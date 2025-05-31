@@ -271,7 +271,7 @@ pub struct StateMgr__vtable {
     pub unk:                   u64,
     pub dtor:                  u64,
     pub initialize_state:      u64,
-    pub execute_state:         u64,
+    pub execute_state:         extern "C" fn(*mut StateMgr),
     pub finalize_state:        u64,
     pub change_state:          extern "C" fn(*mut StateMgr, *mut c_void),
     pub refresh_state:         u64,
