@@ -314,6 +314,9 @@
   - name: True Master Sword Text
     type: textpatch
     index: 19
+  - name: Sailcloth Text
+    type: textpatch
+    index: 20
   - name: Harp Text
     type: textpatch
     index: 21

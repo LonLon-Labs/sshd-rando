@@ -312,6 +312,9 @@ b.eq setup_registers_for_general_modreplace
 cmp w8, #97
 b.eq prefer_modreplace_for_general_arcs
 
+cmp w8, #98
+b.eq check_sailcloth_for_air_vents
+
 ret ; this should never be reached
 
 ; ends at 0x712e0a7000

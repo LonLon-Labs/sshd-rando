@@ -1348,3 +1348,17 @@ pub fn set_random_boss_key_positions() {
         }
     }
 }
+
+#[no_mangle]
+pub fn check_sailcloth_for_air_vents(mut should_deactivate: bool) -> bool {
+    unsafe {
+        // Replaced Instructions
+        asm!("ldp d9, d8, [sp], #0x50");
+
+        if !should_deactivate && flag::check_itemflag(flag::ITEMFLAGS::SAILCLOTH) == 0 {
+            should_deactivate = true;
+        }
+
+        return should_deactivate;
+    }
+}

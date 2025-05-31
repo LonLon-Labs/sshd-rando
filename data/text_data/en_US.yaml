@@ -28,6 +28,12 @@
 - name: True Master Sword Text
   standard: "You got the <y<True Master Sword>>!\nThe goddess has blessed your blade, and\nthe Master Sword has at last achieved its\nultimate form!"
 
+- name: Sailcloth Text
+  standard: 
+    "You got the <y<Sailcloth>>!
+    \n\n\n\nNow you can jump from any height without\nfear of a painful landing!
+    \n\n\n<slowtext>...<pause 20>It smells nice too.<pause 20>"
+
 - name: Harp Text
   standard: "You got the <y<Goddess's Harp>>!\nBut there's no time to admire it!\nYou can play it with <icon 30>."
 
