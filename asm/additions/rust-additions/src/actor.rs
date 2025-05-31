@@ -1355,7 +1355,10 @@ pub fn check_sailcloth_for_air_vents(mut should_deactivate: bool) -> bool {
         // Replaced Instructions
         asm!("ldp d9, d8, [sp], #0x50");
 
-        if !should_deactivate && flag::check_itemflag(flag::ITEMFLAGS::SAILCLOTH) == 0 {
+        if !should_deactivate
+            && &CURRENT_STAGE_NAME[..1] != b"S"
+            && flag::check_itemflag(flag::ITEMFLAGS::SAILCLOTH) == 0
+        {
             should_deactivate = true;
         }
 
