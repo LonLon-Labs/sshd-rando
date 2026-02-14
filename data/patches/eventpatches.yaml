@@ -849,6 +849,37 @@
       next: Display Required Dungeons
       param3: 68
       param4: Fi Objective Text
+  
+  - name: Check if Sailcloth itemflag is set
+    type: flowadd
+    flow:
+      type: type3
+      subType: 1
+      param1: 15 # Sailcloth
+      param2: 1 # Check it is set
+      next: Require Sailcloth to use Amiibo Warp
+      param3: 23 # Check an itemflag
+  
+  - name: Require Sailcloth to use Amiibo Warp
+    type: switchadd
+    flow:
+      subType: 6
+      param2: 0
+      param3: 7 # use result from previous check
+    cases:
+      - 28 # true, the player does have the Sailcloth
+      - Show Fi require Sailcloth to Amiibo Warp # false: the player does not have the Sailcloth
+  
+  - name: Fi require Sailcloth to Amiibo Warp
+    type: textadd
+    textboxtype: 2 # Fi text box background
+  - name: Show Fi require Sailcloth to Amiibo Warp
+    type: flowadd
+    flow:
+      type: type1
+      next: -1
+      param3: 68
+      param4: Fi require Sailcloth to Amiibo Warp
 
   - name: Allow Amiibo Warp without actual Amiibo
     type: flowpatch
@@ -938,7 +969,7 @@
       param3: 0
     cases:
       - Warp to Start
-      - 28
+      - Check if Sailcloth itemflag is set
       - -1
   - name: Warp to Start
     type: flowadd
