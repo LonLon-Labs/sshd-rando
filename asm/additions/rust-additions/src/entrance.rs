@@ -5,6 +5,7 @@
 use crate::actor;
 use crate::debug;
 use crate::flag;
+use crate::player;
 use crate::savefile;
 
 use core::arch::asm;
@@ -37,6 +38,7 @@ assert_eq_size!([u8; 12], WarpToStartInfo);
 // IMPORTANT: when using vanilla code, the start point must be declared in
 // symbols.yaml and then added to this extern block.
 extern "C" {
+    static PLAYER_PTR: *mut player::dPlayer;
     static FILE_MGR: *mut savefile::FileMgr;
     static STORYFLAG_MGR: *mut flag::FlagMgr;
     static STAGE_MGR: *mut actor::dStageMgr;
@@ -132,6 +134,16 @@ pub fn handle_er_cases() {
             NEXT_ENTRANCE = 52
         }
 
+        // If spawning into Mogma Turf without the sailcloth, spawn the player on the
+        // ground instead. Entrance 1 is by the skydive chest in vanilla. It
+        // has been modified to be on the ground instead.
+        // if &NEXT_STAGE_NAME[..5] == b"F210\0"
+        //     && NEXT_ENTRANCE == 0
+        //     && flag::check_itemflag(flag::ITEMFLAGS::SAILCLOTH) == 0
+        // {
+        //     NEXT_ENTRANCE = 1
+        // }
+
         // // If we're spawning from LMF and it hasn't been raised,
         // // instead spawn in front of where the dungeon entrance would be
         if &NEXT_STAGE_NAME[..5] == b"F300\0" && NEXT_ENTRANCE == 5 && flag::check_storyflag(8) == 0
@@ -217,11 +229,24 @@ pub fn next_stage_is_valid_at_night() -> bool {
 #[no_mangle]
 pub fn handle_er_action_states() {
     unsafe {
-        // If we're spawning in the mogma turf dive entrance,
-        // set Link to always be diving regardless of how he
-        // previously entered
+        // Prevent x14 getting clobbered. The vanilla game code does this at
+        // 0x7100e10bd8 but that's too late. This is needed to allow this
+        // function to call other functions (like flag::check_itemflag).
+        asm!("mov x22, x14");
+
         if &CURRENT_STAGE_NAME[..5] == b"F210\0" && CURRENT_ENTRANCE == 0 {
+            // Force the player to be diving when loading into the Mogma Turf skydive
+            // entrance. Ensures the player always has access to the skydive chest (and
+            // other pillars).
             (*GAME_RELOADER_PTR).action_index = 0x13;
+
+            // By default, the game sets the respawn info at the top of the fall into Mogma
+            // Turf. If the player dies due to the fall (either due to low health or OHKO),
+            // they then respawn at the top of the fall but not in the diving state. This
+            // can cause an infinite death loop if the player doesn't have the sailcloth.
+            if flag::check_itemflag(flag::ITEMFLAGS::SAILCLOTH) == 0 {
+                (*GAME_RELOADER_PTR).prevent_set_respawn_info = 1;
+            }
         }
 
         // Replaced code sets this
@@ -374,6 +399,11 @@ pub fn allow_autosave_on_new_file_start(param1: u64) -> u64 {
             ((*(*STORYFLAG_MGR).funcs).do_commit)(STORYFLAG_MGR);
             w21 = 0;
             asm!("mov w8, #1");
+        } else if &CURRENT_STAGE_NAME[..5] == b"F210\0"
+            && CURRENT_ENTRANCE == 0
+            && flag::check_itemflag(flag::ITEMFLAGS::SAILCLOTH) == 0
+        {
+            asm!("mov w8, #0");
         } else if (*GAME_RELOADER_PTR).is_reloading != 0 {
             // vanilla case
             asm!("mov w8, #1");
