@@ -3800,10 +3800,48 @@
       param3: 2
       param4: 4 # number of choices
     cases:
-      - 196 # The Sky!
-      - 198 # The Surface.
+      - Check Sailcloth for Groosenator Sky # The Sky!
+      - Check Sailcloth for Groosenator Surface # The Surface.
       - 79  # Flooded Faron Woods
       - 200 # Never mind!
+  
+  - name: Check Sailcloth for Groosenator Sky
+    type: flowadd
+    flow:
+      type: type3
+      subType: 1
+      param1: 15 # Sailcloth itemflag
+      param2: 1 # check it's set
+      next: Switch from Check Sailcloth for Groosenator Sky
+      param3: 23 # for checking a itemflag
+  - name: Switch from Check Sailcloth for Groosenator Sky
+    type: switchadd
+    flow:
+      subType: 6
+      param2: 0
+      param3: 7 # use result from previous check
+    cases:
+      - 196 # true, continue with flinging to the sky
+      - Show Groosenator needs sailcloth text # false, tell player they need Sailcloth
+  
+  - name: Check Sailcloth for Groosenator Surface
+    type: flowadd
+    flow:
+      type: type3
+      subType: 1
+      param1: 15 # Sailcloth itemflag
+      param2: 1 # check it's set
+      next: Switch from Check Sailcloth for Groosenator Surface
+      param3: 23 # for checking a itemflag
+  - name: Switch from Check Sailcloth for Groosenator Surface
+    type: switchadd
+    flow:
+      subType: 6
+      param2: 0
+      param3: 7 # use result from previous check
+    cases:
+      - 198 # true, continue with flinging to the surface
+      - Show Groosenator needs sailcloth text # false, tell player they need Sailcloth
 
   - name: Groosenator can't fling text
     type: textadd
@@ -3814,6 +3852,16 @@
       next: -1
       param3: 188
       param4: Groosenator can't fling text
+  
+  - name: Groosenator needs sailcloth text
+    type: textadd
+  - name: Show Groosenator needs sailcloth text
+    type: flowadd
+    flow:
+      type: type1
+      next: -1
+      param3: 188
+      param4: Groosenator needs sailcloth text
 
   # Skydiving entrance requirement check
   - name: Access requirement for Skydiving choice
