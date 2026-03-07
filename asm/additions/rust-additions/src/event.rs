@@ -9,6 +9,7 @@ use crate::fix;
 use crate::flag;
 use crate::lyt;
 use crate::minigame;
+use crate::savefile;
 use crate::traps;
 
 use core::arch::asm;
@@ -115,6 +116,7 @@ extern "C" {
 
     static STORYFLAG_MGR: *mut flag::FlagMgr;
     static LYT_MSG_WINDOW: *mut lyt::dLytMsgWindow;
+    static FILE_MGR: *mut savefile::FileMgr;
 
     static mut CURRENT_STAGE_NAME: [u8; 8];
 
@@ -131,7 +133,7 @@ extern "C" {
 // additions/rust-additions.asm
 
 #[no_mangle]
-pub fn custom_event_commands(
+pub extern "C" fn custom_event_commands(
     actor_event_flow_mgr: *mut ActorEventFlowMgr,
     p_event_flow_element: *const EventFlowElement,
 ) {
@@ -165,6 +167,12 @@ pub fn custom_event_commands(
         },
         76 => minigame::boss_rush_backup_flags(event_flow_element.param1),
         77 => minigame::boss_rush_restore_flags(),
+        78 => unsafe {
+            let sceneindex = event_flow_element.param1;
+
+            (*(*LYT_MSG_WINDOW).text_mgr).numeric_args[1] =
+                1 + (((*FILE_MGR).FA.dungeonflags[sceneindex as usize][1] >> 4) & 0xF) as u32;
+        },
         _ => (),
     }
 
@@ -182,26 +190,30 @@ pub fn custom_event_commands(
 }
 
 #[no_mangle]
-pub fn check_tadtone_counter_before_song_event(
+pub extern "C" fn check_tadtone_counter_before_song_event(
     tadtone_minigame_actor: *mut actor::dTgClefGame,
-) -> (*mut actor::dTgClefGame, u32) {
+) -> *mut actor::dTgClefGame {
     let collected_tadtone_groups = flag::check_storyflag(953);
     let vanilla_tadtones_completed_flag = flag::check_storyflag(18);
+
+    let mut should_play_cutscene = false;
 
     // If we've collected all 17 tadtone groups and haven't played the cutscene
     // yet, then play the cutscene
     if collected_tadtone_groups == 17 && vanilla_tadtones_completed_flag == 0 {
+        should_play_cutscene = true;
+
         unsafe {
             (*tadtone_minigame_actor).delay_before_starting_event = 0;
         }
-        return (tadtone_minigame_actor, 1);
     }
 
-    return (tadtone_minigame_actor, 0);
+    unsafe { asm!("mov w1, {0:w}", in(reg) should_play_cutscene as u32) };
+    return tadtone_minigame_actor;
 }
 
 #[no_mangle]
-pub fn set_boko_base_restricted_sword_flag_before_event(param1: *mut c_void) {
+pub extern "C" fn set_boko_base_restricted_sword_flag_before_event(param1: *mut c_void) {
     unsafe {
         if &CURRENT_STAGE_NAME[..7] == b"F201_2\0" {
             flag::set_storyflag(167);
@@ -223,7 +235,7 @@ pub struct unkstruct {
 }
 
 #[no_mangle]
-pub fn remove_vanilla_tms_sword_pull_textbox(param1: *mut *mut unkstruct) {
+pub extern "C" fn remove_vanilla_tms_sword_pull_textbox(param1: *mut *mut unkstruct) {
     unsafe {
         ((*(*param1)).unk0x10)(param1 as *mut c_void, 0xFF, 3);
     }
@@ -237,7 +249,7 @@ pub fn remove_vanilla_tms_sword_pull_textbox(param1: *mut *mut unkstruct) {
 }
 
 #[no_mangle]
-pub fn fix_boko_base_sword_model(
+pub extern "C" fn fix_boko_base_sword_model(
     mut res_data: *mut c_void,
     mut model_name: *const c_char,
     sword_type: u8,

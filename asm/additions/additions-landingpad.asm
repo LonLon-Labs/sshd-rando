@@ -313,12 +313,15 @@ cmp w8, #97
 b.eq prefer_modreplace_for_general_arcs
 
 cmp w8, #98
-b.eq check_sailcloth_for_air_vents
+b.eq setup_gossip_stone_item_params
 
 cmp w8, #99
-b.eq require_sailcloth_to_fly_to_sky
+b.eq check_sailcloth_for_air_vents
 
 cmp w8, #100
+b.eq require_sailcloth_to_fly_to_sky
+
+cmp w8, #101
 b.eq voidout_near_skyloft_or_light_pillars_without_sailcloth
 
 ret ; this should never be reached
