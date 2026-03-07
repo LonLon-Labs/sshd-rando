@@ -157,6 +157,7 @@ main:
     parseBRRES: 0x7100ffd9f0
 
     dPlayer__putItemAway: 0x7100a1c6d4
+    dPlayer__handle_gameover: 0x7100aa6014
     dAcItem__determineFinalItemid: 0x71004ea050
     dAcOlightLine__inUpdate: 0x7100836380
     dAcOmusasabi__stateWaitEnter: 0x7100861db4

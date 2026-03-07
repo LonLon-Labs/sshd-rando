@@ -318,6 +318,9 @@ b.eq check_sailcloth_for_air_vents
 cmp w8, #99
 b.eq require_sailcloth_to_fly_to_sky
 
+cmp w8, #100
+b.eq voidout_near_skyloft_or_light_pillars_without_sailcloth
+
 ret ; this should never be reached
 
 ; ends at 0x712e0a7000

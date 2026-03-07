@@ -5,6 +5,7 @@
 use crate::actor;
 use crate::debug;
 use crate::flag;
+use crate::math;
 use crate::player;
 use crate::savefile;
 
@@ -22,6 +23,25 @@ use static_assertions::assert_eq_size;
 
 // Always add an assert_eq_size!() macro after defining a struct to ensure it's
 // the size you expect it to be.
+
+#[repr(C, packed(1))]
+#[derive(Copy, Clone)]
+pub struct dTgSceneChange {
+    pub base:              actor::dAcBase,
+    pub mTriggerMatrix:    math::Matrix,
+    pub mScenLink:         u8,
+    pub mScenType:         u8,
+    pub mPathIndex:        u8,
+    pub mEnabledSceneflag: u8,
+    pub mEnableStoryflag:  u16,
+    pub mDisableStoryflag: u16,
+    pub unk1:              u8,
+    pub unk2:              u8,
+    pub unk3:              u8,
+    pub unk4:              u8,
+    pub mVec:              math::Vec3f,
+}
+assert_eq_size!([u8; 0x1D8], dTgSceneChange);
 
 // Fi warp stuff
 #[repr(C, packed(1))]
@@ -414,5 +434,26 @@ pub fn allow_autosave_on_new_file_start(param1: u64) -> u64 {
         asm!("mov w21, {0:w}", in(reg) w21);
 
         return param1;
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn voidout_near_skyloft_or_light_pillars_without_sailcloth(
+    player: *mut player::dPlayer,
+    scen_link: u8,
+    path_index: u8,
+    scen_type: u8,
+) {
+    unsafe {
+        // SCEN type 5 == "landing on skyloft"
+        // SCEN type 9 == "entering light pillar"
+        if (scen_type == 5 || scen_type == 9)
+            && flag::check_itemflag(flag::ITEMFLAGS::SAILCLOTH) == 0
+        {
+            // Triggers a voidout.
+            ((*(*PLAYER_PTR).vtable).can_handle_gameover)(PLAYER_PTR, 1, 0, 0);
+        } else {
+            ((*(*player).vtable).trigger_scen_change)(player, scen_link, path_index, scen_type);
+        }
     }
 }
