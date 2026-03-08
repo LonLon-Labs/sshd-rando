@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.9.3
+## Created by: Qt User Interface Compiler version 6.10.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -310,7 +310,7 @@ class Ui_main_window(object):
         self.font_family_combo_box.setMinimumContentsLength(1)
         self.font_family_combo_box.setFontFilters(QFontComboBox.FontFilter.ScalableFonts)
         font = QFont()
-        font.setFamilies([u"Arimo"])
+        font.setFamilies([u"Tahoma"])
         font.setPointSize(10)
         self.font_family_combo_box.setCurrentFont(font)
 
@@ -2036,6 +2036,11 @@ class Ui_main_window(object):
         self.dives_and_jumps_group_box.setSizePolicy(sizePolicy)
         self.verticalLayout_19 = QVBoxLayout(self.dives_and_jumps_group_box)
         self.verticalLayout_19.setObjectName(u"verticalLayout_19")
+        self.setting_logic_precise_falls = RandoTriStateCheckBox(self.dives_and_jumps_group_box)
+        self.setting_logic_precise_falls.setObjectName(u"setting_logic_precise_falls")
+
+        self.verticalLayout_19.addWidget(self.setting_logic_precise_falls)
+
         self.setting_logic_volcanic_island_dive = RandoTriStateCheckBox(self.dives_and_jumps_group_box)
         self.setting_logic_volcanic_island_dive.setObjectName(u"setting_logic_volcanic_island_dive")
 
@@ -3078,7 +3083,7 @@ class Ui_main_window(object):
 
         self.retranslateUi(main_window)
 
-        self.tab_widget.setCurrentIndex(3)
+        self.tab_widget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(main_window)
@@ -3311,7 +3316,8 @@ class Ui_main_window(object):
         self.setting_logic_lmf_minecart_jump.setText(QCoreApplication.translate("main_window", u"Lanayru Mining Facility Ride on Minecart", None))
         self.setting_logic_present_bow_switches.setText(QCoreApplication.translate("main_window", u"Present Bow Switch Shots", None))
         self.setting_logic_skykeep_vineclip.setText(QCoreApplication.translate("main_window", u"Sky Keep Vine Clip", None))
-        self.dives_and_jumps_group_box.setTitle(QCoreApplication.translate("main_window", u"Dives and Jumps", None))
+        self.dives_and_jumps_group_box.setTitle(QCoreApplication.translate("main_window", u"Dives, Jumps, and Falls", None))
+        self.setting_logic_precise_falls.setText(QCoreApplication.translate("main_window", u"Precise Falls", None))
         self.setting_logic_volcanic_island_dive.setText(QCoreApplication.translate("main_window", u"Volcanic Island Dive", None))
         self.setting_logic_east_island_dive.setText(QCoreApplication.translate("main_window", u"Inside the Thunderhead East Island Dive", None))
         self.setting_logic_beedles_island_cage_chest_dive.setText(QCoreApplication.translate("main_window", u"Beedle's Island Cage Chest Dive", None))
