@@ -42,8 +42,8 @@ jobs:
 
       - name: Zip windows build
         run: |
-          cd "Skyward Sword HD Randomizer v${{ steps.read_toml.outputs.value }} (windows)"
-          zip "Skyward_Sword_HD_Randomizer_v${{ steps.read_toml.outputs.value }}_windows.zip" ./* -r
+          cd "Skyward Sword HD Randomizer Archipelago v${{ steps.read_toml.outputs.value }} (windows)"
+          zip "Skyward_Sword_HD_Randomizer_Archipelago_v${{ steps.read_toml.outputs.value }}_windows.zip" ./* -r
           rm *.exe
           cd ..
       
@@ -52,7 +52,7 @@ jobs:
         id: filter_artifacts
         run: |
           echo 'builds<<EOF' >> $GITHUB_OUTPUT
-          echo "$(find . -name "Skyward_Sword_HD_Randomizer*")" >> $GITHUB_OUTPUT
+          echo "$(find . -name "Skyward_Sword_HD_Randomizer_Archipelago*")" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
   
       # create a release

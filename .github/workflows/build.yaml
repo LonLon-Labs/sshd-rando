@@ -119,16 +119,16 @@ jobs:
       # Archive and upload artifacts
       - name: Tar Files if not Windows Build
         if: runner.os != 'Windows'
-        run: tar -C "dist/release_archive_${{ steps.read_toml.outputs.value }}_${{ matrix.artifact }}/" -cvf "Skyward_Sword_HD_Randomizer_v${{ steps.read_toml.outputs.value }}_${{ matrix.artifact }}${{ matrix.artifact_suffix }}.tar" .
+        run: tar -C "dist/release_archive_${{ steps.read_toml.outputs.value }}_${{ matrix.artifact }}/" -cvf "Skyward_Sword_HD_Randomizer_Archipelago_v${{ steps.read_toml.outputs.value }}_${{ matrix.artifact }}${{ matrix.artifact_suffix }}.tar" .
       - name: Upload non-Windows Artifact
         if: runner.os != 'Windows'
         uses: actions/upload-artifact@v6
         with:
-          name: Skyward Sword HD Randomizer v${{ steps.read_toml.outputs.value }} (${{ matrix.artifact }}${{ matrix.artifact_suffix }})
-          path: Skyward_Sword_HD_Randomizer_v${{ steps.read_toml.outputs.value }}_${{ matrix.artifact }}${{ matrix.artifact_suffix }}.tar
+          name: Skyward Sword HD Randomizer Archipelago v${{ steps.read_toml.outputs.value }} (${{ matrix.artifact }}${{ matrix.artifact_suffix }})
+          path: Skyward_Sword_HD_Randomizer_Archipelago_v${{ steps.read_toml.outputs.value }}_${{ matrix.artifact }}${{ matrix.artifact_suffix }}.tar
       - name: Upload Windows Artifact
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v6
         with:
-          name: Skyward Sword HD Randomizer v${{ steps.read_toml.outputs.value }} (${{ matrix.artifact }})
+          name: Skyward Sword HD Randomizer Archipelago v${{ steps.read_toml.outputs.value }} (${{ matrix.artifact }})
           path: dist/release_archive_${{ steps.read_toml.outputs.value }}_${{ matrix.artifact }}

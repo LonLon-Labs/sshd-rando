@@ -66,7 +66,7 @@ exe = EXE(
     ],
     a.binaries,
     a.datas,
-    name=f"Skyward Sword HD Randomizer {VERSION}",
+    name=f"Skyward Sword HD Randomizer Archipelago {VERSION}",
     debug=False,
     strip=False,
     upx=True,
@@ -77,13 +77,13 @@ exe = EXE(
 
 app = BUNDLE(
     exe,
-    name=f"Skyward Sword HD Randomizer {VERSION}.app",
+    name=f"Skyward Sword HD Randomizer Archipelago {VERSION}.app",
     icon="assets/icon.png",
     bundle_identifier=None,
     info_plist={
         "LSBackgroundOnly": False,
-        "CFBundleDisplayName": "Skyward Sword HD Randomizer",
-        "CFBundleName": "SSHD Randomizer", # 15 character maximum
+        "CFBundleDisplayName": "Skyward Sword HD Randomizer Archipelago",
+        "CFBundleName": "SSHD Rando AP", # 15 character maximum
         "CFBundleShortVersionString": VERSION,
     },
 )

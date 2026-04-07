@@ -21,8 +21,7 @@ if platform.system() == "Darwin":
         "Skyward Sword HD Randomizer", "SSHD Rando"
     )
 
-    if not os.path.exists(userdata_path):
-        os.mkdir(userdata_path)
+    os.makedirs(userdata_path, exist_ok=True)
 
     print(
         f"You are running from source on macOS. Currently, macOS builds cannot reliably access data from the local directory, so, to keep things consistent, your data, such as all default paths and config, can be found at {userdata_path}"
