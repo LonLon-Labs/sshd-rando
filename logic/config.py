@@ -35,6 +35,7 @@ class Config:
         self.tutorial_random_settings: bool = False
         self.first_time_seed_gen_text: bool = False
         self.hash: str = ""
+        self.ap_settings: dict = {}
 
     def get_hash(self) -> str:
         if self.hash:
@@ -199,6 +200,10 @@ def write_config_to_file(
 
         # Make sure output_dir is always a string
         preferences_out["output_dir"] = preferences_out["output_dir"].as_posix()
+
+        # Persist Archipelago settings alongside preferences
+        if hasattr(config, "ap_settings") and config.ap_settings:
+            preferences_out["ap_settings"] = config.ap_settings
 
         yaml.safe_dump(preferences_out, preferences_file, sort_keys=False)
 
@@ -454,6 +459,10 @@ def load_preferences(config: Config | None = None) -> Config:
         config.output_dir = Path(config.output_dir)
         # ...and a string if being dumped
         preferences_in["output_dir"] = Path(preferences_in["output_dir"]).as_posix()
+
+        # Load Archipelago settings if present
+        if "ap_settings" in preferences_in:
+            config.ap_settings = preferences_in["ap_settings"]
 
     if rewrite_preferences:
         with open(filepath, "w", encoding="utf-8") as preferences_file:

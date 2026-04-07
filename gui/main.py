@@ -1,4 +1,5 @@
 from functools import partial
+from pathlib import Path
 import sys
 from types import TracebackType
 
@@ -6,6 +7,7 @@ from PySide6.QtCore import QEvent, Qt, QSize, QUrl
 from PySide6.QtGui import QDesktopServices, QIcon, QMouseEvent, QPixmap, QCloseEvent
 from PySide6.QtWidgets import (
     QApplication,
+    QFileDialog,
     QMessageBox,
     QMainWindow,
     QWidget,
@@ -22,6 +24,8 @@ from filepathconstants import (
 
 from gui.accessibility import Accessibility
 from gui.advanced import Advanced
+from gui.archipelago import Archipelago
+from gui.patcher_tab import PatcherTab
 from gui.dialogs.dialog_header import print_progress_text
 from gui.tracker import Tracker
 from gui.dialogs.error_dialog import error, error_from_str
@@ -31,6 +35,7 @@ from gui.guithreads import RandomizationThread
 from gui.settings import Settings
 from gui.dialogs.randomize_progress_dialog import RandomizerProgressDialog
 from gui.ui.ui_main import Ui_main_window
+from gui.yaml_generator import generate_yaml
 from logic.config import load_config_from_file, write_config_to_file
 
 
@@ -48,7 +53,7 @@ class Main(QMainWindow):
         self.ui.setupUi(self)
 
         self.setWindowTitle(
-            f"The Legend of Zelda: Skyward Sword HD Randomizer (Ver. {VERSION})"
+            f"The Legend of Zelda: Skyward Sword HD Randomizer — Archipelago (Ver. {VERSION})"
         )
 
         self.setWindowIcon(QIcon(ICON_PATH.as_posix()))
@@ -69,11 +74,19 @@ class Main(QMainWindow):
         self.settings = Settings(self, self.ui)
         print_progress_text("Initializing GUI: advanced")
         self.advanced = Advanced(self, self.ui)
+        print_progress_text("Initializing GUI: archipelago")
+        self.archipelago = Archipelago(self, self.ui)
+        print_progress_text("Initializing GUI: patcher")
+        self.patcher_tab = PatcherTab(self, self.ui)
         print_progress_text("Initializing GUI: tracker")
         self.tracker = Tracker(self, self.ui)
 
         self.ui.about_button.clicked.connect(self.about)
         self.ui.tab_widget.currentChanged.connect(self.on_tab_change)
+
+        # Override Getting Started text for Archipelago workflow
+        self._update_getting_started_text()
+
         print_progress_text("GUI initialized")
 
     def randomize(self):
@@ -97,6 +110,59 @@ class Main(QMainWindow):
                 "The randomization was unable to be completed and has been cancelled.",
             )
             return
+
+    def generate_ap_yaml(self):
+        """Generate a SkywardSwordHD.yaml from current settings + AP settings."""
+        ap_settings = self.archipelago.get_ap_settings()
+        player_name = ap_settings.get("player_name", "Player1")
+
+        # Validate player name
+        if not player_name or player_name.isspace():
+            self.fi_info_dialog.show_dialog(
+                "Missing Player Name",
+                "Please set a player name in the Archipelago tab before generating a YAML.",
+            )
+            return
+
+        # Warn if extract path is empty (it's needed for patching, not YAML gen)
+        extract_path = ap_settings.get("extract_path", "")
+        if not extract_path:
+            confirm = self.fi_question_dialog.show_dialog(
+                "No Extract Path Set",
+                "You haven't set a ROM extract path in the Archipelago tab.<br>"
+                "The YAML will be generated with a blank extract_path - you'll need to "
+                "fill it in manually before patching.<br><br>Continue anyway?",
+            )
+            if confirm != QMessageBox.StandardButton.Yes:
+                return
+
+        # Ask user where to save
+        default_name = f"SkywardSwordHD_{player_name}.yaml"
+        default_dir = self.config.output_dir if self.config.output_dir else DEFAULT_OUTPUT_PATH
+        default_path = Path(default_dir) / default_name
+
+        save_path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Save Archipelago YAML",
+            str(default_path),
+            "YAML Files (*.yaml *.yml);;All Files (*)",
+        )
+
+        if not save_path:
+            return
+
+        try:
+            result = generate_yaml(self.config, ap_settings, Path(save_path))
+            self.fi_info_dialog.show_dialog(
+                "YAML Generated!",
+                f"SkywardSwordHD.yaml has been saved to:<br><br>{result}<br><br>"
+                f"You can now use this file with Archipelago to generate a multiworld.",
+            )
+        except Exception as e:
+            error_from_str(
+                f"Failed to generate YAML: {e}",
+                str(e),
+            )
 
         done_dialog = QMessageBox(self)
         done_dialog.setWindowTitle("Randomization Completed")
@@ -164,6 +230,41 @@ class Main(QMainWindow):
     def open_output_folder(self):
         QDesktopServices.openUrl(QUrl.fromLocalFile(self.config.output_dir.absolute()))
 
+    def _update_getting_started_text(self):
+        """Override the Getting Started tab text for Archipelago workflow."""
+        try:
+            self.ui.how_to_extract_group_box.setTitle("1. Extract the Game")
+            self.ui.how_to_extract_label.setText(
+                "<html><body><p>Before generating a YAML, you need a valid extract of the game.</p>"
+                '<p>Follow the <a href="https://docs.google.com/document/d/1HHQRXND0n-ZrmhEl4eXjzMANQ-xHK3pKKXPQqSbwXwY">'
+                '<span style="text-decoration: underline; color:#9a0089;">Setup Guide</span></a> for help.</p></body></html>'
+            )
+            self.ui.useful_choose_settings_group_box.setTitle("2. Configure Settings")
+            self.ui.choose_settings_label.setText(
+                "<html><body>"
+                "<p><b>Configure your randomizer settings</b> in the other tabs, then go to the "
+                "<b>Archipelago</b> tab to set your player name, multiworld options, and cheats.</p>"
+                "<p>You can use presets for a quick start or customize every setting yourself.</p>"
+                "</body></html>"
+            )
+            self.ui.how_to_generate_group_box.setTitle("3. Generate YAML")
+            self.ui.how_to_generate_label.setText(
+                '<html><body><p>Click <span style="font-family:\'Courier New\';">Generate YAML</span> '
+                "in the bottom right to create your SkywardSwordHD.yaml file.</p>"
+                "<p>Give this file to your multiworld host (or use it yourself as host).</p></body></html>"
+            )
+            self.ui.how_to_running_group_box.setTitle("4. Patch and Play")
+            self.ui.how_to_running_label.setText(
+                "<html><body>"
+                "<p>After the host generates the multiworld, you'll get an <b>.apsshd</b> file.</p>"
+                "<p>Go to the <b>Patcher</b> tab, select the .apsshd file, and click <b>Patch &amp; Install</b>.</p>"
+                "<p>Then launch the game in Ryujinx and connect the Archipelago client!</p>"
+                "</body></html>"
+            )
+        except AttributeError:
+            # UI elements might not exist in all versions
+            pass
+
     def check_output_dir(self) -> bool:
         output_dir = self.config.output_dir
 
@@ -199,18 +300,21 @@ The output folder you have specified cannot be found.
         about_dialog.setTextFormat(Qt.TextFormat.RichText)
 
         about_text = f"""
-                        <b>The Legend of Zelda: Skyward Sword HD Randomizer</b><br>
+                        <b>The Legend of Zelda: Skyward Sword HD Randomizer - Archipelago Edition</b><br>
                         Version: {VERSION}<br><br>
 
-                        Created by:
+                        Archipelago Integration by:
+                        <a href=\"https://github.com/Wesley-Playz\">Wesley-Playz</a><br><br>
+
+                        Original Randomizer by:
                         <a href=\"https://github.com/covenesme\">CovenEsme</a>,
                         <a href=\"https://github.com/Kuonino\">Kuonino</a>,
                         <a href=\"https://github.com/gymnast86\">Gymnast86</a>, and
                         <a href=\"https://github.com/tbpixel\">tbpixel</a><br><br>
 
-                        <a href=\"https://github.com/mint-choc-chip-skyblade/sshd-rando/issues\">Report issues</a>
+                        <a href=\"https://github.com/LonLon-Labs/sshd-rando/issues\">Report issues</a>
                         or view the 
-                        <a href=\"https://github.com/mint-choc-chip-skyblade/sshd-rando\">Source code</a>
+                        <a href=\"https://github.com/LonLon-Labs/sshd-rando\">Source code</a>
         """
 
         about_dialog.about(self, "About", about_text)
@@ -272,9 +376,14 @@ def start_gui(app: QApplication):
     try:
         main = Main()
 
-        main.ui.randomize_button.setText("Verify Extract")
-        main.ui.randomize_button.clicked.connect(
-            partial(main.advanced.verify_extract, verify_all=True)
+        # In the Archipelago fork, the main button generates a YAML
+        # instead of randomizing (the AP client handles randomization).
+        main.ui.randomize_button.setText("Generate YAML")
+        main.ui.randomize_button.clicked.connect(main.generate_ap_yaml)
+
+        # Sync extract path from AP tab to patcher tab when it changes
+        main.archipelago.extract_path_edit.textChanged.connect(
+            main.patcher_tab.set_extract_path
         )
 
         main.show()
@@ -283,7 +392,7 @@ def start_gui(app: QApplication):
             get_extract_text = "Before you can begin, you will need to provide an extract of The Legend of Zelda: Skyward Sword HD"
             get_extract_text += "<br><br>Instructions for how to do this can be found here: <a href='https://docs.google.com/document/d/1HHQRXND0n-ZrmhEl4eXjzMANQ-xHK3pKKXPQqSbwXwY'>The Legend of Zelda: Skyward Sword HD Randomizer - Setup Guide</a>"
             get_extract_text += '<br><br>Once you are ready, click "OK" and the extract folder will open. Copy your extract of the base game into this folder'
-            get_extract_text += "<br><br>(If you just wish to look around, you can skip this step but you will be unable to randomize the game)."
+            get_extract_text += "<br><br>(If you just wish to look around, you can skip this step but you will be unable to generate a YAML or patch)."
             main.fi_info_dialog.show_dialog(
                 title="Getting Started", text=get_extract_text
             )
@@ -292,17 +401,13 @@ def start_gui(app: QApplication):
 
             confirm_first_time_verify_dialog = main.fi_question_dialog.show_dialog(
                 "Perform Full Verification?",
-                f'Would you like to verify your extract (required for the randomizer to work)?<br><br>Answering "No" will prevent you from randomizing the game but you will still be able to look around.',
+                f'Would you like to verify your extract (required for patching)?<br><br>Answering "No" will prevent you from patching the game but you will still be able to configure settings and generate a YAML.',
             )
 
             if confirm_first_time_verify_dialog == QMessageBox.StandardButton.Yes:
                 if main.advanced.verify_extract(verify_all=True):
                     main.config.verified_extract = True
                     main.settings.update_from_config()
-        else:
-            main.ui.randomize_button.setText("Randomize")
-            main.ui.randomize_button.clicked.disconnect()
-            main.ui.randomize_button.clicked.connect(main.randomize)
 
         sys.exit(app.exec())
     except Exception as e:
