@@ -149,9 +149,7 @@ class Archipelago:
 
         # Death Link
         self.death_link_cb = QCheckBox("Death Link")
-        self.death_link_cb.setToolTip(
-            "When you die, everyone dies (and vice versa)."
-        )
+        self.death_link_cb.setToolTip("When you die, everyone dies (and vice versa).")
         self.death_link_cb.stateChanged.connect(self._on_change)
         vbox.addWidget(self.death_link_cb)
 
@@ -228,30 +226,62 @@ class Archipelago:
         vbox.addWidget(note)
 
         cheat_defs = [
-            ("cheat_infinite_health", "Infinite Health",
-             "Damage multiplier forced to 0 — you take no damage."),
-            ("cheat_infinite_stamina", "Infinite Stamina",
-             "Stamina gauge kept full at all times."),
-            ("cheat_infinite_ammo", "Infinite Arrows/Bombs/Seeds",
-             "Arrow, Bomb, and Deku Seed counters kept at max."),
-            ("cheat_infinite_bugs", "Infinite Bugs",
-             "Start with 99 of every bug. Client keeps flags set."),
-            ("cheat_infinite_materials", "Infinite Materials (Treasures)",
-             "Start with 99 of every treasure. Client keeps flags set."),
-            ("cheat_infinite_shield", "Infinite Shield Durability",
-             "Shield durability counter kept at max."),
-            ("cheat_infinite_skyward_strike", "Infinite Skyward Strike",
-             "Skyward Strike charge never expires."),
-            ("cheat_infinite_rupees", "Infinite Rupees",
-             "Rupee counter kept at wallet maximum."),
-            ("cheat_moon_jump", "Moon Jump",
-             "Press Y while airborne to fly upward."),
-            ("cheat_infinite_beetle", "Infinite Beetle Flying Time",
-             "Beetle flight timer set to a very large value (patches game code)."),
-            ("cheat_infinite_loftwing", "Infinite Loftwing Charges",
-             "Spiral charge counter stays at 3."),
-            ("cheat_no_electric_stun", "No Electric Stun",
-             "Electric shock paralysis animation removed."),
+            (
+                "cheat_infinite_health",
+                "Infinite Health",
+                "Damage multiplier forced to 0 — you take no damage.",
+            ),
+            (
+                "cheat_infinite_stamina",
+                "Infinite Stamina",
+                "Stamina gauge kept full at all times.",
+            ),
+            (
+                "cheat_infinite_ammo",
+                "Infinite Arrows/Bombs/Seeds",
+                "Arrow, Bomb, and Deku Seed counters kept at max.",
+            ),
+            (
+                "cheat_infinite_bugs",
+                "Infinite Bugs",
+                "Start with 99 of every bug. Client keeps flags set.",
+            ),
+            (
+                "cheat_infinite_materials",
+                "Infinite Materials (Treasures)",
+                "Start with 99 of every treasure. Client keeps flags set.",
+            ),
+            (
+                "cheat_infinite_shield",
+                "Infinite Shield Durability",
+                "Shield durability counter kept at max.",
+            ),
+            (
+                "cheat_infinite_skyward_strike",
+                "Infinite Skyward Strike",
+                "Skyward Strike charge never expires.",
+            ),
+            (
+                "cheat_infinite_rupees",
+                "Infinite Rupees",
+                "Rupee counter kept at wallet maximum.",
+            ),
+            ("cheat_moon_jump", "Moon Jump", "Press Y while airborne to fly upward."),
+            (
+                "cheat_infinite_beetle",
+                "Infinite Beetle Flying Time",
+                "Beetle flight timer set to a very large value (patches game code).",
+            ),
+            (
+                "cheat_infinite_loftwing",
+                "Infinite Loftwing Charges",
+                "Spiral charge counter stays at 3.",
+            ),
+            (
+                "cheat_no_electric_stun",
+                "No Electric Stun",
+                "Electric shock paralysis animation removed.",
+            ),
         ]
 
         self._cheat_checkboxes: dict[str, QCheckBox] = {}
@@ -299,8 +329,12 @@ class Archipelago:
 
         row = QHBoxLayout()
         self.extract_path_edit = QLineEdit()
-        self.extract_path_edit.setPlaceholderText("C:\\ProgramData\\Archipelago\\sshd_extract")
-        self.extract_path_edit.setToolTip("Path to extracted SSHD ROM (romfs/ and exefs/).")
+        self.extract_path_edit.setPlaceholderText(
+            "C:\\ProgramData\\Archipelago\\sshd_extract"
+        )
+        self.extract_path_edit.setToolTip(
+            "Path to extracted SSHD ROM (romfs/ and exefs/)."
+        )
         self.extract_path_edit.textChanged.connect(self._on_change)
         row.addWidget(self.extract_path_edit, stretch=1)
 
@@ -327,7 +361,9 @@ class Archipelago:
 
     def _load_values(self):
         """Populate widgets from self.ap dict."""
-        self.player_name_edit.setText(self.ap.get("player_name", AP_DEFAULTS["player_name"]))
+        self.player_name_edit.setText(
+            self.ap.get("player_name", AP_DEFAULTS["player_name"])
+        )
         self.death_link_cb.setChecked(self.ap.get("death_link", False))
         self.breath_link_cb.setChecked(self.ap.get("breath_link", False))
         self.progression_spin.setValue(self.ap.get("progression_balancing", 50))
@@ -370,7 +406,9 @@ class Archipelago:
     def _browse_extract(self):
         start = self.extract_path_edit.text().strip() or str(Path.home())
         path = QFileDialog.getExistingDirectory(
-            self.main, "Select SSHD ROM Extract Folder", start,
+            self.main,
+            "Select SSHD ROM Extract Folder",
+            start,
         )
         if path:
             self.extract_path_edit.setText(path)
@@ -404,7 +442,9 @@ class Archipelago:
             active_cheats.append(f"Speed {speed/10:.0f}x")
 
         if active_cheats:
-            parts.append(f"<b>Active Cheats ({len(active_cheats)}):</b> {', '.join(active_cheats)}")
+            parts.append(
+                f"<b>Active Cheats ({len(active_cheats)}):</b> {', '.join(active_cheats)}"
+            )
         else:
             parts.append("<b>Cheats:</b> None")
 

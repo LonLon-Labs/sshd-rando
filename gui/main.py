@@ -138,7 +138,9 @@ class Main(QMainWindow):
 
         # Ask user where to save
         default_name = f"SkywardSwordHD_{player_name}.yaml"
-        default_dir = self.config.output_dir if self.config.output_dir else DEFAULT_OUTPUT_PATH
+        default_dir = (
+            self.config.output_dir if self.config.output_dir else DEFAULT_OUTPUT_PATH
+        )
         default_path = Path(default_dir) / default_name
 
         save_path, _ = QFileDialog.getSaveFileName(
@@ -249,7 +251,7 @@ class Main(QMainWindow):
             )
             self.ui.how_to_generate_group_box.setTitle("3. Generate YAML")
             self.ui.how_to_generate_label.setText(
-                '<html><body><p>Click <span style="font-family:\'Courier New\';">Generate YAML</span> '
+                "<html><body><p>Click <span style=\"font-family:'Courier New';\">Generate YAML</span> "
                 "in the bottom right to create your SkywardSwordHD.yaml file.</p>"
                 "<p>Give this file to your multiworld host (or use it yourself as host).</p></body></html>"
             )

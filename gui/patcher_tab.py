@@ -41,6 +41,7 @@ if TYPE_CHECKING:
 
 # ── Helpers ───────────────────────────────────────────────────────────────
 
+
 def _find_ryujinx_mod_dir() -> Optional[Path]:
     """Return the Ryujinx LayeredFS mod path for SSHD, or None."""
     game_id = "01002da013484000"
@@ -51,11 +52,24 @@ def _find_ryujinx_mod_dir() -> Optional[Path]:
         ]
     elif sys.platform == "linux":
         candidates = [
-            Path.home() / ".config" / "Ryujinx" / "sdcard" / "atmosphere" / "contents" / game_id,
+            Path.home()
+            / ".config"
+            / "Ryujinx"
+            / "sdcard"
+            / "atmosphere"
+            / "contents"
+            / game_id,
         ]
     else:
         candidates = [
-            Path.home() / "Library" / "Application Support" / "Ryujinx" / "sdcard" / "atmosphere" / "contents" / game_id,
+            Path.home()
+            / "Library"
+            / "Application Support"
+            / "Ryujinx"
+            / "sdcard"
+            / "atmosphere"
+            / "contents"
+            / game_id,
         ]
 
     for p in candidates:
@@ -67,8 +81,10 @@ def _find_ryujinx_mod_dir() -> Optional[Path]:
 
 # ── Worker thread ─────────────────────────────────────────────────────────
 
+
 class PatchWorker(QThread):
     """Background thread that runs patching so the GUI stays responsive."""
+
     log_message = Signal(str)
     progress_update = Signal(int)
     status_update = Signal(str, str)  # (message, color)
@@ -84,6 +100,7 @@ class PatchWorker(QThread):
             self._do_patch()
         except Exception as e:
             import traceback
+
             self.log_message.emit(f"\nERROR: {e}")
             self.log_message.emit(traceback.format_exc())
             self.status_update.emit(f"Error: {e}", "#ee0000")
@@ -187,6 +204,7 @@ class PatchWorker(QThread):
         os.environ["SSHD_AP_USERDATA_PATH"] = str(self._extract_path.resolve().parent)
 
         import importlib
+
         if "filepathconstants" in sys.modules:
             importlib.reload(sys.modules["filepathconstants"])
         importlib.invalidate_caches()
@@ -201,6 +219,7 @@ class PatchWorker(QThread):
             create_sshd_rando_config,
             overlay_multiworld_items,
         )
+
         _initialize_sshd_rando()
 
         from logic.generate import generate
@@ -246,11 +265,14 @@ class PatchWorker(QThread):
             self.progress_update.emit(55)
             self.log_message.emit(f"Injecting {len(raw_flag_mapping)} custom flags...")
             flag_mapping = {int(k): v for k, v in raw_flag_mapping.items()}
-            location_code_to_flag = {loc_code: fid for fid, loc_code in flag_mapping.items()}
+            location_code_to_flag = {
+                loc_code: fid for fid, loc_code in flag_mapping.items()
+            }
 
             # Try to import Locations from AP world
             try:
                 from Locations import LOCATION_TABLE
+
                 name_to_code = {
                     name: data.code
                     for name, data in LOCATION_TABLE.items()
@@ -287,7 +309,9 @@ class PatchWorker(QThread):
 
         mod_dir = _find_ryujinx_mod_dir()
         if mod_dir is None:
-            self.status_update.emit("Patches generated — manual install needed", "#ff7700")
+            self.status_update.emit(
+                "Patches generated — manual install needed", "#ff7700"
+            )
             self.log_message.emit(
                 f"Patches at: {temp_dir}\n"
                 "Copy romfs/ and exefs/ to your Ryujinx mod directory."
@@ -304,11 +328,14 @@ class PatchWorker(QThread):
 
         self.progress_update.emit(100)
         self.status_update.emit("Patched and installed!", "#00ff7f")
-        self.log_message.emit("\nDone! Launch Skyward Sword HD in Ryujinx and connect to the server.")
+        self.log_message.emit(
+            "\nDone! Launch Skyward Sword HD in Ryujinx and connect to the server."
+        )
         self.finished_signal.emit(True)
 
 
 # ── Tab class ─────────────────────────────────────────────────────────────
+
 
 class PatcherTab:
     """Manages the integrated Patcher tab in the randomizer GUI."""
@@ -333,9 +360,7 @@ class PatcherTab:
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(title)
 
-        subtitle = QLabel(
-            "<i>Generate and install ROM patches from .apsshd files</i>"
-        )
+        subtitle = QLabel("<i>Generate and install ROM patches from .apsshd files</i>")
         subtitle.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(subtitle)
 
@@ -387,7 +412,8 @@ class PatcherTab:
         self.log_output = QTextEdit()
         self.log_output.setReadOnly(True)
         self.log_output.setSizePolicy(
-            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Expanding,
+            QSizePolicy.Policy.Expanding,
         )
         layout.addWidget(self.log_output, stretch=1)
 
@@ -405,9 +431,15 @@ class PatcherTab:
     # ── Callbacks ─────────────────────────────────────────────────────
 
     def _browse_patch(self):
-        start = str(Path(self.patch_input.text()).parent) if self.patch_input.text().strip() else str(Path.home())
+        start = (
+            str(Path(self.patch_input.text()).parent)
+            if self.patch_input.text().strip()
+            else str(Path.home())
+        )
         path, _ = QFileDialog.getOpenFileName(
-            self.main, "Select .apsshd file", start,
+            self.main,
+            "Select .apsshd file",
+            start,
             "SSHD Patches (*.apsshd);;All Files (*)",
         )
         if path:
@@ -416,7 +448,9 @@ class PatcherTab:
     def _browse_extract(self):
         start = self.extract_input.text().strip() or str(Path.home())
         path = QFileDialog.getExistingDirectory(
-            self.main, "Select SSHD ROM Extract Folder", start,
+            self.main,
+            "Select SSHD ROM Extract Folder",
+            start,
         )
         if path:
             self.extract_input.setText(path)
@@ -424,7 +458,9 @@ class PatcherTab:
     def _on_file_changed(self):
         """Enable/disable patch button and show file info."""
         patch_file = self.patch_input.text().strip()
-        valid = patch_file and Path(patch_file).is_file() and patch_file.endswith(".apsshd")
+        valid = (
+            patch_file and Path(patch_file).is_file() and patch_file.endswith(".apsshd")
+        )
         self.patch_btn.setEnabled(valid)
 
         if valid:
@@ -434,7 +470,9 @@ class PatcherTab:
                     player = manifest.get("player", "?")
                     seed = manifest.get("seed", "?")
                     has_rom = manifest.get("has_rom_patches", False)
-                    status = "contains ROM patches" if has_rom else "needs ROM generation"
+                    status = (
+                        "contains ROM patches" if has_rom else "needs ROM generation"
+                    )
                     self.info_label.setText(
                         f"Player: {player}  |  Seed: {seed}  |  Status: {status}"
                     )
