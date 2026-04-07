@@ -7,6 +7,7 @@ from PySide6.QtCore import QEvent, Qt, QSize, QUrl
 from PySide6.QtGui import QDesktopServices, QIcon, QMouseEvent, QPixmap, QCloseEvent
 from PySide6.QtWidgets import (
     QApplication,
+    QCheckBox,
     QFileDialog,
     QMessageBox,
     QMainWindow,
@@ -61,6 +62,11 @@ class Main(QMainWindow):
         # Always open on the getting started tab
         self.ui.tab_widget.setCurrentIndex(0)
 
+        # Remove the Hints tab (hints are not used in Archipelago)
+        hints_index = self.ui.tab_widget.indexOf(self.ui.hints_tab)
+        if hints_index != -1:
+            self.ui.tab_widget.removeTab(hints_index)
+
         self.fi_info_dialog = FiInfoDialog(self)
         self.fi_question_dialog = FiQuestionDialog(self)
 
@@ -70,6 +76,10 @@ class Main(QMainWindow):
 
         print_progress_text("Initializing GUI: accessibility")
         self.accessibility = Accessibility(self, self.ui)
+
+        # Add Archipelago-specific accessibility options
+        self._init_ap_accessibility_options()
+
         print_progress_text("Initializing GUI: settings")
         self.settings = Settings(self, self.ui)
         print_progress_text("Initializing GUI: advanced")
@@ -126,7 +136,7 @@ class Main(QMainWindow):
 
         # Warn if extract path is empty (it's needed for patching, not YAML gen)
         extract_path = ap_settings.get("extract_path", "")
-        if not extract_path:
+        if not extract_path and not self.config.disable_extract_verification:
             confirm = self.fi_question_dialog.show_dialog(
                 "No Extract Path Set",
                 "You haven't set a ROM extract path in the Archipelago tab.<br>"
@@ -172,7 +182,10 @@ class Main(QMainWindow):
             f"Seed successfully generated!\n\nHash: {self.config.get_hash()}"
         )
 
-        if not self.config.first_time_seed_gen_text:
+        if (
+            not self.config.first_time_seed_gen_text
+            and not self.config.disable_reminders
+        ):
             done_dialog_text += "\n\nPlease note that the item which spawns after defeating a boss will always look like a Heart Container. This item is actually randomized even though it doesn't look different and could be a useful item."
 
         done_dialog.setText(done_dialog_text)
@@ -266,6 +279,62 @@ class Main(QMainWindow):
         except AttributeError:
             # UI elements might not exist in all versions
             pass
+
+    def _init_ap_accessibility_options(self):
+        """Add Archipelago-specific checkboxes to the accessibility group box."""
+        from PySide6.QtWidgets import QGroupBox, QVBoxLayout
+
+        # Create a new group box for AP options
+        ap_options_box = QGroupBox("Options", self.ui.accessibility_group_box)
+        layout = QVBoxLayout(ap_options_box)
+
+        self.disable_extract_verification_cb = QCheckBox(
+            "Disable Extract Verification", ap_options_box
+        )
+        self.disable_extract_verification_cb.setToolTip(
+            "Skip the extract verification prompt on startup."
+        )
+        self.disable_extract_verification_cb.setChecked(
+            self.config.disable_extract_verification
+        )
+        self.disable_extract_verification_cb.stateChanged.connect(
+            self._on_ap_option_changed
+        )
+        layout.addWidget(self.disable_extract_verification_cb)
+
+        self.disable_open_extract_folder_cb = QCheckBox(
+            "Disable Opening Extract Folder", ap_options_box
+        )
+        self.disable_open_extract_folder_cb.setToolTip(
+            "Don't automatically open the extract folder on first startup."
+        )
+        self.disable_open_extract_folder_cb.setChecked(
+            self.config.disable_open_extract_folder
+        )
+        self.disable_open_extract_folder_cb.stateChanged.connect(
+            self._on_ap_option_changed
+        )
+        layout.addWidget(self.disable_open_extract_folder_cb)
+
+        self.disable_reminders_cb = QCheckBox("Disable Reminders", ap_options_box)
+        self.disable_reminders_cb.setToolTip(
+            "Skip one-time informational popups (e.g. seed generation tips, random setting tutorials)."
+        )
+        self.disable_reminders_cb.setChecked(self.config.disable_reminders)
+        self.disable_reminders_cb.stateChanged.connect(self._on_ap_option_changed)
+        layout.addWidget(self.disable_reminders_cb)
+
+        self.ui.horizontalLayout_6.addWidget(ap_options_box)
+
+    def _on_ap_option_changed(self):
+        self.config.disable_extract_verification = (
+            self.disable_extract_verification_cb.isChecked()
+        )
+        self.config.disable_open_extract_folder = (
+            self.disable_open_extract_folder_cb.isChecked()
+        )
+        self.config.disable_reminders = self.disable_reminders_cb.isChecked()
+        write_config_to_file(CONFIG_PATH, self.config)
 
     def check_output_dir(self) -> bool:
         output_dir = self.config.output_dir
@@ -399,17 +468,19 @@ def start_gui(app: QApplication):
                 title="Getting Started", text=get_extract_text
             )
 
-            main.advanced.open_extract_folder()
+            if not main.config.disable_open_extract_folder:
+                main.advanced.open_extract_folder()
 
-            confirm_first_time_verify_dialog = main.fi_question_dialog.show_dialog(
-                "Perform Full Verification?",
-                f'Would you like to verify your extract (required for patching)?<br><br>Answering "No" will prevent you from patching the game but you will still be able to configure settings and generate a YAML.',
-            )
+            if not main.config.disable_extract_verification:
+                confirm_first_time_verify_dialog = main.fi_question_dialog.show_dialog(
+                    "Perform Full Verification?",
+                    f'Would you like to verify your extract (required for patching)?<br><br>Answering "No" will prevent you from patching the game but you will still be able to configure settings and generate a YAML.',
+                )
 
-            if confirm_first_time_verify_dialog == QMessageBox.StandardButton.Yes:
-                if main.advanced.verify_extract(verify_all=True):
-                    main.config.verified_extract = True
-                    main.settings.update_from_config()
+                if confirm_first_time_verify_dialog == QMessageBox.StandardButton.Yes:
+                    if main.advanced.verify_extract(verify_all=True):
+                        main.config.verified_extract = True
+                        main.settings.update_from_config()
 
         sys.exit(app.exec())
     except Exception as e:

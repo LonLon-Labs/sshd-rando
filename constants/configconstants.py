@@ -36,6 +36,9 @@ PREFERENCE_FIELDS = (
     "verified_extract",
     "tutorial_random_settings",
     "first_time_seed_gen_text",
+    "disable_extract_verification",
+    "disable_open_extract_folder",
+    "disable_reminders",
 )
 
 
@@ -64,6 +67,9 @@ DEFAULT_SETTINGS = {
     "verified_extract": False,
     "tutorial_random_settings": False,
     "first_time_seed_gen_text": False,
+    "disable_extract_verification": False,
+    "disable_open_extract_folder": False,
+    "disable_reminders": False,
     "starting_inventory": Counter(
         [
             HYLIAN_SHIELD,

@@ -165,46 +165,6 @@ class Settings:
             self.exclude_locations_pair.update_option_list_type_filter
         )
 
-        # Init excluded hint locations
-        excludable_hint_locations = list(
-            (location.name, location.types)
-            for location in self.location_table.values()
-            if "Hint Location" in location.types
-        )
-
-        self.exclude_hints_locations_pair = ListPair(
-            self.config.settings[0].excluded_hint_locations,
-            get_default_setting("excluded_hint_locations"),
-            self.ui.excluded_hint_locations_list_view,
-            self.ui.included_hint_locations_list_view,
-            self.ui.exclude_hint_location_button,
-            self.ui.include_hint_location_button,
-            self.ui.hints_reset_button,
-            excludable_hint_locations,
-        )
-        self.exclude_hints_locations_pair.listPairChanged.connect(self.update_from_gui)
-
-        self.ui.excluded_hint_locations_free_search.textChanged.connect(
-            self.exclude_hints_locations_pair.update_option_list_filter
-        )
-        self.ui.included_hint_locations_free_search.textChanged.connect(
-            self.exclude_hints_locations_pair.update_non_option_list_filter
-        )
-
-        # Type filters will be added once there are multiple types of hint sources
-        #
-        # self.ui.included_hint_locations_type_filter.addItem("All")
-        # self.ui.included_hint_locations_type_filter.addItems(LOCATION_FILTER_TYPES)
-        # self.ui.included_hint_locations_type_filter.currentTextChanged.connect(
-        #     self.exclude_hints_locations_pair.update_non_option_list_type_filter
-        # )
-
-        # self.ui.excluded_hint_locations_type_filter.addItem("All")
-        # self.ui.excluded_hint_locations_type_filter.addItems(LOCATION_FILTER_TYPES)
-        # self.ui.excluded_hint_locations_type_filter.currentTextChanged.connect(
-        #     self.exclude_hints_locations_pair.update_option_list_type_filter
-        # )
-
         # Init starting items
         item_defs: list[dict] = list(yaml_load(ITEMS_PATH))
         item_types: dict[str, list[str]] = {
@@ -347,7 +307,11 @@ class Settings:
                 elif widget.checkState() == Qt.CheckState.PartiallyChecked:
                     new_option = "random"
 
-                    if not self.config.tutorial_random_settings and from_widget:
+                    if (
+                        not self.config.tutorial_random_settings
+                        and not self.config.disable_reminders
+                        and from_widget
+                    ):
                         self.main.fi_info_dialog.show_dialog(
                             "Random Setting Information",
                             f"Checkboxes have 3 states: off, on, and 'random'. Checkboxes that have a dash (-) instead of a tick mean that the randomizer will randomly pick if that setting is on or off when you click 'Randomize'.<br><br>You can middle-click any setting to quickly reset it back to its default or right-click to view a description of the possible options for a setting.",
@@ -374,10 +338,6 @@ class Settings:
         ## Excluded locations
         excluded_locations = self.exclude_locations_pair.get_added()
         self.config.settings[0].excluded_locations = excluded_locations
-
-        ## Excluded hint locations
-        excluded_hint_locations = self.exclude_hints_locations_pair.get_added()
-        self.config.settings[0].excluded_hint_locations = excluded_hint_locations
 
         ## Starting inventory
         starting_inventory = self.starting_inventory_pair.get_added()
@@ -443,9 +403,6 @@ class Settings:
 
         # Update list pairs
         self.exclude_locations_pair.update(self.config.settings[0].excluded_locations)
-        self.exclude_hints_locations_pair.update(
-            self.config.settings[0].excluded_hint_locations
-        )
         self.starting_inventory_pair.update(
             list(self.config.settings[0].starting_inventory.elements())
         )
@@ -750,21 +707,6 @@ class Settings:
         return True
 
     def verify_excluded_locations(self):
-        excluded_hint_locations = self.config.settings[0].excluded_hint_locations.copy()
-        for location in excluded_hint_locations:
-            if location not in self.location_table:
-                self.config.settings[0].excluded_hint_locations.remove(location)
-
-                if location in LOCATION_ALIASES:
-                    self.config.settings[0].excluded_hint_locations.append(
-                        LOCATION_ALIASES[location]
-                    )
-                else:
-                    self.main.fi_info_dialog.show_dialog(
-                        "Unknown location!",
-                        f"Could not exclude unknown location: {location}.\n\nThis location will be ignored and will not be excluded.",
-                    )
-
         excluded_locations = self.config.settings[0].excluded_locations.copy()
         for location in excluded_locations:
             if location not in self.location_table:

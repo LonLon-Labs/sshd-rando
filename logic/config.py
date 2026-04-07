@@ -36,6 +36,9 @@ class Config:
         self.first_time_seed_gen_text: bool = False
         self.hash: str = ""
         self.ap_settings: dict = {}
+        self.disable_extract_verification: bool = False
+        self.disable_open_extract_folder: bool = False
+        self.disable_reminders: bool = False
 
     def get_hash(self) -> str:
         if self.hash:
