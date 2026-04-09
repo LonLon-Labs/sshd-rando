@@ -85,6 +85,7 @@ class Archipelago:
         # Build the tab widget
         self._build_tab()
         self._load_values()
+        self._update_summary()
 
     # ── Tab construction ──────────────────────────────────────────────────
 
@@ -382,20 +383,27 @@ class Archipelago:
 
     def _load_values(self):
         """Populate widgets from self.ap dict."""
-        self.player_name_edit.setText(
-            self.ap.get("player_name", AP_DEFAULTS["player_name"])
-        )
-        self.goal_combo.setCurrentIndex(self.ap.get("goal", 0))
-        self.death_link_cb.setChecked(self.ap.get("death_link", False))
-        self.breath_link_cb.setChecked(self.ap.get("breath_link", False))
-        self.progression_spin.setValue(self.ap.get("progression_balancing", 50))
-        self.alt_logo_cb.setChecked(self.ap.get("use_alternative_logo", False))
-        self.item_model_combo.setCurrentIndex(self.ap.get("archipelago_item_model", 2))
-        self.extract_path_edit.setText(self.ap.get("extract_path", ""))
-        self.speed_spin.setValue(self.ap.get("cheat_speed_multiplier", 10))
+        # Block signals while loading to prevent _on_change from firing
+        # mid-load (which would save partially-default widget values over the
+        # real loaded settings).
+        self._loading = True
+        try:
+            self.player_name_edit.setText(
+                self.ap.get("player_name", AP_DEFAULTS["player_name"])
+            )
+            self.goal_combo.setCurrentIndex(self.ap.get("goal", 0))
+            self.death_link_cb.setChecked(self.ap.get("death_link", False))
+            self.breath_link_cb.setChecked(self.ap.get("breath_link", False))
+            self.progression_spin.setValue(self.ap.get("progression_balancing", 50))
+            self.alt_logo_cb.setChecked(self.ap.get("use_alternative_logo", False))
+            self.item_model_combo.setCurrentIndex(self.ap.get("archipelago_item_model", 2))
+            self.extract_path_edit.setText(self.ap.get("extract_path", ""))
+            self.speed_spin.setValue(self.ap.get("cheat_speed_multiplier", 10))
 
-        for key, cb in self._cheat_checkboxes.items():
-            cb.setChecked(self.ap.get(key, False))
+            for key, cb in self._cheat_checkboxes.items():
+                cb.setChecked(self.ap.get(key, False))
+        finally:
+            self._loading = False
 
     def _save_values(self):
         """Write widget values back to self.ap and persist config."""
@@ -423,6 +431,8 @@ class Archipelago:
     # ── Callbacks ─────────────────────────────────────────────────────────
 
     def _on_change(self, *_args):
+        if getattr(self, "_loading", False):
+            return
         self._save_values()
         self._update_summary()
 
