@@ -170,10 +170,35 @@ _INT_SETTINGS = {
 # Settings that use "progressive_items" → "true"/"false"
 _PROGRESSIVE_BOOL = {"progressive_items"}
 
+# sshd-rando damage_multiplier (numeric 0-80) → AP named choice
+_DAMAGE_MULTIPLIER_MAP = {
+    0: "half",
+    1: "normal",
+    2: "double",
+    4: "quadruple",
+    80: "ohko",
+}
+
+
+def _convert_damage_multiplier(val) -> str:
+    """Map the sshd-rando numeric damage_multiplier to an AP choice name."""
+    try:
+        num = int(val)
+    except (ValueError, TypeError):
+        return "normal"
+    if num in _DAMAGE_MULTIPLIER_MAP:
+        return _DAMAGE_MULTIPLIER_MAP[num]
+    # For non-standard values, pick the closest AP option
+    closest = min(_DAMAGE_MULTIPLIER_MAP, key=lambda k: abs(k - num))
+    return _DAMAGE_MULTIPLIER_MAP[closest]
+
 
 def _convert_setting_value(name: str, setting: Setting):
     """Convert a sshd-rando Setting to the appropriate YAML value."""
     val = setting.value
+
+    if name == "damage_multiplier":
+        return _convert_damage_multiplier(val)
 
     if name in _BOOL_SETTINGS:
         if val == "on":

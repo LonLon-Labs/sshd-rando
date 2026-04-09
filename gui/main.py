@@ -176,44 +176,6 @@ class Main(QMainWindow):
                 str(e),
             )
 
-        done_dialog = QMessageBox(self)
-        done_dialog.setWindowTitle("Randomization Completed")
-        done_dialog_text = (
-            f"Seed successfully generated!\n\nHash: {self.config.get_hash()}"
-        )
-
-        if (
-            not self.config.first_time_seed_gen_text
-            and not self.config.disable_reminders
-        ):
-            done_dialog_text += "\n\nPlease note that the item which spawns after defeating a boss will always look like a Heart Container. This item is actually randomized even though it doesn't look different and could be a useful item."
-
-        done_dialog.setText(done_dialog_text)
-
-        open_output_button = done_dialog.addButton(
-            "Open", QMessageBox.ButtonRole.NoRole
-        )
-        open_output_button.clicked.disconnect()  # Prevent from closing the done message
-        open_output_button.clicked.connect(self.open_output_folder)
-
-        done_dialog.addButton("OK", QMessageBox.ButtonRole.NoRole)
-
-        done_dialog.setWindowIcon(QIcon(ICON_PATH.as_posix()))
-        icon_pixmap = QPixmap(ICON_PATH.as_posix()).scaled(
-            QSize(80, 80),
-            Qt.AspectRatioMode.IgnoreAspectRatio,
-            Qt.TransformationMode.SmoothTransformation,
-        )
-        done_dialog.setIconPixmap(icon_pixmap)
-        done_dialog.exec()
-
-        self.config.first_time_seed_gen_text = True
-        write_config_to_file(CONFIG_PATH, self.config)
-
-        # Prevents old progress dialogs reappearing when generating another
-        # seed without reopening the entire program
-        self.progress_dialog.deleteLater()
-
     def cancel_callback(self):
         RandomizationThread.cancelled = True
 
