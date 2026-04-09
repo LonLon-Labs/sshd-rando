@@ -228,6 +228,7 @@ def generate_yaml(
     game_settings["extract_path"] = ap_settings.get("extract_path", "")
 
     # ── Archipelago options ───────────────────────────────────────────
+    game_settings["goal"] = ap_settings.get("goal", 0)
     game_settings["death_link"] = ap_settings.get("death_link", False)
     game_settings["breath_link"] = ap_settings.get("breath_link", False)
     game_settings["progression_balancing"] = ap_settings.get(

@@ -11,10 +11,6 @@ on:
       - 'feature/*'
     paths-ignore:
       - 'README.md'
-  pull_request:
-    branches: [main, master]
-    paths-ignore:
-      - 'README.md'
   workflow_dispatch:
     inputs:
       # we don't currently take in the input version, instead

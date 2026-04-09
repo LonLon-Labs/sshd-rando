@@ -41,6 +41,7 @@ if TYPE_CHECKING:
 
 AP_DEFAULTS = {
     "player_name": "Player1",
+    "goal": 0,
     "death_link": False,
     "breath_link": False,
     "progression_balancing": 50,
@@ -63,6 +64,7 @@ AP_DEFAULTS = {
     "cheat_speed_multiplier": 10,
 }
 
+GOAL_OPTIONS = ["Defeat Demise", "Defeat Ghirahim 3", "Defeat Horde"]
 ITEM_MODEL_OPTIONS = ["Letter", "Archipelago Logo", "Unofficial Archipelago Logo"]
 
 
@@ -146,6 +148,25 @@ class Archipelago:
     def _build_multiworld_group(self):
         group = QGroupBox("Multiworld Options")
         vbox = QVBoxLayout(group)
+
+        # Goal
+        row = QHBoxLayout()
+        lbl = QLabel("Goal:")
+        lbl.setMinimumWidth(160)
+        self.goal_combo = QComboBox()
+        self.goal_combo.setMinimumWidth(200)
+        self.goal_combo.addItems(GOAL_OPTIONS)
+        self.goal_combo.setToolTip(
+            "Victory condition for this world in the multiworld.\n"
+            "Defeat Demise: Full Horde \u2192 Ghirahim 3 \u2192 Demise sequence.\n"
+            "Defeat Ghirahim 3: Demise is skipped.\n"
+            "Defeat Horde: Ghirahim 3 and Demise are skipped."
+        )
+        self.goal_combo.currentIndexChanged.connect(self._on_change)
+        row.addWidget(lbl)
+        row.addWidget(self.goal_combo)
+        row.addStretch()
+        vbox.addLayout(row)
 
         # Death Link
         self.death_link_cb = QCheckBox("Death Link")
@@ -364,6 +385,7 @@ class Archipelago:
         self.player_name_edit.setText(
             self.ap.get("player_name", AP_DEFAULTS["player_name"])
         )
+        self.goal_combo.setCurrentIndex(self.ap.get("goal", 0))
         self.death_link_cb.setChecked(self.ap.get("death_link", False))
         self.breath_link_cb.setChecked(self.ap.get("breath_link", False))
         self.progression_spin.setValue(self.ap.get("progression_balancing", 50))
@@ -378,6 +400,7 @@ class Archipelago:
     def _save_values(self):
         """Write widget values back to self.ap and persist config."""
         self.ap["player_name"] = self.player_name_edit.text().strip() or "Player1"
+        self.ap["goal"] = self.goal_combo.currentIndex()
         self.ap["death_link"] = self.death_link_cb.isChecked()
         self.ap["breath_link"] = self.breath_link_cb.isChecked()
         self.ap["progression_balancing"] = self.progression_spin.value()
@@ -421,6 +444,9 @@ class Archipelago:
         parts = []
         name = self.ap.get("player_name", "Player1")
         parts.append(f"<b>Player:</b> {name}")
+
+        goal_idx = self.ap.get("goal", 0)
+        parts.append(f"<b>Goal:</b> {GOAL_OPTIONS[goal_idx]}")
 
         active_links = []
         if self.ap.get("death_link"):
