@@ -22,29 +22,47 @@ if TYPE_CHECKING:
 # Maps sshd-rando setting names to YAML keys where they differ.
 # Most are 1:1 so they don't need to be in this map.
 _RANDO_TO_YAML = {
-    "small_key_shuffle": "small_key_shuffle",
-    "boss_key_shuffle": "boss_key_shuffle",
-    "map_shuffle": "map_shuffle",
+    "small_keys": "small_key_shuffle",
+    "boss_keys": "boss_key_shuffle",
+    "map_mode": "map_shuffle",
     "skip_g3": "skip_ghirahim3",
+    "randomize_dungeon_entrances": "randomize_dungeons",
+    "randomize_trial_gate_entrances": "randomize_trials",
+    "required_dungeons": "required_dungeon_count",
+    "got_sword_requirement": "gate_of_time_sword_requirement",
+    "skip_misc_small_cutscenes": "skip_misc_cutscenes",
+    "randomize_music": "music_randomization",
+    "random_starting_tablet_count": "starting_tablets",
+}
+
+# sshd-rando settings that have no AP equivalent and should be excluded from yaml
+_SKIP_SETTINGS = {
+    "randomize_skykeep_layout",
+    "skip_demise",
+    "spawn_hearts",
+    "language",
+    "daytime_sky_color",
+    "nighttime_sky_color",
+    "daytime_cloud_color",
+    "nighttime_cloud_color",
+    "low_health_beeping_speed",
 }
 
 # Settings that use on/off in sshd-rando but true/false in the YAML
 _BOOL_SETTINGS = {
     "gratitude_crystal_shuffle",
     "stamina_fruit_shuffle",
-    "npc_closet_shuffle",
     "hidden_item_shuffle",
     "goddess_chest_shuffle",
     "tadtone_shuffle",
     "gossip_stone_treasure_shuffle",
-    "randomize_dungeons",
-    "randomize_trials",
+    "randomize_dungeon_entrances",
+    "randomize_trial_gate_entrances",
     "randomize_door_entrances",
     "decouple_double_doors",
     "randomize_interior_entrances",
     "randomize_overworld_entrances",
     "decouple_entrances",
-    "decouple_skykeep_layout",
     "random_starting_statues",
     "limit_starting_spawn",
     "burn_traps",
@@ -55,14 +73,13 @@ _BOOL_SETTINGS = {
     "open_thunderhead",
     "open_batreaux_shed",
     "skip_harp_playing",
-    "skip_misc_cutscenes",
+    "skip_misc_small_cutscenes",
     "no_spoiler_log",
     "enable_back_in_time",
     "underground_rupee_shuffle",
     "random_bottle_contents",
     "randomize_shop_prices",
     "full_wallet_upgrades",
-    "random_trial_object_positions",
     "upgraded_skyward_strike",
     "faster_air_meter_depletion",
     "unlock_all_groosenator_destinations",
@@ -72,10 +89,8 @@ _BOOL_SETTINGS = {
     "empty_unrequired_dungeons",
     "small_keys_in_fancy_chests",
     "cutoff_game_over_music",
-    "spawn_hearts",
     "skip_horde",
     "skip_g3",
-    "skip_demise",
     "tunic_swap",
     "lightning_skyward_strike",
     "starry_skies",
@@ -159,8 +174,8 @@ _BOOL_SETTINGS = {
 
 # Integer settings (value stored as string in sshd-rando)
 _INT_SETTINGS = {
-    "required_dungeon_count",
-    "starting_tablets",
+    "required_dungeons",
+    "random_starting_tablet_count",
     "random_starting_item_count",
     "trial_treasure_shuffle",
     "starting_hearts",
@@ -169,6 +184,22 @@ _INT_SETTINGS = {
 
 # Settings that use "progressive_items" → "true"/"false"
 _PROGRESSIVE_BOOL = {"progressive_items"}
+
+# Settings that need custom value mapping
+_VALUE_MAP = {
+    # sshd-rando vanilla/randomized → AP Toggle false/true
+    "npc_closet_shuffle": {"vanilla": False, "randomized": True},
+    # sshd-rando none/simple/advanced/full → AP Choice (pass through directly)
+    "random_trial_object_positions": {"none": "none", "simple": "simple", "advanced": "advanced", "full": "full"},
+    # sshd-rando music options → AP choice names
+    "randomize_music": {"vanilla": "vanilla", "shuffle_music": "shuffled", "shuffle_music_limit_vanilla": "shuffled_limit_vanilla"},
+    # sshd-rando spawn options → AP choice names (AP only has vanilla/anywhere)
+    "random_starting_spawn": {"vanilla": "vanilla", "bird_statues": "anywhere", "any_surface_region": "anywhere", "anywhere": "anywhere"},
+    # sshd-rando multi-option → AP Toggle (open = true, anything else = false)
+    "open_lake_floria": {"vanilla": False, "yerbal": False, "open": True},
+    "open_earth_temple": {"open": True, "shuffle_eldin": False, "shuffle_anywhere": False},
+    "open_lmf": {"nodes": False, "main_node": False, "open": True},
+}
 
 # sshd-rando damage_multiplier (numeric 0-80) → AP named choice
 _DAMAGE_MULTIPLIER_MAP = {
@@ -199,6 +230,9 @@ def _convert_setting_value(name: str, setting: Setting):
 
     if name == "damage_multiplier":
         return _convert_damage_multiplier(val)
+
+    if name in _VALUE_MAP:
+        return _VALUE_MAP[name].get(val, val)
 
     if name in _BOOL_SETTINGS:
         if val == "on":
@@ -281,6 +315,8 @@ def generate_yaml(
         setting_map = config.settings[0]
 
         for setting_name, setting in setting_map.settings.items():
+            if setting_name in _SKIP_SETTINGS:
+                continue
             yaml_key = _RANDO_TO_YAML.get(setting_name, setting_name)
             game_settings[yaml_key] = _convert_setting_value(setting_name, setting)
 
