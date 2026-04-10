@@ -42,6 +42,8 @@ if TYPE_CHECKING:
 AP_DEFAULTS = {
     "player_name": "Player1",
     "goal": 0,
+    "triforce_required": True,
+    "triforce_count": 3,
     "death_link": False,
     "breath_link": False,
     "progression_balancing": 50,
@@ -104,6 +106,7 @@ class Archipelago:
         self.layout.setSpacing(10)
 
         self._build_connection_group()
+        self._build_defeat_requirements_group()
         self._build_multiworld_group()
         self._build_cosmetics_group()
         self._build_cheats_group()
@@ -143,6 +146,46 @@ class Archipelago:
         vbox.addLayout(row)
 
         self.layout.addWidget(group)
+
+    # ── Group: Defeat Requirements ─────────────────────────────────────────
+
+    def _build_defeat_requirements_group(self):
+        group = QGroupBox("Defeat Requirements")
+        vbox = QVBoxLayout(group)
+
+        # Triforce Required
+        self.triforce_required_cb = QCheckBox("Triforce Required")
+        self.triforce_required_cb.setToolTip(
+            "When enabled, Triforce pieces are required to open the door\n"
+            "to Hylia's Realm. When disabled, you can proceed to the\n"
+            "endgame without collecting any Triforce pieces."
+        )
+        self.triforce_required_cb.stateChanged.connect(self._on_change)
+        self.triforce_required_cb.stateChanged.connect(self._update_triforce_count_enabled)
+        vbox.addWidget(self.triforce_required_cb)
+
+        # Triforce Count
+        row = QHBoxLayout()
+        lbl = QLabel("Triforce Count:")
+        lbl.setMinimumWidth(160)
+        self.triforce_count_spin = QSpinBox()
+        self.triforce_count_spin.setRange(1, 3)
+        self.triforce_count_spin.setToolTip(
+            "How many of the 3 Triforce pieces are needed to open the\n"
+            "door to Hylia's Realm. Only applies when Triforce Required\n"
+            "is enabled."
+        )
+        self.triforce_count_spin.valueChanged.connect(self._on_change)
+        row.addWidget(lbl)
+        row.addWidget(self.triforce_count_spin)
+        row.addStretch()
+        vbox.addLayout(row)
+
+        self.layout.addWidget(group)
+
+    def _update_triforce_count_enabled(self):
+        """Enable/disable the triforce count spinbox based on triforce_required."""
+        self.triforce_count_spin.setEnabled(self.triforce_required_cb.isChecked())
 
     # ── Group: Multiworld Options ─────────────────────────────────────────
 
@@ -392,6 +435,9 @@ class Archipelago:
                 self.ap.get("player_name", AP_DEFAULTS["player_name"])
             )
             self.goal_combo.setCurrentIndex(self.ap.get("goal", 0))
+            self.triforce_required_cb.setChecked(self.ap.get("triforce_required", True))
+            self.triforce_count_spin.setValue(self.ap.get("triforce_count", 3))
+            self._update_triforce_count_enabled()
             self.death_link_cb.setChecked(self.ap.get("death_link", False))
             self.breath_link_cb.setChecked(self.ap.get("breath_link", False))
             self.progression_spin.setValue(self.ap.get("progression_balancing", 50))
@@ -409,7 +455,19 @@ class Archipelago:
         """Write widget values back to self.ap and persist config."""
         self.ap["player_name"] = self.player_name_edit.text().strip() or "Player1"
         self.ap["goal"] = self.goal_combo.currentIndex()
+        self.ap["triforce_required"] = self.triforce_required_cb.isChecked()
+        self.ap["triforce_count"] = self.triforce_count_spin.value()
         self.ap["death_link"] = self.death_link_cb.isChecked()
+
+        # Sync triforce settings into the randomizer's config settings map
+        # so the randomizer logic sees them.
+        rando_settings = self.config.settings[0].settings
+        if "triforce_required" in rando_settings:
+            rando_settings["triforce_required"].value = (
+                "on" if self.ap["triforce_required"] else "off"
+            )
+        if "triforce_count" in rando_settings:
+            rando_settings["triforce_count"].value = str(self.ap["triforce_count"])
         self.ap["breath_link"] = self.breath_link_cb.isChecked()
         self.ap["progression_balancing"] = self.progression_spin.value()
         self.ap["use_alternative_logo"] = self.alt_logo_cb.isChecked()
@@ -457,6 +515,12 @@ class Archipelago:
 
         goal_idx = self.ap.get("goal", 0)
         parts.append(f"<b>Goal:</b> {GOAL_OPTIONS[goal_idx]}")
+
+        if self.ap.get("triforce_required", True):
+            tc = self.ap.get("triforce_count", 3)
+            parts.append(f"<b>Triforce:</b> {tc}/3 pieces required")
+        else:
+            parts.append("<b>Triforce:</b> Not required")
 
         active_links = []
         if self.ap.get("death_link"):

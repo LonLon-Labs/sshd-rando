@@ -272,6 +272,8 @@ Sceneflags:
       - 39 # Log to Behind the Temple pushed down
     - Complete_Triforce:
       - 50 # Unlocked Horde Door from Temple of Hylia
+    - triforce_required == off:
+      - 50 # Unlocked Horde Door from Temple of Hylia (triforce not required)
     - skip_horde == on:
       - 51 # Unlocked Horde Door from Hylia's Realm
 
