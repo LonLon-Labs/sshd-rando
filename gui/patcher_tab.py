@@ -2,7 +2,7 @@
 Patcher tab for the SSHD Randomizer GUI.
 
 Provides the ability to load an .apsshd file, generate ROM patches using
-the user's extracted ROM, and install the result to Ryujinx.
+the user's extracted ROM, and install the result to the emulator.
 """
 
 import json
@@ -42,41 +42,42 @@ if TYPE_CHECKING:
 # ── Helpers ───────────────────────────────────────────────────────────────
 
 
-def _find_ryujinx_mod_dir() -> Optional[Path]:
-    """Return the Ryujinx LayeredFS mod path for SSHD, or None."""
+def _find_emulator_mod_dir() -> Optional[Path]:
+    """Return the emulator LayeredFS mod path for SSHD, or None."""
     game_id = "01002da013484000"
+    candidates = []
     if sys.platform == "win32":
         appdata = Path(os.environ.get("APPDATA", ""))
-        candidates = [
-            appdata / "Ryujinx" / "sdcard" / "atmosphere" / "contents" / game_id,
-        ]
+        for emu in ["Ryujinx", "yuzu", "suyu", "sudachi"]:
+            candidates.append(appdata / emu / "sdcard" / "atmosphere" / "contents" / game_id)
+            candidates.append(appdata / emu / "load" / game_id)
     elif sys.platform == "linux":
-        candidates = [
-            Path.home()
-            / ".config"
-            / "Ryujinx"
-            / "sdcard"
-            / "atmosphere"
-            / "contents"
-            / game_id,
-        ]
+        for emu_dir, emu_base in [
+            (".config/Ryujinx", "sdcard/atmosphere/contents"),
+            (".local/share/yuzu", "load"),
+            (".local/share/suyu", "load"),
+            (".local/share/sudachi", "load"),
+        ]:
+            candidates.append(
+                Path.home() / emu_dir / emu_base / game_id
+            )
     else:
-        candidates = [
-            Path.home()
-            / "Library"
-            / "Application Support"
-            / "Ryujinx"
-            / "sdcard"
-            / "atmosphere"
-            / "contents"
-            / game_id,
-        ]
+        app_support = Path.home() / "Library" / "Application Support"
+        for emu in ["Ryujinx", "yuzu", "suyu", "sudachi"]:
+            candidates.append(
+                app_support / emu / "sdcard" / "atmosphere" / "contents" / game_id
+            )
+            candidates.append(app_support / emu / "load" / game_id)
 
     for p in candidates:
-        if p.parent.parent.parent.exists():
+        if p.parent.exists():
             p.mkdir(parents=True, exist_ok=True)
             return p
     return None
+
+
+# Keep old name as alias
+_find_ryujinx_mod_dir = _find_emulator_mod_dir
 
 
 # ── Worker thread ─────────────────────────────────────────────────────────
@@ -165,11 +166,11 @@ class PatchWorker(QThread):
 
     def _install_from_zip(self):
         """Install pre-patched romfs/exefs from the .apsshd file."""
-        mod_dir = _find_ryujinx_mod_dir()
+        mod_dir = _find_emulator_mod_dir()
         if mod_dir is None:
-            self.status_update.emit("Ryujinx directory not found", "#ff7700")
+            self.status_update.emit("Emulator directory not found", "#ff7700")
             self.log_message.emit(
-                "Could not locate Ryujinx mod directory.\n"
+                "Could not locate emulator mod directory.\n"
                 "Extract romfs/ and exefs/ from the .apsshd manually."
             )
             self.finished_signal.emit(False)
@@ -192,7 +193,7 @@ class PatchWorker(QThread):
 
         self.progress_update.emit(100)
         self.status_update.emit("Installed successfully!", "#00ff7f")
-        self.log_message.emit("\nDone! Launch Skyward Sword HD in Ryujinx.")
+        self.log_message.emit("\nDone! Launch Skyward Sword HD in your emulator.")
         self.finished_signal.emit(True)
 
     def _generate_and_install(self, patcher_data: dict, temp_dir: Path):
@@ -296,7 +297,7 @@ class PatchWorker(QThread):
         handler.do_all_patches()
 
         self.progress_update.emit(85)
-        self.log_message.emit("Installing to Ryujinx...")
+        self.log_message.emit("Installing to emulator...")
 
         romfs_out = temp_dir / "romfs"
         exefs_out = temp_dir / "exefs"
@@ -307,14 +308,14 @@ class PatchWorker(QThread):
             self.finished_signal.emit(False)
             return
 
-        mod_dir = _find_ryujinx_mod_dir()
+        mod_dir = _find_emulator_mod_dir()
         if mod_dir is None:
             self.status_update.emit(
-                "Patches generated — manual install needed", "#ff7700"
+                "Patches generated \u2014 manual install needed", "#ff7700"
             )
             self.log_message.emit(
                 f"Patches at: {temp_dir}\n"
-                "Copy romfs/ and exefs/ to your Ryujinx mod directory."
+                "Copy romfs/ and exefs/ to your emulator's mod directory."
             )
             self.finished_signal.emit(True)
             return
@@ -329,7 +330,7 @@ class PatchWorker(QThread):
         self.progress_update.emit(100)
         self.status_update.emit("Patched and installed!", "#00ff7f")
         self.log_message.emit(
-            "\nDone! Launch Skyward Sword HD in Ryujinx and connect to the server."
+            "\nDone! Launch Skyward Sword HD in your emulator and connect to the server."
         )
         self.finished_signal.emit(True)
 

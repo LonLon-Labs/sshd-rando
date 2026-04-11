@@ -235,7 +235,7 @@ class Main(QMainWindow):
                 "<html><body>"
                 "<p>After the host generates the multiworld, you'll get an <b>.apsshd</b> file.</p>"
                 "<p>Go to the <b>Patcher</b> tab, select the .apsshd file, and click <b>Patch &amp; Install</b>.</p>"
-                "<p>Then launch the game in Ryujinx and connect the Archipelago client!</p>"
+                "<p>Then launch the game in your emulator and connect the Archipelago client!</p>"
                 "</body></html>"
             )
         except AttributeError:
