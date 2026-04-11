@@ -48,7 +48,7 @@ def _find_emulator_mod_dir() -> Optional[Path]:
     candidates = []
     if sys.platform == "win32":
         appdata = Path(os.environ.get("APPDATA", ""))
-        for emu in ["Ryujinx", "yuzu", "suyu", "sudachi"]:
+        for emu in ["Ryujinx", "yuzu", "suyu", "sudachi", "eden"]:
             candidates.append(appdata / emu / "sdcard" / "atmosphere" / "contents" / game_id)
             candidates.append(appdata / emu / "load" / game_id)
     elif sys.platform == "linux":
@@ -57,13 +57,14 @@ def _find_emulator_mod_dir() -> Optional[Path]:
             (".local/share/yuzu", "load"),
             (".local/share/suyu", "load"),
             (".local/share/sudachi", "load"),
+            (".local/share/eden", "load"),
         ]:
             candidates.append(
                 Path.home() / emu_dir / emu_base / game_id
             )
     else:
         app_support = Path.home() / "Library" / "Application Support"
-        for emu in ["Ryujinx", "yuzu", "suyu", "sudachi"]:
+        for emu in ["Ryujinx", "yuzu", "suyu", "sudachi", "eden"]:
             candidates.append(
                 app_support / emu / "sdcard" / "atmosphere" / "contents" / game_id
             )
