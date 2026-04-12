@@ -195,10 +195,10 @@ _VALUE_MAP = {
     "randomize_music": {"vanilla": "vanilla", "shuffle_music": "shuffled", "shuffle_music_limit_vanilla": "shuffled_limit_vanilla"},
     # sshd-rando spawn options → AP choice names (AP only has vanilla/anywhere)
     "random_starting_spawn": {"vanilla": "vanilla", "bird_statues": "anywhere", "any_surface_region": "anywhere", "anywhere": "anywhere"},
-    # sshd-rando multi-option → AP Toggle (open = true, anything else = false)
-    "open_lake_floria": {"vanilla": False, "yerbal": False, "open": True},
-    "open_earth_temple": {"open": True, "shuffle_eldin": False, "shuffle_anywhere": False},
-    "open_lmf": {"nodes": False, "main_node": False, "open": True},
+    # sshd-rando multi-option → AP Choice names
+    "open_lake_floria": {"vanilla": "vanilla", "yerbal": "yerbal", "open": "open"},
+    "open_earth_temple": {"open": "open", "shuffle_eldin": "shuffle_eldin", "shuffle_anywhere": "shuffle_anywhere"},
+    "open_lmf": {"nodes": "nodes", "main_node": "main_node", "open": "open"},
 }
 
 # sshd-rando damage_multiplier (numeric 0-80) → AP named choice
