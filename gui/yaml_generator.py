@@ -288,6 +288,7 @@ def generate_yaml(
 
     # ── Archipelago options ───────────────────────────────────────────
     game_settings["goal"] = ap_settings.get("goal", 0)
+    game_settings["demise_count"] = ap_settings.get("demise_count", 1)
     game_settings["death_link"] = ap_settings.get("death_link", False)
     game_settings["breath_link"] = ap_settings.get("breath_link", False)
     game_settings["progression_balancing"] = ap_settings.get(
