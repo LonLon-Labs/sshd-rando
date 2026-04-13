@@ -44,12 +44,12 @@ ENGLISH_LANGUAGE_IDS = {
 # These file stems (without .msbt extension) contain NPC dialogue for shops,
 # item descriptions, or other gameplay-critical text.
 PROTECTED_MSBT_STEMS = {
-    "003-ItemGet",          # Item get text
-    "006-8KenseiNormal",    # Fi hints/notes/required dungeons
-    "008-System",           # System messages
-    "101-Shop",             # Shop text
-    "105-Terry",            # Beedle's Airshop text
-    "107-Kanban",           # Signs/bulletin boards
+    "003-ItemGet",  # Item get text
+    "006-8KenseiNormal",  # Fi hints/notes/required dungeons
+    "008-System",  # System messages
+    "101-Shop",  # Shop text
+    "105-Terry",  # Beedle's Airshop text
+    "107-Kanban",  # Signs/bulletin boards
 }
 
 
@@ -80,7 +80,9 @@ def _split_sentences(text: str) -> list[str]:
     return [p for p in parts if p.strip()]
 
 
-def _shuffle_preserving_structure(texts: list[bytes], rng: random.Random) -> list[bytes]:
+def _shuffle_preserving_structure(
+    texts: list[bytes], rng: random.Random
+) -> list[bytes]:
     """
     Shuffle text entries while preserving sentence/paragraph structure.
     Extracts sentences from all entries, shuffles them, then redistributes
@@ -231,7 +233,9 @@ def apply_text_shuffle(
         )
         all_text_bytes.extend(raw for _, _, _, raw in entries)
 
-    print(f"[TextShuffle] Collected {len(all_text_bytes)} text entries from {len(source_lang_ids)} languages")
+    print(
+        f"[TextShuffle] Collected {len(all_text_bytes)} text entries from {len(source_lang_ids)} languages"
+    )
     if not all_text_bytes:
         return
 
@@ -243,7 +247,10 @@ def apply_text_shuffle(
 
     # Now apply shuffled text back to the active language's output files
     _apply_shuffled_to_output(
-        lang_id, output_dir, shuffled_texts, protected,
+        lang_id,
+        output_dir,
+        shuffled_texts,
+        protected,
     )
     print(f"[TextShuffle] Applied {len(shuffled_texts)} shuffled entries to {lang_id}")
 
@@ -317,5 +324,3 @@ def _apply_shuffled_to_output(
 
         if modified:
             write_bytes_create_dirs(event_path, event_arc.build_U8())
-
-
