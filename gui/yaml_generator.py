@@ -190,14 +190,32 @@ _VALUE_MAP = {
     # sshd-rando vanilla/randomized → AP Toggle false/true
     "npc_closet_shuffle": {"vanilla": False, "randomized": True},
     # sshd-rando none/simple/advanced/full → AP Choice (pass through directly)
-    "random_trial_object_positions": {"none": "none", "simple": "simple", "advanced": "advanced", "full": "full"},
+    "random_trial_object_positions": {
+        "none": "none",
+        "simple": "simple",
+        "advanced": "advanced",
+        "full": "full",
+    },
     # sshd-rando music options → AP choice names
-    "randomize_music": {"vanilla": "vanilla", "shuffle_music": "shuffled", "shuffle_music_limit_vanilla": "shuffled_limit_vanilla"},
+    "randomize_music": {
+        "vanilla": "vanilla",
+        "shuffle_music": "shuffled",
+        "shuffle_music_limit_vanilla": "shuffled_limit_vanilla",
+    },
     # sshd-rando spawn options → AP choice names (AP only has vanilla/anywhere)
-    "random_starting_spawn": {"vanilla": "vanilla", "bird_statues": "anywhere", "any_surface_region": "anywhere", "anywhere": "anywhere"},
+    "random_starting_spawn": {
+        "vanilla": "vanilla",
+        "bird_statues": "anywhere",
+        "any_surface_region": "anywhere",
+        "anywhere": "anywhere",
+    },
     # sshd-rando multi-option → AP Toggle (open = true, anything else = false)
     "open_lake_floria": {"vanilla": False, "yerbal": False, "open": True},
-    "open_earth_temple": {"open": True, "shuffle_eldin": False, "shuffle_anywhere": False},
+    "open_earth_temple": {
+        "open": True,
+        "shuffle_eldin": False,
+        "shuffle_anywhere": False,
+    },
     "open_lmf": {"nodes": False, "main_node": False, "open": True},
 }
 

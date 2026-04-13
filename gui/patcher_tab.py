@@ -2,7 +2,7 @@
 Patcher tab for the SSHD Randomizer GUI.
 
 Provides the ability to load an .apsshd file, generate ROM patches using
-the user's extracted ROM, and install the result to Ryujinx.
+the user's extracted ROM, and install the result to the emulator.
 """
 
 import json
@@ -16,6 +16,7 @@ from typing import Optional
 
 from PySide6.QtCore import Qt, QThread, Signal
 from PySide6.QtWidgets import (
+    QComboBox,
     QFileDialog,
     QGroupBox,
     QHBoxLayout,
@@ -41,42 +42,68 @@ if TYPE_CHECKING:
 
 # ── Helpers ───────────────────────────────────────────────────────────────
 
+_GAME_ID = "01002da013484000"
+_ALL_EMULATORS = ["Ryujinx", "yuzu", "suyu", "sudachi", "eden"]
 
-def _find_ryujinx_mod_dir() -> Optional[Path]:
-    """Return the Ryujinx LayeredFS mod path for SSHD, or None."""
-    game_id = "01002da013484000"
+
+def _emulator_mod_path(emulator: str) -> Optional[Path]:
+    """Return the expected mod directory path for a specific emulator, or None if not installed."""
     if sys.platform == "win32":
-        appdata = Path(os.environ.get("APPDATA", ""))
-        candidates = [
-            appdata / "Ryujinx" / "sdcard" / "atmosphere" / "contents" / game_id,
-        ]
+        base = Path(os.environ.get("APPDATA", "")) / emulator
     elif sys.platform == "linux":
-        candidates = [
-            Path.home()
-            / ".config"
-            / "Ryujinx"
-            / "sdcard"
-            / "atmosphere"
-            / "contents"
-            / game_id,
-        ]
-    else:
-        candidates = [
-            Path.home()
-            / "Library"
-            / "Application Support"
-            / "Ryujinx"
-            / "sdcard"
-            / "atmosphere"
-            / "contents"
-            / game_id,
-        ]
+        linux_dirs = {
+            "Ryujinx": ".config/Ryujinx",
+            "yuzu": ".local/share/yuzu",
+            "suyu": ".local/share/suyu",
+            "sudachi": ".local/share/sudachi",
+            "eden": ".local/share/eden",
+        }
+        dir_name = linux_dirs.get(emulator)
+        if dir_name is None:
+            return None
+        base = Path.home() / dir_name
+    else:  # macOS
+        base = Path.home() / "Library" / "Application Support" / emulator
 
-    for p in candidates:
-        if p.parent.parent.parent.exists():
+    if not base.exists():
+        return None
+
+    if emulator == "Ryujinx":
+        return base / "sdcard" / "atmosphere" / "contents" / _GAME_ID
+    return base / "load" / _GAME_ID
+
+
+def _detect_installed_emulators() -> list:
+    """Return list of emulator names whose base directory exists."""
+    return [emu for emu in _ALL_EMULATORS if _emulator_mod_path(emu) is not None]
+
+
+def _find_emulator_mod_dir(emulator: Optional[str] = None) -> Optional[Path]:
+    """Return the emulator LayeredFS mod path for SSHD, or None.
+
+    If *emulator* is given, only check that specific emulator.
+    """
+    targets = [emulator] if emulator else _ALL_EMULATORS
+    for emu in targets:
+        p = _emulator_mod_path(emu)
+        if p is not None:
             p.mkdir(parents=True, exist_ok=True)
             return p
     return None
+
+
+def _find_all_emulator_mod_dirs() -> list:
+    """Return list of Paths for all installed emulators."""
+    dirs = []
+    for emu in _ALL_EMULATORS:
+        p = _emulator_mod_path(emu)
+        if p is not None:
+            dirs.append(p)
+    return dirs
+
+
+# Keep old name as alias
+_find_ryujinx_mod_dir = _find_emulator_mod_dir
 
 
 # ── Worker thread ─────────────────────────────────────────────────────────
@@ -90,10 +117,11 @@ class PatchWorker(QThread):
     status_update = Signal(str, str)  # (message, color)
     finished_signal = Signal(bool)  # success
 
-    def __init__(self, patch_path: Path, extract_path: Path):
+    def __init__(self, patch_path: Path, extract_path: Path, emulator: str = "all"):
         super().__init__()
         self._patch_path = patch_path
         self._extract_path = extract_path
+        self._emulator = emulator
 
     def run(self):
         try:
@@ -165,34 +193,41 @@ class PatchWorker(QThread):
 
     def _install_from_zip(self):
         """Install pre-patched romfs/exefs from the .apsshd file."""
-        mod_dir = _find_ryujinx_mod_dir()
-        if mod_dir is None:
-            self.status_update.emit("Ryujinx directory not found", "#ff7700")
+        if self._emulator == "all":
+            mod_dirs = _find_all_emulator_mod_dirs()
+        else:
+            d = _find_emulator_mod_dir(self._emulator)
+            mod_dirs = [d] if d else []
+
+        if not mod_dirs:
+            self.status_update.emit("Emulator directory not found", "#ff7700")
             self.log_message.emit(
-                "Could not locate Ryujinx mod directory.\n"
+                "Could not locate emulator mod directory.\n"
                 "Extract romfs/ and exefs/ from the .apsshd manually."
             )
             self.finished_signal.emit(False)
             return
 
-        install_dir = mod_dir / "Archipelago"
-        self.log_message.emit(f"Installing to: {install_dir}")
+        for mod_dir in mod_dirs:
+            mod_dir.mkdir(parents=True, exist_ok=True)
+            install_dir = mod_dir / "Archipelago"
+            self.log_message.emit(f"Installing to: {install_dir}")
 
-        if install_dir.exists():
-            shutil.rmtree(install_dir)
-        install_dir.mkdir(parents=True, exist_ok=True)
+            if install_dir.exists():
+                shutil.rmtree(install_dir)
+            install_dir.mkdir(parents=True, exist_ok=True)
 
-        with zipfile.ZipFile(self._patch_path, "r") as zf:
-            for name in zf.namelist():
-                if name.startswith("romfs/") or name.startswith("exefs/"):
-                    target = install_dir / name
-                    target.parent.mkdir(parents=True, exist_ok=True)
-                    with zf.open(name) as src, open(target, "wb") as dst:
-                        dst.write(src.read())
+            with zipfile.ZipFile(self._patch_path, "r") as zf:
+                for name in zf.namelist():
+                    if name.startswith("romfs/") or name.startswith("exefs/"):
+                        target = install_dir / name
+                        target.parent.mkdir(parents=True, exist_ok=True)
+                        with zf.open(name) as src, open(target, "wb") as dst:
+                            dst.write(src.read())
 
         self.progress_update.emit(100)
-        self.status_update.emit("Installed successfully!", "#00ff7f")
-        self.log_message.emit("\nDone! Launch Skyward Sword HD in Ryujinx.")
+        self.status_update.emit(f"Installed to {len(mod_dirs)} emulator(s)!", "#00ff7f")
+        self.log_message.emit("\nDone! Launch Skyward Sword HD in your emulator.")
         self.finished_signal.emit(True)
 
     def _generate_and_install(self, patcher_data: dict, temp_dir: Path):
@@ -296,7 +331,7 @@ class PatchWorker(QThread):
         handler.do_all_patches()
 
         self.progress_update.emit(85)
-        self.log_message.emit("Installing to Ryujinx...")
+        self.log_message.emit("Installing to emulator...")
 
         romfs_out = temp_dir / "romfs"
         exefs_out = temp_dir / "exefs"
@@ -307,29 +342,39 @@ class PatchWorker(QThread):
             self.finished_signal.emit(False)
             return
 
-        mod_dir = _find_ryujinx_mod_dir()
-        if mod_dir is None:
+        if self._emulator == "all":
+            mod_dirs = _find_all_emulator_mod_dirs()
+        else:
+            d = _find_emulator_mod_dir(self._emulator)
+            mod_dirs = [d] if d else []
+
+        if not mod_dirs:
             self.status_update.emit(
-                "Patches generated — manual install needed", "#ff7700"
+                "Patches generated \u2014 manual install needed", "#ff7700"
             )
             self.log_message.emit(
                 f"Patches at: {temp_dir}\n"
-                "Copy romfs/ and exefs/ to your Ryujinx mod directory."
+                "Copy romfs/ and exefs/ to your emulator's mod directory."
             )
             self.finished_signal.emit(True)
             return
 
-        install_dir = mod_dir / "Archipelago"
-        if install_dir.exists():
-            shutil.rmtree(install_dir)
-        install_dir.mkdir(parents=True, exist_ok=True)
-        shutil.copytree(str(romfs_out), str(install_dir / "romfs"))
-        shutil.copytree(str(exefs_out), str(install_dir / "exefs"))
+        for mod_dir in mod_dirs:
+            mod_dir.mkdir(parents=True, exist_ok=True)
+            install_dir = mod_dir / "Archipelago"
+            self.log_message.emit(f"Installing to: {install_dir}")
+            if install_dir.exists():
+                shutil.rmtree(install_dir)
+            install_dir.mkdir(parents=True, exist_ok=True)
+            shutil.copytree(str(romfs_out), str(install_dir / "romfs"))
+            shutil.copytree(str(exefs_out), str(install_dir / "exefs"))
 
         self.progress_update.emit(100)
-        self.status_update.emit("Patched and installed!", "#00ff7f")
+        self.status_update.emit(
+            f"Patched and installed to {len(mod_dirs)} emulator(s)!", "#00ff7f"
+        )
         self.log_message.emit(
-            "\nDone! Launch Skyward Sword HD in Ryujinx and connect to the server."
+            "\nDone! Launch Skyward Sword HD in your emulator and connect to the server."
         )
         self.finished_signal.emit(True)
 
@@ -393,6 +438,18 @@ class PatcherTab:
         browse_ext.clicked.connect(self._browse_extract)
         row2.addWidget(browse_ext)
         vbox_file.addLayout(row2)
+
+        # Emulator selection
+        row3 = QHBoxLayout()
+        lbl3 = QLabel("Install to:")
+        lbl3.setMinimumWidth(100)
+        self.emulator_combo = QComboBox()
+        self.emulator_combo.addItem("All Installed Emulators", "all")
+        for emu in _detect_installed_emulators():
+            self.emulator_combo.addItem(emu, emu)
+        row3.addWidget(lbl3)
+        row3.addWidget(self.emulator_combo, stretch=1)
+        vbox_file.addLayout(row3)
 
         layout.addWidget(group_file)
 
@@ -493,7 +550,9 @@ class PatcherTab:
         self.progress_bar.setValue(0)
         self.log_output.clear()
 
-        self._worker = PatchWorker(patch_path, extract_path)
+        self._worker = PatchWorker(
+            patch_path, extract_path, self.emulator_combo.currentData()
+        )
         self._worker.log_message.connect(self._on_log)
         self._worker.progress_update.connect(self.progress_bar.setValue)
         self._worker.status_update.connect(self._on_status)
