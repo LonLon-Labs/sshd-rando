@@ -370,7 +370,9 @@ class PatchWorker(QThread):
             shutil.copytree(str(exefs_out), str(install_dir / "exefs"))
 
         self.progress_update.emit(100)
-        self.status_update.emit(f"Patched and installed to {len(mod_dirs)} emulator(s)!", "#00ff7f")
+        self.status_update.emit(
+            f"Patched and installed to {len(mod_dirs)} emulator(s)!", "#00ff7f"
+        )
         self.log_message.emit(
             "\nDone! Launch Skyward Sword HD in your emulator and connect to the server."
         )
@@ -548,7 +550,9 @@ class PatcherTab:
         self.progress_bar.setValue(0)
         self.log_output.clear()
 
-        self._worker = PatchWorker(patch_path, extract_path, self.emulator_combo.currentData())
+        self._worker = PatchWorker(
+            patch_path, extract_path, self.emulator_combo.currentData()
+        )
         self._worker.log_message.connect(self._on_log)
         self._worker.progress_update.connect(self.progress_bar.setValue)
         self._worker.status_update.connect(self._on_status)

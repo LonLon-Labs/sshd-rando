@@ -161,7 +161,9 @@ class Archipelago:
             "endgame without collecting any Triforce pieces."
         )
         self.triforce_required_cb.stateChanged.connect(self._on_change)
-        self.triforce_required_cb.stateChanged.connect(self._update_triforce_count_enabled)
+        self.triforce_required_cb.stateChanged.connect(
+            self._update_triforce_count_enabled
+        )
         vbox.addWidget(self.triforce_required_cb)
 
         # Triforce Count
@@ -442,7 +444,9 @@ class Archipelago:
             self.breath_link_cb.setChecked(self.ap.get("breath_link", False))
             self.progression_spin.setValue(self.ap.get("progression_balancing", 50))
             self.alt_logo_cb.setChecked(self.ap.get("use_alternative_logo", False))
-            self.item_model_combo.setCurrentIndex(self.ap.get("archipelago_item_model", 2))
+            self.item_model_combo.setCurrentIndex(
+                self.ap.get("archipelago_item_model", 2)
+            )
             self.extract_path_edit.setText(self.ap.get("extract_path", ""))
             self.speed_spin.setValue(self.ap.get("cheat_speed_multiplier", 10))
 
