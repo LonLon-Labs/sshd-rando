@@ -45,40 +45,6 @@ if TYPE_CHECKING:
 _GAME_ID = "01002da013484000"
 _ALL_EMULATORS = ["Ryujinx", "yuzu", "suyu", "sudachi", "eden"]
 
-<<<<<<< Updated upstream
-def _find_ryujinx_mod_dir() -> Optional[Path]:
-    """Return the Ryujinx LayeredFS mod path for SSHD, or None."""
-    game_id = "01002da013484000"
-    if sys.platform == "win32":
-        appdata = Path(os.environ.get("APPDATA", ""))
-        candidates = [
-            appdata / "Ryujinx" / "sdcard" / "atmosphere" / "contents" / game_id,
-        ]
-    elif sys.platform == "linux":
-        candidates = [
-            Path.home()
-            / ".config"
-            / "Ryujinx"
-            / "sdcard"
-            / "atmosphere"
-            / "contents"
-            / game_id,
-        ]
-    else:
-        candidates = [
-            Path.home()
-            / "Library"
-            / "Application Support"
-            / "Ryujinx"
-            / "sdcard"
-            / "atmosphere"
-            / "contents"
-            / game_id,
-        ]
-
-    for p in candidates:
-        if p.parent.parent.parent.exists():
-=======
 
 def _emulator_mod_path(emulator: str) -> Optional[Path]:
     """Return the expected mod directory path for a specific emulator, or None if base dir missing."""
@@ -121,14 +87,11 @@ def _find_emulator_mod_dir(emulator: Optional[str] = None) -> Optional[Path]:
     for emu in targets:
         p = _emulator_mod_path(emu)
         if p is not None:
->>>>>>> Stashed changes
             p.mkdir(parents=True, exist_ok=True)
             return p
     return None
 
 
-<<<<<<< Updated upstream
-=======
 def _find_all_emulator_mod_dirs() -> list:
     """Return list of Paths for all installed emulators."""
     dirs = []
@@ -142,8 +105,6 @@ def _find_all_emulator_mod_dirs() -> list:
 # Keep old name as alias
 _find_ryujinx_mod_dir = _find_emulator_mod_dir
 
-
->>>>>>> Stashed changes
 # ── Worker thread ─────────────────────────────────────────────────────────
 
 
@@ -231,11 +192,6 @@ class PatchWorker(QThread):
 
     def _install_from_zip(self):
         """Install pre-patched romfs/exefs from the .apsshd file."""
-<<<<<<< Updated upstream
-        mod_dir = _find_ryujinx_mod_dir()
-        if mod_dir is None:
-            self.status_update.emit("Ryujinx directory not found", "#ff7700")
-=======
         if self._emulator == "all":
             mod_dirs = _find_all_emulator_mod_dirs()
         else:
@@ -244,7 +200,6 @@ class PatchWorker(QThread):
 
         if not mod_dirs:
             self.status_update.emit("Emulator directory not found", "#ff7700")
->>>>>>> Stashed changes
             self.log_message.emit(
                 "Could not locate Ryujinx mod directory.\n"
                 "Extract romfs/ and exefs/ from the .apsshd manually."
@@ -270,13 +225,8 @@ class PatchWorker(QThread):
                             dst.write(src.read())
 
         self.progress_update.emit(100)
-<<<<<<< Updated upstream
-        self.status_update.emit("Installed successfully!", "#00ff7f")
-        self.log_message.emit("\nDone! Launch Skyward Sword HD in Ryujinx.")
-=======
         self.status_update.emit(f"Installed to {len(mod_dirs)} emulator(s)!", "#00ff7f")
         self.log_message.emit("\nDone! Launch Skyward Sword HD in your emulator.")
->>>>>>> Stashed changes
         self.finished_signal.emit(True)
 
     def _generate_and_install(self, patcher_data: dict, temp_dir: Path):
@@ -391,10 +341,6 @@ class PatchWorker(QThread):
             self.finished_signal.emit(False)
             return
 
-<<<<<<< Updated upstream
-        mod_dir = _find_ryujinx_mod_dir()
-        if mod_dir is None:
-=======
         if self._emulator == "all":
             mod_dirs = _find_all_emulator_mod_dirs()
         else:
@@ -402,7 +348,6 @@ class PatchWorker(QThread):
             mod_dirs = [d] if d else []
 
         if not mod_dirs:
->>>>>>> Stashed changes
             self.status_update.emit(
                 "Patches generated — manual install needed", "#ff7700"
             )
