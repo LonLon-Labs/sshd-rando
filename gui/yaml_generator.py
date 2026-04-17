@@ -209,14 +209,18 @@ _VALUE_MAP = {
         "any_surface_region": "anywhere",
         "anywhere": "anywhere",
     },
-    # sshd-rando multi-option → AP Toggle (open = true, anything else = false)
-    "open_lake_floria": {"vanilla": False, "yerbal": False, "open": True},
-    "open_earth_temple": {
-        "open": True,
-        "shuffle_eldin": False,
-        "shuffle_anywhere": False,
+    # sshd-rando multi-option → AP Choice (pass through directly)
+    "open_lake_floria": {
+        "vanilla": "vanilla",
+        "yerbal": "yerbal",
+        "open": "open",
     },
-    "open_lmf": {"nodes": False, "main_node": False, "open": True},
+    "open_earth_temple": {
+        "open": "open",
+        "shuffle_eldin": "shuffle_eldin",
+        "shuffle_anywhere": "shuffle_anywhere",
+    },
+    "open_lmf": {"nodes": "nodes", "main_node": "main_node", "open": "open"},
 }
 
 # sshd-rando damage_multiplier (numeric 0-80) → AP named choice
