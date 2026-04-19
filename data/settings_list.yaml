@@ -487,6 +487,24 @@
   options:
     - 0-7: "Choose how many dungeons will have required items on their dungeon completion checks. Triforces, then swords, then other progress items are chosen, in this order."
 
+- name: triforce_required
+  default_option: "on"
+  pretty_name: Triforce Required
+  pretty_options:
+    - "Off"
+    - "On"
+  options:
+    - "off": "Triforce pieces are not required to open the door to Hylia's Realm. You can proceed to the endgame without collecting any Triforce pieces."
+    - "on": "Triforce pieces are required to open the door to Hylia's Realm. The number of pieces needed is controlled by the Triforce Count setting."
+
+- name: triforce_count
+  default_option: 3
+  pretty_name: Triforce Count
+  pretty_options:
+    - 1-3
+  options:
+    - 1-3: "Choose how many of the 3 Triforce pieces are needed to open the door to Hylia's Realm. Only applies when Triforce Required is enabled."
+
 - name: dungeons_include_sky_keep
   default_option: "off"
   pretty_name: Include Sky Keep as a Dungeon

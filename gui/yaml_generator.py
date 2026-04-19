@@ -209,8 +209,12 @@ _VALUE_MAP = {
         "any_surface_region": "anywhere",
         "anywhere": "anywhere",
     },
-    # sshd-rando multi-option → AP Choice names
-    "open_lake_floria": {"vanilla": "vanilla", "yerbal": "yerbal", "open": "open"},
+    # sshd-rando multi-option → AP Choice (pass through directly)
+    "open_lake_floria": {
+        "vanilla": "vanilla",
+        "yerbal": "yerbal",
+        "open": "open",
+    },
     "open_earth_temple": {
         "open": "open",
         "shuffle_eldin": "shuffle_eldin",
