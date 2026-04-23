@@ -60,6 +60,7 @@ AP_DEFAULTS = {
     "cheat_infinite_skyward_strike": False,
     "cheat_infinite_rupees": False,
     "cheat_moon_jump": False,
+    "cheat_hovercraft": False,
     "cheat_infinite_beetle": False,
     "cheat_infinite_loftwing": False,
     "cheat_no_electric_stun": False,
@@ -334,6 +335,11 @@ class Archipelago:
                 "Rupee counter kept at wallet maximum.",
             ),
             ("cheat_moon_jump", "Moon Jump", "Press Y while airborne to fly upward."),
+            (
+                "cheat_hovercraft",
+                "Hovercraft Mode",
+                "Hold X to float. L-stick up/down to move forward/back, L-stick left/right to turn.",
+            ),
             (
                 "cheat_infinite_beetle",
                 "Infinite Beetle Flying Time",
