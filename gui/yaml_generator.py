@@ -300,7 +300,7 @@ def generate_yaml(
     out["game"] = "Skyward Sword HD"
     out["requires"] = {
         "version": "0.6.6",
-        "game": {"Skyward Sword HD": "0.7.2"},
+        "game": {"Skyward Sword HD": "0.7.3"},
     }
 
     game_settings: dict = {}

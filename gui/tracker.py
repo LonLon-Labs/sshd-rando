@@ -678,7 +678,7 @@ class Tracker:
     def initialize_tracker_world(
         self, tracker_config: Config | None = None, autosave: dict = {}
     ) -> None:
-        self.started = True
+        self.started = False
 
         # Generate a new config from the current settings, but if we
         # passed in one from an autosave, use that instead
@@ -956,6 +956,7 @@ class Tracker:
         # the tracker one. This ensures that the hover text is cleared when opening the program
         self.update_hover_text("")
 
+        self.started = True
         self.update_tracker()
         self.main.clear_layout(self.ui.tracker_locations_info_layout)
         self.main.clear_layout(self.ui.tracker_locations_scroll_layout)
