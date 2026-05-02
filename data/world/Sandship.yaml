@@ -17,9 +17,8 @@
   events:
     Finish Mast Sequence: Bow and Sword
   exits:
-    Sandship Main Deck: Nothing
-    Sandship Stern: Bow and (Clawshots or logic_sandship_jump_to_stern)
-
+    Sandship Main Deck: Nothing # Climb across the masts to the central ladder and climb down.
+    Sandship Stern: Bow and Can_Survive_Short_Fall and (Clawshots or logic_sandship_jump_to_stern)
 
 - name: Sandship Stern
   dungeon: Sandship

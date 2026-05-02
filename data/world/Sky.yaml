@@ -1,9 +1,10 @@
 - name: The Sky
   hint_region: Sky
   exits:
-    Faron Pillar: Emerald_Tablet
-    Eldin Pillar: Ruby_Tablet
-    Lanayru Pillar: Amber_Tablet
+    Faron Pillar: Emerald_Tablet and Sailcloth
+    Eldin Pillar: Ruby_Tablet and Sailcloth
+    Lanayru Pillar: Amber_Tablet and Sailcloth
+    # You can fly low enough to land on the islands without taking damage or needing the sailcloth.
     Bamboo Island: Nothing
     Island near Bamboo Island: Nothing
     Beedle's Island: Nothing
@@ -15,9 +16,9 @@
     Fun Fun Island: Nothing
     Triple Island: Nothing
     Inside the Thunderhead: (Goddesss_Harp and Ballad_of_the_Goddess and can_access(Central Skyloft)) or open_thunderhead == on
-    Upper Skyloft: Nothing
-    Central Skyloft: Nothing
-    Skyloft Village: Nothing
+    Upper Skyloft: Sailcloth
+    Central Skyloft: Sailcloth
+    Skyloft Village: Sailcloth
   locations:
     The Sky - Form a Swirrell Ring above Volcanic Island: Nothing
     The Sky - Form a Swirrell Ring above Lumpy Pumpkin: Nothing

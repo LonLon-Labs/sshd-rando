@@ -472,9 +472,9 @@
 
 - name: Skipper's Retreat Top
   exits:
-    Skipper's Retreat Shack: Nothing
-    Skipper's Retreat Past Rock: Nothing
-    Skipper's Retreat Skydive Platform: Nothing
+    Skipper's Retreat Shack: Nothing # Open the door into the shack.
+    Skipper's Retreat Past Rock: Nothing # Use the zipper and ride down.
+    Skipper's Retreat Skydive Platform: Can_Survive_Long_Fall
   locations:
     Skipper's Retreat - Chest on North Cacti Pillar: Clawshots
     Skipper's Retreat - Slingshot Left Eye of Shack: Slingshot
@@ -588,84 +588,84 @@
 # Lanayru Statues
 - name: Lanayru Mine Entry Statue
   events:
-    Unlock Lanayru Mine Entry Statue: Nothing
+    Unlock Lanayru Mine Entry Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Lanayru Mine Entry: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Lanayru Mine Entry: Nothing # Back out of interaction.
 
 - name: Desert Entrance Statue
   events:
-    Unlock Desert Entrance Statue: Nothing
+    Unlock Desert Entrance Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Lanayru Desert South: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Lanayru Desert South: Nothing # Back out of interaction.
 
 - name: West Desert Statue
   events:
-    Unlock West Desert Statue: Nothing
+    Unlock West Desert Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Sand Oasis Middle: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Sand Oasis Middle: Nothing # Back out of interaction.
 
 - name: Desert Gorge Statue
   events:
-    Unlock Desert Gorge Statue: Nothing
+    Unlock Desert Gorge Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Temple of Time South: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Temple of Time South: Nothing # Back out of interaction.
 
 - name: Temple of Time Statue
   events:
-    Unlock Temple of Time Statue: Nothing
+    Unlock Temple of Time Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Temple of Time West Past Rubble: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Temple of Time West Past Rubble: Nothing # Back out of interaction.
 
 - name: North Desert Statue
   events:
-    Unlock North Desert Statue: Nothing
+    Unlock North Desert Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Lanayru Desert North: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Lanayru Desert North: Nothing # Back out of interaction.
 
 - name: Stone Cache Statue
   events:
-    Unlock Stone Cache Statue: Nothing
+    Unlock Stone Cache Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Lanayru Desert East: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Lanayru Desert East: Nothing # Back out of interaction.
 
 - name: Ancient Harbour Statue
   events:
-    Unlock Ancient Harbour Statue: Nothing
+    Unlock Ancient Harbour Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Ancient Harbour: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Ancient Harbour: Nothing # Back out of interaction.
 
 - name: Skipper's Retreat Statue
   events:
-    Unlock Skippers Retreat Statue: Nothing
+    Unlock Skippers Retreat Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Skipper's Retreat Dock: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Skipper's Retreat Dock: Nothing # Back out of interaction.
 
 - name: Shipyard Statue
   events:
-    Unlock Shipyard Statue: Nothing
+    Unlock Shipyard Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Shipyard Dock: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Shipyard Dock: Nothing # Back out of interaction.
 
 - name: Pirate Stronghold Statue
   events:
-    Unlock Pirate Stronghold Statue: Nothing
+    Unlock Pirate Stronghold Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Pirate Stronghold Dock: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Pirate Stronghold Dock: Nothing # Back out of interaction.
 
 - name: Lanayru Gorge Statue
   events:
-    Unlock Lanayru Gorge Statue: Nothing
+    Unlock Lanayru Gorge Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Lanayru Gorge: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Lanayru Gorge: Nothing # Back out of interaction.

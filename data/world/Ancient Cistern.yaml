@@ -1,4 +1,3 @@
-
 - name: Ancient Cistern Lobby
   dungeon: Ancient Cistern
   dungeon_starting_area: true
@@ -10,8 +9,8 @@
     AC Lobby After Whip Hooks: Whip
     AC Lobby Vines Area: (can_access(AC Lobby Vines Area) and Whip) or shortcut_ac_water_vents
     AC Behind the Waterfall: Water_Dragons_Scale and 'Can_Pull_Waterfall_Lever'
-    AC Inside Statue: count(2, Ancient_Cistern_Small_Key) or small_keys == removed or 'Can_Lower_Giant_Statue'
-    Floria Waterfall Temple Ledge: Nothing
+    AC Inside Statue High: count(2, Ancient_Cistern_Small_Key) or small_keys == removed or 'Can_Lower_Giant_Statue'
+    Floria Waterfall Temple Ledge: Nothing # Walk up the stairs and out the dungeon.
   locations:
     Ancient Cistern - Rupee in East Hand: Water_Dragons_Scale
     Ancient Cistern - Rupee in West Hand: Water_Dragons_Scale
@@ -92,13 +91,29 @@
     Ancient Cistern - Slingshot West Lamp after Pipes 2: Water_Dragons_Scale and (Whip or Clawshots) and Slingshot
     Ancient Cistern - Slingshot West Lamp after Pipes 3: Water_Dragons_Scale and (Whip or Clawshots) and Slingshot
 
-
-- name: AC Inside Statue
+- name: AC Inside Statue High
   dungeon: Ancient Cistern
   exits:
-    AC Basement: "'Can_Lower_Giant_Statue'"
+    # The player can enter the inside of the statue either from the key locked
+    # door, or the door above it. Falling from the key locked door down to the
+    # basement is a short fall. Falling from the higher door is a long fall.
+    # To avoid complicating the logic for an already logically complex dungeon,
+    # assume the player needs to survive a long fall and move on.
+    # 
+    # One additional note: The cutscene of the Stalmaster spawning in negates
+    # the fall damage and allows the player to bypass the fall logic while the
+    # Stalmaster remains undefeated. As such, the likelihood of someone
+    # actually getting locked out of their seed without modelling this fall
+    # logic is *exceedingly* small.
+    AC Inside Statue Low: Can_Survive_Long_Fall
     Ancient Cistern Lobby: Whip or shortcut_ac_water_vents
-    AC Platform Before Boss: (Ancient_Cistern_Boss_Key or boss_keys == removed) and (Whip or shortcut_ac_water_vents)
+    AC Platform Before Boss: (Ancient_Cistern_Boss_Key or boss_keys == removed) and Whip
+
+- name: AC Inside Statue Low
+  dungeon: Ancient Cistern
+  exits:
+    AC Inside Statue High: Whip or shortcut_ac_water_vents
+    AC Basement: "'Can_Lower_Giant_Statue'"
   locations:
     Ancient Cistern - Chest in Key Locked Room: "(count(2, Ancient_Cistern_Small_Key) or small_keys == removed) and
                                                  (Can_Defeat_Stalmaster or 'Can_Lower_Giant_Statue')"
@@ -108,7 +123,7 @@
 - name: AC Basement
   dungeon: Ancient Cistern
   exits:
-    AC Inside Statue: Nothing
+    AC Inside Statue Low: Nothing
     AC Basement Bone Pile with Long Thread: shortcut_ac_water_vents
     # You can clawshot straight onto the rotating vines
     AC Basement Rotating Vines: "Clawshots or
@@ -158,8 +173,8 @@
 - name: AC Platform Before Boss
   dungeon: Ancient Cistern
   exits:
-    Ancient Cistern Boss Room: Nothing
-    Ancient Cistern Lobby: Nothing
+    Ancient Cistern Boss Room: Nothing # Run up the stairs to the boss.
+    Ancient Cistern Lobby: Can_Survive_Short_Fall # Drop down and exit through the door.
 
 # Not explicitly part of the dungeon incase boss entrances are randomized
 - name: Ancient Cistern Boss Room

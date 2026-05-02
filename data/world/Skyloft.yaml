@@ -342,9 +342,9 @@
   events:
     Can Collect Water: Bottle
   exits:
-    Central Skyloft: Nothing
-    Skyloft Village: Nothing
-    Bird Nest: Nothing
+    Central Skyloft: Nothing # Jump off the island and land in the water.
+    Skyloft Village: Nothing # Jump off the island and land in the water.
+    Bird Nest: Can_Survive_Short_Fall
   locations:
     Central Skyloft - Crystal on Waterfall Island: Night
     Central Skyloft - Goddess Chest on Waterfall Island: Pirate_Stronghold_Goddess_Cube

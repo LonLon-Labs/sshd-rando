@@ -12,14 +12,14 @@
 - name: Sealed Grounds Groosenator
   hint_region: None # Don't allow sealed grounds to be the parent area of any areas reached with the groosenator
   exits:
-    Flooded Faron Woods: Nothing
-    Fun Fun Island: unlock_all_groosenator_destinations
-    Bug Heaven: unlock_all_groosenator_destinations
-    Bamboo Island: unlock_all_groosenator_destinations
-    Upper Skyloft: unlock_all_groosenator_destinations
-    Lanayru Gorge: unlock_all_groosenator_destinations
-    Shipyard Dock: unlock_all_groosenator_destinations
-    Outside Thrill Digger Cave: unlock_all_groosenator_destinations
+    Flooded Faron Woods: Nothing # Fling to FFW.
+    Fun Fun Island: Sailcloth and unlock_all_groosenator_destinations
+    Bug Heaven: Sailcloth and unlock_all_groosenator_destinations
+    Bamboo Island: Sailcloth and unlock_all_groosenator_destinations
+    Upper Skyloft: Sailcloth and unlock_all_groosenator_destinations
+    Lanayru Gorge: Sailcloth and unlock_all_groosenator_destinations
+    Shipyard Dock: Sailcloth and unlock_all_groosenator_destinations
+    Outside Thrill Digger Cave: Sailcloth and unlock_all_groosenator_destinations
 
 - name: Sealed Grounds Spiral
   hint_region: Sealed Grounds
@@ -286,11 +286,11 @@
   events:
     Talk to Yerbal: Water_Dragons_Scale and (Slingshot or Beetle) # Scale needed for Yerbal to spawn
   exits:
-    The Great Tree Statue: Nothing
-    Great Tree Interior Upper: Nothing
-    Great Tree Exterior Platforms: Nothing
-    Great Tree Rope Branch: Nothing
-    Great Tree Clawshot Target Branch: Nothing
+    The Great Tree Statue: Nothing # Interact with the statue.
+    Great Tree Interior Upper: Nothing # Run into the Great Tree.
+    Great Tree Exterior Platforms: Can_Survive_Short_Fall or logic_precise_falls # Slow walking off the ledge doesn't result in fall damage.
+    Great Tree Rope Branch: Can_Survive_Short_Fall
+    Great Tree Clawshot Target Branch: Can_Survive_Short_Fall
   locations:
     Faron Woods - Rupee on Great Tree North Branch: Beetle
     Faron Woods - Rupee on Great Tree West Branch: Beetle
@@ -479,70 +479,70 @@
 # FARON STATUES
 - name: Sealed Grounds Statue
   events:
-    Unlock Sealed Grounds Statue: Nothing
+    Unlock Sealed Grounds Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Sealed Grounds: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Sealed Grounds: Nothing # Back out of interaction.
 
 - name: Behind the Temple Statue
   events:
-    Unlock Behind the Temple Statue: Nothing
+    Unlock Behind the Temple Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Behind the Temple: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Behind the Temple: Nothing # Back out of interaction.
 
 - name: Faron Woods Entry Statue
   events:
-    Unlock Faron Woods Entry Statue: Nothing
+    Unlock Faron Woods Entry Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Faron Woods Entry: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Faron Woods Entry: Nothing # Back out of interaction.
 
 - name: Viewing Platform Statue
   events:
-    Unlock Viewing Platform Statue: Nothing
+    Unlock Viewing Platform Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Faron Woods: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Faron Woods: Nothing # Back out of interaction.
 
 - name: In the Woods Statue
   events:
-    Unlock In the Woods Statue: Nothing
+    Unlock In the Woods Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Faron Woods: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Faron Woods: Nothing # Back out of interaction.
 
 - name: Deep Woods Statue
   events:
-    Unlock Deep Woods Statue: Nothing
+    Unlock Deep Woods Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Deep Woods: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Deep Woods: Nothing # Back out of interaction.
 
 - name: Forest Temple Statue
   events:
-    Unlock Forest Temple Statue: Nothing
+    Unlock Forest Temple Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Deep Woods: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Deep Woods: Nothing # Back out of interaction.
 
 - name: The Great Tree Statue
   events:
-    Unlock The Great Tree Statue: Nothing
+    Unlock The Great Tree Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Great Tree Exterior Top: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Great Tree Exterior Top: Nothing # Back out of interaction.
 
 - name: Lake Floria Statue
   events:
-    Unlock Lake Floria Statue: Nothing
+    Unlock Lake Floria Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Lake Floria Emerged Area: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Lake Floria Emerged Area: Nothing # Back out of interaction.
 
 - name: Floria Waterfall Statue
   events:
-    Unlock Floria Waterfall Statue: Nothing
+    Unlock Floria Waterfall Statue: Nothing # Approach statue and get autosave.
   exits:
-    The Sky: Day or natural_night_connections == off
-    Floria Waterfall: Nothing
+    The Sky: Sailcloth and (Day or natural_night_connections == off)
+    Floria Waterfall: Nothing # Back out of interaction.
