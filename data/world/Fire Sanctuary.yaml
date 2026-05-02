@@ -183,18 +183,20 @@
   dungeon: Fire Sanctuary
   exits:
     FS Under Magmanos Fight Room: Nothing
-    FS West of Boss Door: Can_Hit_High_Water_Plant
+    FS West of Boss Door After Lava River: Can_Hit_High_Water_Plant
 
 
-- name: FS West of Boss Door
+- name: FS West of Boss Door After Lava River
   dungeon: Fire Sanctuary
   events:
+    # Catch Plats, cross the river to the dig spot, burrow and set the river flowing OR have the shortcut enabled.
     FS Release Second Lava River: (Can_Hit_High_Water_Plant and Mogma_Mitts) or shortcut_fs_lava_flow
   exits:
+    # Hit the plant and ride the river on the magma platform.
     FS In Front of Boss Door: Can_Hit_High_Water_Plant and 'FS_Release_Second_Lava_River'
     FS West of Boss Door Before Lava River: Can_Hit_High_Water_Plant
   locations:
-    Fire Sanctuary - Plats' Chest: Mogma_Mitts and Can_Hit_High_Water_Plant
+    Fire Sanctuary - Plats' Chest: Mogma_Mitts
 
 
 - name: FS In Front of Boss Door
@@ -203,7 +205,7 @@
     Inside the Fire Sanctuary Statue: Nothing
     Fire Sanctuary Boss Room: Fire_Sanctuary_Boss_Key or boss_keys == removed
     FS Lizalfos Fight Room: Nothing
-    FS West of Boss Door: Nothing
+    FS West of Boss Door After Lava River: Nothing
     # FS In Front of Boss Door Past Bars: Opened Bars
 
 
