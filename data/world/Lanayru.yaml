@@ -121,7 +121,7 @@
   exits:
     Lanayru Desert South: Nothing # Run up the slope and drop down past the sand pit.
     Lanayru Desert West Wall: Clawshots or shortcut_west_wall_minecart or 'Push_Down_West_Wall_Minecart'
-    Sand Oasis Middle: Can_Navigate_in_Oasis or shortcut_sand_oasis_minecart or 'Push_Down_First_Sand_Oasis_Minecart'
+    Sand Oasis Start: Nothing # Just walk upto it.
   locations:
     Lanayru Desert - Goddess Cube in Sand Oasis: Can_Navigate_in_Oasis and Goddess_Sword
     Lanayru Desert - Rupee behind South Statue near Caged Robot: Bomb_Bag and logic_bomb_throws
@@ -141,21 +141,32 @@
     Lanayru Desert - Chest on Sand Oasis Wall: Nothing # Run to the chest and open it.
     Lanayru Desert - Goddess Cube near Caged Robot: Goddess_Sword
 
+- name: Sand Oasis Start
+  hint_region: Lanayru Desert
+  exits:
+    Lanayru Desert West Courtyard: Nothing # Just walk into it.
+    Sand Oasis Middle: Can_Navigate_in_Oasis or shortcut_sand_oasis_minecart or 'Push_Down_First_Sand_Oasis_Minecart'
+  locations:
+    Lanayru Desert - Stamina Fruit in South Sand Oasis 1: Can_Navigate_in_Oasis or Beetle
+    Lanayru Desert - Stamina Fruit in South Sand Oasis 2: Can_Navigate_in_Oasis or Beetle
+
 - name: Sand Oasis Middle
   hint_region: Lanayru Desert
   events:
     Push Down First Sand Oasis Minecart: Nothing # Climb up the wall, run round to the start of sand oasis, and push down the minecart.
   exits:
     West Desert Statue: Nothing # Interact with the statue.
+    Sand Oasis Start: Nothing # Climb up the wall and run towards the start.
     Lanayru Desert West Courtyard: Nothing # Climb up the wall and run toward the courtyard.
     Lanayru Desert West Wall: Clawshots
     Sand Oasis End: Can_Navigate_in_Oasis or Clawshots or shortcut_minecart_before_caves or 'Push_Down_Second_Sand_Oasis_Minecart'
   locations:
     Lanayru Desert - Goddess Cube in Sand Oasis: Goddess_Sword
-    Lanayru Desert - Stamina Fruit in South Sand Oasis 1: Can_Navigate_in_Oasis or Beetle
-    Lanayru Desert - Stamina Fruit in South Sand Oasis 2: Can_Navigate_in_Oasis or Beetle
-    Lanayru Desert - Stamina Fruit in North Sand Oasis 1: Can_Navigate_in_Oasis or Beetle
-    Lanayru Desert - Stamina Fruit in North Sand Oasis 2: Can_Navigate_in_Oasis or Beetle
+    # Only the 2nd stamina fruit can be directly obtained from here.
+    Lanayru Desert - Stamina Fruit in South Sand Oasis 1: Beetle
+    Lanayru Desert - Stamina Fruit in South Sand Oasis 2: Nothing # Run into the south oasis and collect the freestanding item.
+    Lanayru Desert - Stamina Fruit in North Sand Oasis 1: Beetle
+    Lanayru Desert - Stamina Fruit in North Sand Oasis 2: Beetle
     Lanayru Desert - Slingshot Left Robot Eye near West Desert Bird Statue: Slingshot
 
 - name: Sand Oasis End
