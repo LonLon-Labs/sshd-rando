@@ -304,7 +304,7 @@
   exits:
     Inside the Thunderhead: Day or natural_night_connections == off
   locations:
-    Inside the Thunderhead - Chest on East Island: Digging_Mitts or logic_east_island_dive
+    Inside the Thunderhead - Chest on East Island: (Digging_Mitts and Sailcloth) or logic_east_island_dive
     Inside the Thunderhead - Goddess Chest on East Island: Faron_Woods_Goddess_Cube_on_East_Great_Tree_with_Rope
 
 - name: Mogma Mitts Island
