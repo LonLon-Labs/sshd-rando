@@ -3828,13 +3828,13 @@ F301_3: # Skipper's Retreat
       posy: 50
       posz: 8550
       name: Tubo
-  - name: Add bomb flower next to skydive chest # prevents softlocks
+  - name: Add cactus with bomb flower on top next to skydive chest # prevents softlocks
     type: objadd
     layer: 0
     room: 0
-    objtype: OBJ
+    objtype: SOBJ
     object:
-      params1: 0xFFFFFFF0
+      params1: 0xFFFEFFFF
       params2: 0xFFFFFFFF
       posx: -80
       posy: 800
@@ -3843,7 +3843,7 @@ F301_3: # Skipper's Retreat
       angley: 0
       anglez: 0
       id: 0x4270
-      name: Bombf
+      name: ECactus
 
 F301_4: # Shipyard
   - name: Layer override
