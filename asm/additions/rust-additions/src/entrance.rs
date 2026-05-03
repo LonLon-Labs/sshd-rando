@@ -154,16 +154,6 @@ pub extern "C" fn handle_er_cases() {
             NEXT_ENTRANCE = 52
         }
 
-        // If spawning into Mogma Turf without the sailcloth, spawn the player on the
-        // ground instead. Entrance 1 is by the skydive chest in vanilla. It
-        // has been modified to be on the ground instead.
-        // if &NEXT_STAGE_NAME[..5] == b"F210\0"
-        //     && NEXT_ENTRANCE == 0
-        //     && flag::check_itemflag(flag::ITEMFLAGS::SAILCLOTH) == 0
-        // {
-        //     NEXT_ENTRANCE = 1
-        // }
-
         // // If we're spawning from LMF and it hasn't been raised,
         // // instead spawn in front of where the dungeon entrance would be
         if &NEXT_STAGE_NAME[..5] == b"F300\0" && NEXT_ENTRANCE == 5 && flag::check_storyflag(8) == 0
