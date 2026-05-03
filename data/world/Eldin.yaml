@@ -182,7 +182,7 @@
   hint_region: Eldin Volcano
   exits:
     Near Temple Entrance: Clawshots or 'Beaten_Boko_Base'
-    Upper Eldin Cave: Nothing # Jump on the magma platforms.
+    Upper Eldin Cave: Nothing # Run into the cave.
 
 - name: Upper Eldin Cave
   hint_region: Eldin Volcano
@@ -240,7 +240,7 @@
 - name: Outside Lower Eldin Cave
   hint_region: Eldin Volcano
   exits:
-    Lower Eldin Cave: Nothing # Drop down onto a magma platform.
+    Lower Eldin Cave: Nothing # Run into the cave.
     Past Sand Slide: Clawshots
     Past Mogma Turf: "'Beaten_Boko_Base'"
     Volcano East: "'Beaten_Boko_Base'"

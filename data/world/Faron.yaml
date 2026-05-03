@@ -316,7 +316,7 @@
   exits:
     Deep Woods Statue: Nothing # Interact with the statue.
     Forest Temple Statue: Nothing # Interact with the statue.
-    Deep Woods Entry: Nothing # Run up the natural stairs neart the tightrope and drop down the other side.
+    Deep Woods Entry: Nothing # Run up the natural stairs near the tightrope and drop down the other side.
     Skyview Entry: Can_Hit_High_Skyview_Switches
   locations:
     # Dodging the enemies here can be a little rough without any way to deal with them.
