@@ -24,6 +24,39 @@ def build_datas_recursive(paths):
     return datas
 
 
+def build_ap_bridge_datas():
+    """Bundle AP bridge files used by patcher_tab's SSHDRWrapper import path."""
+    bridge_files = [
+        "SSHDRWrapper.py",
+        "Locations.py",
+        "Items.py",
+        "SSHD_Options.py",
+        "platform_utils.py",
+        "setting_string_decoder.py",
+        "archipelago.json",
+    ]
+    bridge_roots = [
+        "../SSHD_APWorld",
+        "../SSHD_APWorld_Switch",
+        "../SSHD_Switch_AP",
+    ]
+
+    for root in bridge_roots:
+        if not os.path.isdir(root):
+            continue
+
+        datas = []
+        for filename in bridge_files:
+            src = os.path.join(root, filename)
+            if os.path.isfile(src):
+                datas.append((src, "apworld_bridge"))
+
+        if datas:
+            return datas
+
+    return []
+
+
 a = Analysis(
     ["sshdrando.py"],
     pathex=[],
@@ -42,7 +75,7 @@ a = Analysis(
             "*.md",
             "LICENSE",
         ]
-    ),
+    ) + build_ap_bridge_datas(),
     hiddenimports=[],
     hookspath=[],
     runtime_hooks=[],

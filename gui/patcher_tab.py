@@ -244,10 +244,31 @@ class PatchWorker(QThread):
             importlib.reload(sys.modules["filepathconstants"])
         importlib.invalidate_caches()
 
-        # We need the SSHDRWrapper — find it
-        ap_world_dir = Path(__file__).resolve().parent.parent.parent / "SSHD_APWorld"
-        if ap_world_dir.is_dir() and str(ap_world_dir) not in sys.path:
-            sys.path.insert(0, str(ap_world_dir))
+        # We need SSHDRWrapper.py from either bundled bridge files or a local checkout.
+        ap_world_candidates = []
+        meipass = getattr(sys, "_MEIPASS", None)
+        if meipass:
+            ap_world_candidates.extend(
+                [
+                    Path(meipass) / "apworld_bridge",
+                    Path(meipass) / "SSHD_APWorld",
+                    Path(meipass) / "SSHD_APWorld_Switch",
+                    Path(meipass) / "SSHD_Switch_AP",
+                ]
+            )
+
+        repo_root = Path(__file__).resolve().parent.parent.parent
+        ap_world_candidates.extend(
+            [
+                repo_root / "SSHD_APWorld",
+                repo_root / "SSHD_APWorld_Switch",
+                repo_root / "SSHD_Switch_AP",
+            ]
+        )
+
+        for ap_world_dir in ap_world_candidates:
+            if ap_world_dir.is_dir() and str(ap_world_dir) not in sys.path:
+                sys.path.insert(0, str(ap_world_dir))
 
         from SSHDRWrapper import (
             _initialize_sshd_rando,
