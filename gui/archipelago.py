@@ -70,6 +70,7 @@ AP_DEFAULTS = {
     "cheat_infinite_loftwing": False,
     "cheat_no_electric_stun": False,
     "cheat_speed_multiplier": 10,
+    "demise_count": 1,
 }
 
 GOAL_OPTIONS = ["Defeat Demise", "Defeat Ghirahim 3", "Defeat Horde"]
@@ -275,6 +276,22 @@ class Archipelago:
         self.goal_combo.currentIndexChanged.connect(self._on_change)
         row.addWidget(lbl)
         row.addWidget(self.goal_combo)
+        row.addStretch()
+        vbox.addLayout(row)
+
+        # Demise Count
+        row = QHBoxLayout()
+        lbl = QLabel("Demise Count:")
+        lbl.setMinimumWidth(160)
+        self.demise_count_spin = QSpinBox()
+        self.demise_count_spin.setRange(1, 10)
+        self.demise_count_spin.setToolTip(
+            "Number of Demise bosses to fight in the final arena.\n"
+            "Setting this higher than 1 spawns additional Demise bosses."
+        )
+        self.demise_count_spin.valueChanged.connect(self._on_change)
+        row.addWidget(lbl)
+        row.addWidget(self.demise_count_spin)
         row.addStretch()
         vbox.addLayout(row)
 
@@ -505,6 +522,7 @@ class Archipelago:
             self.player_name_edit.setText(
                 self.ap.get("player_name", AP_DEFAULTS["player_name"])
             )
+            self.demise_count_spin.setValue(self.ap.get("demise_count", 1))
             self.goal_combo.setCurrentIndex(self.ap.get("goal", 0))
             self.triforce_required_cb.setChecked(self.ap.get("triforce_required", True))
             self.triforce_count_spin.setValue(self.ap.get("triforce_count", 3))
@@ -533,6 +551,7 @@ class Archipelago:
     def _save_values(self):
         """Write widget values back to self.ap and persist config."""
         self.ap["player_name"] = self.player_name_edit.text().strip() or "Player1"
+        self.ap["demise_count"] = self.demise_count_spin.value()
         self.ap["goal"] = self.goal_combo.currentIndex()
         self.ap["triforce_required"] = self.triforce_required_cb.isChecked()
         self.ap["triforce_count"] = self.triforce_count_spin.value()
