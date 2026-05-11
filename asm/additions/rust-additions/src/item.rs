@@ -274,6 +274,9 @@ pub extern "C" fn handle_crest_hit_give_item(crest_actor: *mut actor::dAcOSwSwor
                 ((*crest_actor).base.basebase.members.param1 >> 0x18) as u8;
             give_item(goddess_sword_reward);
             flag::set_local_sceneflag(50);
+            // Return after giving one item so the game can process
+            // the item-get animation. Hit the crest again for the next reward.
+            return;
         }
         if (EQUIPPED_SWORD < 2) {
             return;
@@ -284,6 +287,7 @@ pub extern "C" fn handle_crest_hit_give_item(crest_actor: *mut actor::dAcOSwSwor
             let longsword_reward: u8 = ((*crest_actor).base.basebase.members.param1 >> 0x10) as u8;
             give_item(longsword_reward);
             flag::set_local_sceneflag(51);
+            return;
         }
         if (EQUIPPED_SWORD < 3) {
             return;

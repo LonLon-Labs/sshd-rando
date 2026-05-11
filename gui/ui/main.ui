@@ -3591,6 +3591,16 @@ Practice Sword</string>
             <widget class="QComboBox" name="setting_language"/>
            </item>
            <item>
+            <widget class="QLabel" name="text_shuffle_label">
+             <property name="text">
+              <string>Text Shuffle</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="setting_text_shuffle"/>
+           </item>
+           <item>
             <spacer name="text_cosmetics_vspacer">
              <property name="orientation">
               <enum>Qt::Orientation::Vertical</enum>

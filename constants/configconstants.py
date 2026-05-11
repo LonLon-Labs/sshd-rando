@@ -50,6 +50,7 @@ ENTRANCE_TYPES = (
     "Interior",
     "Overworld",
     "Trial Gate",
+    "Gate of Time",
 )
 
 

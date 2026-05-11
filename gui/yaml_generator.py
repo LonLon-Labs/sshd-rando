@@ -39,6 +39,7 @@ _RANDO_TO_YAML = {
 _SKIP_SETTINGS = {
     "randomize_skykeep_layout",
     "skip_demise",
+    "goal_requirement",  # Replaced by individual require_* toggles in AP settings
     "spawn_hearts",
     "language",
     "daytime_sky_color",
@@ -190,15 +191,37 @@ _VALUE_MAP = {
     # sshd-rando vanilla/randomized → AP Toggle false/true
     "npc_closet_shuffle": {"vanilla": False, "randomized": True},
     # sshd-rando none/simple/advanced/full → AP Choice (pass through directly)
-    "random_trial_object_positions": {"none": "none", "simple": "simple", "advanced": "advanced", "full": "full"},
+    "random_trial_object_positions": {
+        "none": "none",
+        "simple": "simple",
+        "advanced": "advanced",
+        "full": "full",
+    },
     # sshd-rando music options → AP choice names
-    "randomize_music": {"vanilla": "vanilla", "shuffle_music": "shuffled", "shuffle_music_limit_vanilla": "shuffled_limit_vanilla"},
+    "randomize_music": {
+        "vanilla": "vanilla",
+        "shuffle_music": "shuffled",
+        "shuffle_music_limit_vanilla": "shuffled_limit_vanilla",
+    },
     # sshd-rando spawn options → AP choice names (AP only has vanilla/anywhere)
-    "random_starting_spawn": {"vanilla": "vanilla", "bird_statues": "anywhere", "any_surface_region": "anywhere", "anywhere": "anywhere"},
-    # sshd-rando multi-option → AP Toggle (open = true, anything else = false)
-    "open_lake_floria": {"vanilla": False, "yerbal": False, "open": True},
-    "open_earth_temple": {"open": True, "shuffle_eldin": False, "shuffle_anywhere": False},
-    "open_lmf": {"nodes": False, "main_node": False, "open": True},
+    "random_starting_spawn": {
+        "vanilla": "vanilla",
+        "bird_statues": "anywhere",
+        "any_surface_region": "anywhere",
+        "anywhere": "anywhere",
+    },
+    # sshd-rando multi-option → AP Choice (pass through directly)
+    "open_lake_floria": {
+        "vanilla": "vanilla",
+        "yerbal": "yerbal",
+        "open": "open",
+    },
+    "open_earth_temple": {
+        "open": "open",
+        "shuffle_eldin": "shuffle_eldin",
+        "shuffle_anywhere": "shuffle_anywhere",
+    },
+    "open_lmf": {"nodes": "nodes", "main_node": "main_node", "open": "open"},
 }
 
 # sshd-rando damage_multiplier (numeric 0-80) → AP named choice
@@ -278,7 +301,7 @@ def generate_yaml(
     out["game"] = "Skyward Sword HD"
     out["requires"] = {
         "version": "0.6.6",
-        "game": {"Skyward Sword HD": "0.7.2"},
+        "game": {"Skyward Sword HD": "0.7.3"},
     }
 
     game_settings: dict = {}
@@ -331,6 +354,14 @@ def generate_yaml(
 
         # No-spoiler-log is derived from generate_spoiler_log
         game_settings["no_spoiler_log"] = not config.generate_spoiler_log
+
+    # ── Completion requirement toggles (AP-specific) ──────────────────
+    game_settings["require_triforce_pieces"] = ap_settings.get("require_triforce_pieces", False)
+    game_settings["require_dungeons"] = ap_settings.get("require_dungeons", False)
+    game_settings["required_dungeon_count"] = ap_settings.get("required_dungeon_count", 2)
+    game_settings["require_greg"] = ap_settings.get("require_greg", False)
+    game_settings["require_tim"] = ap_settings.get("require_tim", False)
+    game_settings["require_all_progression_items"] = ap_settings.get("require_all_progression_items", False)
 
     out["Skyward Sword HD"] = game_settings
 

@@ -216,10 +216,15 @@ class Advanced:
             self.main.config.verified_extract = True
             self.update_config()
 
-            # Make sure the "Randomize" button no longer has the "Verify Extract" label
-            self.main.ui.randomize_button.setText("Randomize")
+            # Make sure the "Randomize" button no longer has the "Verify Extract" label.
+            # In the AP fork the button generates a YAML instead of randomizing.
             self.main.ui.randomize_button.clicked.disconnect()
-            self.main.ui.randomize_button.clicked.connect(self.main.randomize)
+            if hasattr(self.main, "generate_ap_yaml"):
+                self.main.ui.randomize_button.setText("Generate YAML")
+                self.main.ui.randomize_button.clicked.connect(self.main.generate_ap_yaml)
+            else:
+                self.main.ui.randomize_button.setText("Randomize")
+                self.main.ui.randomize_button.clicked.connect(self.main.randomize)
 
         completion_dialog.show_dialog("Done", "Verification Complete!")
 

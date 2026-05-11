@@ -418,6 +418,17 @@
     - "off": "Entering a doorway, pushup door, or loadzone that leads to an overworld location in the vanilla game will lead to its vanilla location."
     - "on": "Entering a doorway, pushup door, or loadzone that leads to an overworld location in the vanilla game will lead to a random overworld location."
 
+- name: randomize_gate_of_time
+  tracker_important: true
+  default_option: "off"
+  pretty_name: Randomize Gate of Time
+  pretty_options:
+    - "Off"
+    - "On"
+  options:
+    - "off": "The Gate of Time will lead to its vanilla destination (Temple of Hylia)."
+    - "on": "The Gate of Time entrance will be randomized and may lead to a different location."
+
 - name: decouple_entrances
   tracker_important: true
   default_option: "off"
@@ -494,6 +505,40 @@
     - 0-7
   options:
     - 0-7: "Choose how many dungeons will have required items on their dungeon completion checks. Triforces, then swords, then other progress items are chosen, in this order."
+
+- name: goal_requirement
+  default_option: boss_only
+  pretty_name: Goal Requirement
+  pretty_options:
+    - Boss Only
+    - Triforce Pieces
+    - Dungeons
+    - Greg
+    - All Progression Items
+  options:
+    - boss_only: "Defeating the goal boss is enough to send the goal."
+    - triforce_pieces: "Collect the configured number of Triforce pieces before the goal boss counts."
+    - dungeons: "Beat the configured number of dungeons before the goal boss counts."
+    - greg: "Obtain Greg the Green Rupee before the goal boss counts."
+    - all_progression_items: "Collect every progression item before the goal boss counts."
+
+- name: triforce_required
+  default_option: "on"
+  pretty_name: Triforce Required
+  pretty_options:
+    - "Off"
+    - "On"
+  options:
+    - "off": "Triforce pieces are not required to open the door to Hylia's Realm. You can proceed to the endgame without collecting any Triforce pieces."
+    - "on": "Triforce pieces are required to open the door to Hylia's Realm. The number of pieces needed is controlled by the Triforce Count setting."
+
+- name: triforce_count
+  default_option: 3
+  pretty_name: Triforce Count
+  pretty_options:
+    - 1-3
+  options:
+    - 1-3: "Choose how many of the 3 Triforce pieces are needed to open the door to Hylia's Realm. Only applies when Triforce Required is enabled."
 
 - name: dungeons_include_sky_keep
   default_option: "off"
@@ -967,6 +1012,25 @@
   options:
     - "off": "The background music will be interrupted by enemy drums when you get near to an enemy. Additionally, the intense music when Scaldera and Tentalus are vulnerable will play as normal."
     - "on": "The background music will continue to play when you get near to enemies. Additionally, the intense music when Scaldera and Tentalus are vulnerable will not play and the background music will continue uninterrupted."
+
+- name: text_shuffle
+  type: Cosmetic
+  default_option: "off"
+  pretty_name: Text Shuffle
+  pretty_options:
+    - "Off"
+    - "Baby"
+    - "Crazy"
+    - "Extreme"
+    - "European Extreme"
+    - "Psychopath"
+  options:
+    - "off": "All in-game text will be unchanged."
+    - "baby": "English text will be shuffled, but shop text and other important functional text will be left intact."
+    - "crazy": "All English text will be shuffled. Text will be shuffled in sentences and paragraphs to maintain some readability."
+    - "extreme": "All English text will be fully shuffled."
+    - "european_extreme": "Text from all Latin-script languages (English, French, Spanish, German, Italian, Dutch) will be shuffled. Text will be shuffled in sentences and paragraphs to maintain some readability."
+    - "psychopath": "Text from all Latin-script languages (English, French, Spanish, German, Italian, Dutch) will be fully shuffled."
 
 - name: low_health_beeping_speed
   type: Cosmetic

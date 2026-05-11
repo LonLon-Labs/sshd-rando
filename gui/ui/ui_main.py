@@ -2359,6 +2359,16 @@ class Ui_main_window(object):
 
         self.verticalLayout_36.addWidget(self.setting_language)
 
+        self.text_shuffle_label = QLabel(self.text_cosmetics_group_box)
+        self.text_shuffle_label.setObjectName(u"text_shuffle_label")
+
+        self.verticalLayout_36.addWidget(self.text_shuffle_label)
+
+        self.setting_text_shuffle = QComboBox(self.text_cosmetics_group_box)
+        self.setting_text_shuffle.setObjectName(u"setting_text_shuffle")
+
+        self.verticalLayout_36.addWidget(self.setting_text_shuffle)
+
         self.text_cosmetics_vspacer = QSpacerItem(20, 522, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_36.addItem(self.text_cosmetics_vspacer)
@@ -3360,6 +3370,7 @@ class Ui_main_window(object):
         self.low_health_beeping_speed_label.setText(QCoreApplication.translate("main_window", u"Low Health Beeping Speed", None))
         self.text_cosmetics_group_box.setTitle(QCoreApplication.translate("main_window", u"Text Cosmetics", None))
         self.language_label.setText(QCoreApplication.translate("main_window", u"In-Game Language", None))
+        self.text_shuffle_label.setText(QCoreApplication.translate("main_window", u"Text Shuffle", None))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.cosmetics_tab), QCoreApplication.translate("main_window", u"Cosmetics", None))
         self.file_setup_group_box.setTitle(QCoreApplication.translate("main_window", u"Extract and Output Utilities", None))
         self.config_generate_spoiler_log.setText(QCoreApplication.translate("main_window", u"Generate Spoiler Log", None))
