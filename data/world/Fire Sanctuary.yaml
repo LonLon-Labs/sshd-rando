@@ -29,7 +29,8 @@
 - name: FS First Magmanos Room
   dungeon: Fire Sanctuary
   exits:
-    FS South Bridge: Nothing
+    # Clawshots to skip to the end of the vines, bow or slingshot to kill / stun the bokoblin archers.
+    FS South Bridge: Clawshots or Bow or Slingshot
     FS First Magmanos Room Balcony: Mogma_Mitts and Sword
     FS First Outside Section: Nothing
   locations:
@@ -149,7 +150,9 @@
   dungeon: Fire Sanctuary
   exits:
     FS North Bridge Bottom: Nothing
-    FS North Bridge East Side: Clawshots or logic_fs_pillar_jump # No bow for the bokos?
+    # Clawshots for the targets; Bow, Slingshot, or Hook Beetle to deal with the annoying bokoblin archers; or just pillar jump.
+    # Pillar jump allows the player to hide out of the bokoblins' line of sight so they aren't really an issue.
+    FS North Bridge East Side: (Clawshots and (Bow or Slingshot or Hook_Beetle)) or logic_fs_pillar_jump
     FS South Bridge: Nothing
     FS Under Magmanos Fight Room Past Sliding Door: Nothing
 
@@ -183,18 +186,20 @@
   dungeon: Fire Sanctuary
   exits:
     FS Under Magmanos Fight Room: Nothing
-    FS West of Boss Door: Can_Hit_High_Water_Plant
+    FS West of Boss Door After Lava River: Can_Hit_High_Water_Plant
 
 
-- name: FS West of Boss Door
+- name: FS West of Boss Door After Lava River
   dungeon: Fire Sanctuary
   events:
+    # Catch Plats, cross the river to the dig spot, burrow and set the river flowing OR have the shortcut enabled.
     FS Release Second Lava River: (Can_Hit_High_Water_Plant and Mogma_Mitts) or shortcut_fs_lava_flow
   exits:
+    # Hit the plant and ride the river on the magma platform.
     FS In Front of Boss Door: Can_Hit_High_Water_Plant and 'FS_Release_Second_Lava_River'
     FS West of Boss Door Before Lava River: Can_Hit_High_Water_Plant
   locations:
-    Fire Sanctuary - Plats' Chest: Mogma_Mitts and Can_Hit_High_Water_Plant
+    Fire Sanctuary - Plats' Chest: Mogma_Mitts
 
 
 - name: FS In Front of Boss Door
@@ -203,7 +208,7 @@
     Inside the Fire Sanctuary Statue: Nothing
     Fire Sanctuary Boss Room: Fire_Sanctuary_Boss_Key or boss_keys == removed
     FS Lizalfos Fight Room: Nothing
-    FS West of Boss Door: Nothing
+    FS West of Boss Door After Lava River: Nothing
     # FS In Front of Boss Door Past Bars: Opened Bars
 
 

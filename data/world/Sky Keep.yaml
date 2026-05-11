@@ -56,7 +56,8 @@
 - name: SK LMF Room South
   dungeon: Sky Keep
   exits:
-    SK LMF Room North: (Gust_Bellows or logic_present_bow_switches) and Bow
+    # Gust Bellows to shoot the single eye switch, whip to control the conveyor for the 5 switches.
+    SK LMF Room North: ((Gust_Bellows and Whip) or logic_present_bow_switches) and Bow
 
 
 - name: SK LMF Room North
