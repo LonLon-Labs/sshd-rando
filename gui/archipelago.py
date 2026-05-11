@@ -44,7 +44,7 @@ AP_DEFAULTS = {
     "goal": 0,
     "triforce_required": True,
     "triforce_count": 3,
-    "require_dungeons": False,
+    "dungeon_goal_requirement": False,
     "required_dungeon_count": 0,
     "require_greg": False,
     "require_tim": False,
@@ -190,8 +190,8 @@ class Archipelago:
         row.addStretch()
         vbox.addLayout(row)
 
-        # Require Dungeons
-        self.require_dungeons_cb = QCheckBox("Require Dungeons")
+        # Dungeon Goal Requirement
+        self.require_dungeons_cb = QCheckBox("Dungeon Goal Requirement")
         self.require_dungeons_cb.setToolTip(
             "When enabled, you must defeat the configured number of dungeons\n"
             "before the goal boss counts for victory."
@@ -527,7 +527,7 @@ class Archipelago:
             self.triforce_required_cb.setChecked(self.ap.get("triforce_required", True))
             self.triforce_count_spin.setValue(self.ap.get("triforce_count", 3))
             self._update_triforce_count_enabled()
-            self.require_dungeons_cb.setChecked(self.ap.get("require_dungeons", False))
+            self.require_dungeons_cb.setChecked(self.ap.get("dungeon_goal_requirement", False))
             self.dungeon_count_spin.setValue(self.ap.get("required_dungeon_count", 0))
             self._update_dungeon_count_enabled()
             self.require_greg_cb.setChecked(self.ap.get("require_greg", False))
@@ -555,7 +555,7 @@ class Archipelago:
         self.ap["goal"] = self.goal_combo.currentIndex()
         self.ap["triforce_required"] = self.triforce_required_cb.isChecked()
         self.ap["triforce_count"] = self.triforce_count_spin.value()
-        self.ap["require_dungeons"] = self.require_dungeons_cb.isChecked()
+        self.ap["dungeon_goal_requirement"] = self.require_dungeons_cb.isChecked()
         self.ap["required_dungeon_count"] = self.dungeon_count_spin.value()
         self.ap["require_greg"] = self.require_greg_cb.isChecked()
         self.ap["require_tim"] = self.require_tim_cb.isChecked()

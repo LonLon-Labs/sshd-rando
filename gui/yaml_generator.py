@@ -357,7 +357,7 @@ def generate_yaml(
 
     # ── Completion requirement toggles (AP-specific) ──────────────────
     game_settings["require_triforce_pieces"] = ap_settings.get("require_triforce_pieces", False)
-    game_settings["require_dungeons"] = ap_settings.get("require_dungeons", False)
+    game_settings["require_dungeons"] = ap_settings.get("dungeon_goal_requirement", False)
     game_settings["required_dungeon_count"] = ap_settings.get("required_dungeon_count", 2)
     game_settings["require_greg"] = ap_settings.get("require_greg", False)
     game_settings["require_tim"] = ap_settings.get("require_tim", False)
