@@ -44,6 +44,11 @@ AP_DEFAULTS = {
     "goal": 0,
     "triforce_required": True,
     "triforce_count": 3,
+    "require_dungeons": False,
+    "required_dungeon_count": 0,
+    "require_greg": False,
+    "require_tim": False,
+    "require_all_progression_items": False,
     "death_link": False,
     "breath_link": False,
     "progression_balancing": 50,
@@ -184,11 +189,69 @@ class Archipelago:
         row.addStretch()
         vbox.addLayout(row)
 
+        # Require Dungeons
+        self.require_dungeons_cb = QCheckBox("Require Dungeons")
+        self.require_dungeons_cb.setToolTip(
+            "When enabled, you must defeat the configured number of dungeons\n"
+            "before the goal boss counts for victory."
+        )
+        self.require_dungeons_cb.stateChanged.connect(self._on_change)
+        self.require_dungeons_cb.stateChanged.connect(self._update_dungeon_count_enabled)
+        vbox.addWidget(self.require_dungeons_cb)
+
+        # Dungeon Count
+        row = QHBoxLayout()
+        lbl = QLabel("Dungeon Count:")
+        lbl.setMinimumWidth(160)
+        self.dungeon_count_spin = QSpinBox()
+        self.dungeon_count_spin.setRange(0, 7)
+        self.dungeon_count_spin.setToolTip(
+            "How many dungeons must be defeated before the goal boss counts.\n"
+            "Only applies when Require Dungeons is enabled."
+        )
+        self.dungeon_count_spin.valueChanged.connect(self._on_change)
+        row.addWidget(lbl)
+        row.addWidget(self.dungeon_count_spin)
+        row.addStretch()
+        vbox.addLayout(row)
+
+        # Require Greg
+        self.require_greg_cb = QCheckBox("Require Greg (The Green Rupee)")
+        self.require_greg_cb.setToolTip(
+            "When enabled, you must obtain Greg The Green Rupee\n"
+            "before the goal boss counts for victory."
+        )
+        self.require_greg_cb.stateChanged.connect(self._on_change)
+        vbox.addWidget(self.require_greg_cb)
+
+        # Require Tim
+        self.require_tim_cb = QCheckBox("Require Tim (The Tumbleweed)")
+        self.require_tim_cb.setToolTip(
+            "When enabled, you must obtain Tim The Tumbleweed\n"
+            "before the goal boss counts for victory."
+        )
+        self.require_tim_cb.stateChanged.connect(self._on_change)
+        vbox.addWidget(self.require_tim_cb)
+
+        # Require All Progression Items
+        self.require_all_progression_cb = QCheckBox("Require All Progression Items")
+        self.require_all_progression_cb.setToolTip(
+            "When enabled, you must collect every single progression item\n"
+            "in the randomizer before the goal boss counts for victory.\n"
+            "This may result in a long playthrough!"
+        )
+        self.require_all_progression_cb.stateChanged.connect(self._on_change)
+        vbox.addWidget(self.require_all_progression_cb)
+
         self.layout.addWidget(group)
 
     def _update_triforce_count_enabled(self):
         """Enable/disable the triforce count spinbox based on triforce_required."""
         self.triforce_count_spin.setEnabled(self.triforce_required_cb.isChecked())
+
+    def _update_dungeon_count_enabled(self):
+        """Enable/disable the dungeon count spinbox based on require_dungeons."""
+        self.dungeon_count_spin.setEnabled(self.require_dungeons_cb.isChecked())
 
     # ── Group: Multiworld Options ─────────────────────────────────────────
 
@@ -446,6 +509,12 @@ class Archipelago:
             self.triforce_required_cb.setChecked(self.ap.get("triforce_required", True))
             self.triforce_count_spin.setValue(self.ap.get("triforce_count", 3))
             self._update_triforce_count_enabled()
+            self.require_dungeons_cb.setChecked(self.ap.get("require_dungeons", False))
+            self.dungeon_count_spin.setValue(self.ap.get("required_dungeon_count", 0))
+            self._update_dungeon_count_enabled()
+            self.require_greg_cb.setChecked(self.ap.get("require_greg", False))
+            self.require_tim_cb.setChecked(self.ap.get("require_tim", False))
+            self.require_all_progression_cb.setChecked(self.ap.get("require_all_progression_items", False))
             self.death_link_cb.setChecked(self.ap.get("death_link", False))
             self.breath_link_cb.setChecked(self.ap.get("breath_link", False))
             self.progression_spin.setValue(self.ap.get("progression_balancing", 50))
@@ -467,6 +536,11 @@ class Archipelago:
         self.ap["goal"] = self.goal_combo.currentIndex()
         self.ap["triforce_required"] = self.triforce_required_cb.isChecked()
         self.ap["triforce_count"] = self.triforce_count_spin.value()
+        self.ap["require_dungeons"] = self.require_dungeons_cb.isChecked()
+        self.ap["required_dungeon_count"] = self.dungeon_count_spin.value()
+        self.ap["require_greg"] = self.require_greg_cb.isChecked()
+        self.ap["require_tim"] = self.require_tim_cb.isChecked()
+        self.ap["require_all_progression_items"] = self.require_all_progression_cb.isChecked()
         self.ap["death_link"] = self.death_link_cb.isChecked()
 
         # Sync triforce settings into the randomizer's config settings map

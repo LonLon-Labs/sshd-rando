@@ -498,6 +498,22 @@
   options:
     - 0-7: "Choose how many dungeons will have required items on their dungeon completion checks. Triforces, then swords, then other progress items are chosen, in this order."
 
+- name: goal_requirement
+  default_option: boss_only
+  pretty_name: Goal Requirement
+  pretty_options:
+    - Boss Only
+    - Triforce Pieces
+    - Dungeons
+    - Greg
+    - All Progression Items
+  options:
+    - boss_only: "Defeating the goal boss is enough to send the goal."
+    - triforce_pieces: "Collect the configured number of Triforce pieces before the goal boss counts."
+    - dungeons: "Beat the configured number of dungeons before the goal boss counts."
+    - greg: "Obtain Greg the Green Rupee before the goal boss counts."
+    - all_progression_items: "Collect every progression item before the goal boss counts."
+
 - name: triforce_required
   default_option: "on"
   pretty_name: Triforce Required

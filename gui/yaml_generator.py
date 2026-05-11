@@ -39,6 +39,7 @@ _RANDO_TO_YAML = {
 _SKIP_SETTINGS = {
     "randomize_skykeep_layout",
     "skip_demise",
+    "goal_requirement",  # Replaced by individual require_* toggles in AP settings
     "spawn_hearts",
     "language",
     "daytime_sky_color",
@@ -352,6 +353,14 @@ def generate_yaml(
 
         # No-spoiler-log is derived from generate_spoiler_log
         game_settings["no_spoiler_log"] = not config.generate_spoiler_log
+
+    # ── Completion requirement toggles (AP-specific) ──────────────────
+    game_settings["require_triforce_pieces"] = ap_settings.get("require_triforce_pieces", False)
+    game_settings["require_dungeons"] = ap_settings.get("require_dungeons", False)
+    game_settings["required_dungeon_count"] = ap_settings.get("required_dungeon_count", 2)
+    game_settings["require_greg"] = ap_settings.get("require_greg", False)
+    game_settings["require_tim"] = ap_settings.get("require_tim", False)
+    game_settings["require_all_progression_items"] = ap_settings.get("require_all_progression_items", False)
 
     out["Skyward Sword HD"] = game_settings
 
