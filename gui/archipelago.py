@@ -571,6 +571,8 @@ class Archipelago:
             )
         if "triforce_count" in rando_settings:
             rando_settings["triforce_count"].value = str(self.ap["triforce_count"])
+        if "demise_count" in rando_settings:
+            rando_settings["demise_count"].value = str(self.ap["demise_count"])
         self.ap["breath_link"] = self.breath_link_cb.isChecked()
         self.ap["progression_balancing"] = self.progression_spin.value()
         self.ap["use_alternative_logo"] = self.alt_logo_cb.isChecked()

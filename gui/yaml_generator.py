@@ -33,20 +33,16 @@ _RANDO_TO_YAML = {
     "skip_misc_small_cutscenes": "skip_misc_cutscenes",
     "randomize_music": "music_randomization",
     "random_starting_tablet_count": "starting_tablets",
+    # triforce_count in sshd-rando = required_triforce_pieces AP option (how many for Hylia's Realm door)
+    "triforce_count": "required_triforce_pieces",
+    # randomize_skykeep_layout in sshd-rando = decouple_skykeep_layout AP option
+    "randomize_skykeep_layout": "decouple_skykeep_layout",
 }
 
 # sshd-rando settings that have no AP equivalent and should be excluded from yaml
 _SKIP_SETTINGS = {
-    "randomize_skykeep_layout",
     "skip_demise",
     "goal_requirement",  # Replaced by individual require_* toggles in AP settings
-    "spawn_hearts",
-    "language",
-    "daytime_sky_color",
-    "nighttime_sky_color",
-    "daytime_cloud_color",
-    "nighttime_cloud_color",
-    "low_health_beeping_speed",
 }
 
 # Settings that use on/off in sshd-rando but true/false in the YAML
@@ -63,7 +59,10 @@ _BOOL_SETTINGS = {
     "decouple_double_doors",
     "randomize_interior_entrances",
     "randomize_overworld_entrances",
+    "randomize_gate_of_time",
+    "randomize_skykeep_layout",
     "decouple_entrances",
+    "triforce_required",
     "random_starting_statues",
     "limit_starting_spawn",
     "burn_traps",
@@ -92,6 +91,7 @@ _BOOL_SETTINGS = {
     "cutoff_game_over_music",
     "skip_horde",
     "skip_g3",
+    "spawn_hearts",
     "tunic_swap",
     "lightning_skyward_strike",
     "starry_skies",
@@ -181,6 +181,8 @@ _INT_SETTINGS = {
     "trial_treasure_shuffle",
     "starting_hearts",
     "peatrice_conversations",
+    "triforce_count",
+    "demise_count",
 }
 
 # Settings that use "progressive_items" → "true"/"false"
@@ -309,32 +311,14 @@ def generate_yaml(
     # ── Extract path ──────────────────────────────────────────────────
     game_settings["extract_path"] = ap_settings.get("extract_path", "")
 
-    # ── Archipelago options ───────────────────────────────────────────
-    game_settings["goal"] = ap_settings.get("goal", 0)
-    game_settings["demise_count"] = ap_settings.get("demise_count", 1)
-    game_settings["death_link"] = ap_settings.get("death_link", False)
-    game_settings["breath_link"] = ap_settings.get("breath_link", False)
-    game_settings["progression_balancing"] = ap_settings.get(
-        "progression_balancing", 50
-    )
-    game_settings["use_alternative_logo"] = ap_settings.get(
-        "use_alternative_logo", False
-    )
-    game_settings["archipelago_item_model"] = ap_settings.get(
-        "archipelago_item_model", 2
-    )
-
-    # ── Cheats ────────────────────────────────────────────────────────
-    cheat_keys = [k for k in ap_settings if k.startswith("cheat_")]
-    for key in cheat_keys:
-        game_settings[key] = ap_settings[key]
-
     # ── Config method: leave config_yaml_path and setting_string blank ─
     game_settings["config_yaml_path"] = ""
     game_settings["setting_string"] = ""
     game_settings["sshdr_seed"] = config.seed
 
     # ── Randomizer settings ───────────────────────────────────────────
+    # These come from the sshd-rando config (user's GUI settings).
+    # Written first so AP-specific overrides below can take priority.
     if config.settings:
         setting_map = config.settings[0]
 
@@ -355,13 +339,65 @@ def generate_yaml(
         # No-spoiler-log is derived from generate_spoiler_log
         game_settings["no_spoiler_log"] = not config.generate_spoiler_log
 
+    # ── Archipelago options (written AFTER rando loop to take priority) ─
+    # These come from the AP tab UI settings and override any rando defaults.
+    game_settings["goal"] = ap_settings.get("goal", 0)
+    game_settings["demise_count"] = ap_settings.get("demise_count", 1)
+    game_settings["death_link"] = ap_settings.get("death_link", False)
+    game_settings["breath_link"] = ap_settings.get("breath_link", False)
+    game_settings["progression_balancing"] = ap_settings.get(
+        "progression_balancing", 50
+    )
+    game_settings["use_alternative_logo"] = ap_settings.get(
+        "use_alternative_logo", False
+    )
+    game_settings["archipelago_item_model"] = ap_settings.get(
+        "archipelago_item_model", 2
+    )
+
     # ── Completion requirement toggles (AP-specific) ──────────────────
-    game_settings["require_triforce_pieces"] = ap_settings.get("require_triforce_pieces", False)
+    # triforce_required comes from sshd-rando config (handled in rando loop above as bool).
+    # We re-apply from ap_settings to ensure the AP tab value wins.
+    game_settings["triforce_required"] = ap_settings.get("triforce_required", True)
+    # required_triforce_pieces = triforce count (rando loop maps triforce_count → required_triforce_pieces).
+    # Re-apply from ap_settings["triforce_count"] so AP tab value wins over rando default.
+    game_settings["required_triforce_pieces"] = ap_settings.get("triforce_count", 3)
     game_settings["require_dungeons"] = ap_settings.get("dungeon_goal_requirement", False)
     game_settings["required_dungeon_count"] = ap_settings.get("required_dungeon_count", 2)
     game_settings["require_greg"] = ap_settings.get("require_greg", False)
     game_settings["require_tim"] = ap_settings.get("require_tim", False)
     game_settings["require_all_progression_items"] = ap_settings.get("require_all_progression_items", False)
+
+    # ── AP-only settings (no sshd-rando equivalent, use defaults if not in ap_settings) ─
+    # triforce_shuffle: where triforces appear — default anywhere
+    game_settings["triforce_shuffle"] = ap_settings.get("triforce_shuffle", "anywhere")
+    # gate_of_time_dungeon_requirements: whether required dungeons must be beaten to open GoT
+    game_settings["gate_of_time_dungeon_requirements"] = ap_settings.get(
+        "gate_of_time_dungeon_requirements", "required"
+    )
+    # imp2_skip: skip Imp 2 fight — default True (DefaultOnToggle)
+    game_settings["imp2_skip"] = ap_settings.get("imp2_skip", True)
+    # skip_horde / skip_ghirahim3 come from rando loop (_BOOL_SETTINGS) but
+    # re-assert with ap_settings if present so AP tab wins.
+    if "skip_horde" in ap_settings:
+        game_settings["skip_horde"] = ap_settings["skip_horde"]
+    if "skip_ghirahim3" in ap_settings:
+        game_settings["skip_ghirahim3"] = ap_settings["skip_ghirahim3"]
+    # empty_unreachable_locations / add_junk_items / junk_item_rate — AP-only
+    game_settings["empty_unreachable_locations"] = ap_settings.get(
+        "empty_unreachable_locations", False
+    )
+    game_settings["add_junk_items"] = ap_settings.get("add_junk_items", False)
+    game_settings["junk_item_rate"] = ap_settings.get("junk_item_rate", 50)
+    # skip_skykeep_door_cutscene — AP-only (DefaultOnToggle default True)
+    game_settings["skip_skykeep_door_cutscene"] = ap_settings.get(
+        "skip_skykeep_door_cutscene", True
+    )
+
+    # ── Cheats ────────────────────────────────────────────────────────
+    cheat_keys = [k for k in ap_settings if k.startswith("cheat_")]
+    for key in cheat_keys:
+        game_settings[key] = ap_settings[key]
 
     out["Skyward Sword HD"] = game_settings
 
