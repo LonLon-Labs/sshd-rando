@@ -37,8 +37,6 @@ def build_ap_bridge_datas():
     ]
     bridge_roots = [
         "../SSHD_APWorld",
-        "../SSHD_APWorld_Switch",
-        "../SSHD_Switch_AP",
     ]
 
     for root in bridge_roots:

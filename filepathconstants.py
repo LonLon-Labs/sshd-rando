@@ -6,6 +6,11 @@ from pathlib import Path
 
 TITLE_ID = "01002DA013484000"
 
+# Check for patcher environment overrides (set by SSHDPatcher.py / patcher_tab.py)
+# These allow the patcher to override the default extract path at runtime
+_patcher_extract_path = os.environ.get("SSHD_AP_EXTRACT_PATH")
+_patcher_userdata_path = os.environ.get("SSHD_AP_USERDATA_PATH")
+
 userdata_path = "."
 
 try:
@@ -30,7 +35,13 @@ if platform.system() == "Darwin":
         f"You are running from source on macOS. Currently, macOS builds cannot reliably access data from the local directory, so, to keep things consistent, your data, such as all default paths and config, can be found at {userdata_path}"
     )
 
-SSHD_EXTRACT_PATH = Path(userdata_path) / "sshd_extract"
+# Override with patcher-provided paths if present
+if _patcher_userdata_path:
+    userdata_path = _patcher_userdata_path
+elif _patcher_extract_path:
+    userdata_path = str(Path(_patcher_extract_path).parent)
+
+SSHD_EXTRACT_PATH = Path(_patcher_extract_path) if _patcher_extract_path else (Path(userdata_path) / "sshd_extract")
 EXEFS_EXTRACT_PATH = SSHD_EXTRACT_PATH / "exefs"
 ROMFS_EXTRACT_PATH = SSHD_EXTRACT_PATH / "romfs"
 OTHER_MODS_PATH = Path(userdata_path) / "other_mods"
