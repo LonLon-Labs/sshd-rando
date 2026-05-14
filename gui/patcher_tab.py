@@ -378,7 +378,6 @@ class PatchWorker(QThread):
                     f"{wrapper_path}. Allowed roots: SSHD_APWorld or apworld_bridge."
                 )
 
-            _initialize_sshd_rando = wrapper_mod._initialize_sshd_rando
             create_sshd_rando_config = wrapper_mod.create_sshd_rando_config
             overlay_multiworld_items = wrapper_mod.overlay_multiworld_items
         except ModuleNotFoundError as exc:
@@ -392,7 +391,10 @@ class PatchWorker(QThread):
                 ) from exc
             raise
 
-        _initialize_sshd_rando()
+        # Do not call the downloaded APWorld wrapper's backend initializer here.
+        # In the randomizer app/exe, the sshd-rando backend is the app itself and
+        # its modules are already directly importable; the APWorld initializer is
+        # designed for a separate on-disk sshd-rando-backend checkout.
 
         # Force reimport of filepathconstants and all backend modules from the backend now that it's on sys.path.
         # This ensures all path constants (SSHD_EXTRACT_PATH, OBJECTPACK_PATH, DEFAULT_OUTPUT_PATH, etc.)
