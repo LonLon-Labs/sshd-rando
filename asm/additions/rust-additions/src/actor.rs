@@ -1361,6 +1361,7 @@ pub extern "C" fn check_sailcloth_for_air_vents(mut should_deactivate: bool) -> 
 
         if !should_deactivate
             && &CURRENT_STAGE_NAME[..1] != b"S"
+            && &CURRENT_STAGE_NAME[..1] != b"D"
             && flag::check_itemflag(flag::ITEMFLAGS::SAILCLOTH) == 0
         {
             should_deactivate = true;
