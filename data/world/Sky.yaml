@@ -228,7 +228,7 @@
 - name: Volcanic Island
   hint_region: Sky
   events:
-    Mushroom Spores: Nothing # Bonk into a mushroom.
+    Can Collect Mushroom Spores: Bottle
   exits:
     The Sky: Day or natural_night_connections == off
   locations:
@@ -241,7 +241,7 @@
   hint_region: Sky
   events:
     Talk to Orielle: Day
-    Save Orielle: Day and Bottle and 'Mushroom_Spores'
+    Save Orielle: Day and Bottle and 'Can_Collect_Mushroom_Spores'
   exits:
     The Sky: Day or natural_night_connections == off
   locations:

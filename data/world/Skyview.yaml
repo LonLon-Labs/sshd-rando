@@ -2,6 +2,8 @@
 - name: Skyview Entry
   dungeon: Skyview Temple
   dungeon_starting_area: true
+  events:
+    Can Collect Mushroom Spores: Bottle
   exits:
     Deep Woods: Nothing # Exit out of the dungeon.
     SVT First Room: Can_Cut_Trees_And_Logs
@@ -13,6 +15,7 @@
   dungeon: Skyview Temple
   events:
     Goddess Wall Trigger: Ballad_of_the_Goddess and Goddesss_Harp
+    Can Collect Mushroom Spores: Bottle
   exits:
     Skyview Entry: Can_Cut_Trees_And_Logs
     SVT One Eye Room: Can_Hit_High_Skyview_Switches
@@ -20,6 +23,8 @@
 
 - name: SVT One Eye Room
   dungeon: Skyview Temple
+  events:
+    Can Collect Mushroom Spores: Bottle
   exits:
     SVT First Room: Nothing # Open the door.
     SVT First Hub Center Room: Sword
@@ -34,6 +39,7 @@
   events:
     One Water Raise: "'Skyview_Raise_East_Water' or 'Skyview_Raise_West_Water'"
     Can Collect Water: Bottle and 'One_Water_Raise'
+    Can Collect Mushroom Spores: Bottle
   exits:
     SVT One Eye Room: Nothing # Open the door.
     SVT First Room: Nothing # Climb the vines.
@@ -59,6 +65,7 @@
       "((Can_Hit_High_Skyview_Switches or Goddess_Sword or Whip) and Can_Hit_Switch)
       or (logic_skyview_spider_roll and Can_Hit_High_Skyview_Switches)"
     Can Collect Water: Bottle and 'Skyview_Raise_West_Water'
+    Can Collect Mushroom Spores: Bottle
   exits:
     SVT First Hub Center Room: Nothing # Open the door.
   locations:
@@ -69,6 +76,7 @@
   events:
     Skyview Raise East Water: Can_Hit_High_Skyview_Switches
     Can Collect Water: Bottle and 'Skyview_Raise_East_Water'
+    Can Collect Mushroom Spores: Bottle
   exits:
     SVT First Hub Center Room: Nothing # Open the lower door.
   locations:
@@ -76,6 +84,8 @@
 
 - name: SVT First Hub Right Room Upper
   dungeon: Skyview Temple
+  events:
+    Can Collect Mushroom Spores: Bottle
   exits:
     SVT First Hub Right Room Lower: Nothing # Drop down.
     SVT First Hub Center Room: Nothing # Open the upper door.
@@ -86,6 +96,8 @@
 
 - name: SVT Second Hub Center Room
   dungeon: Skyview Temple
+  events:
+    Can Collect Mushroom Spores: Bottle
   exits:
     SVT First Hub Center Room: count(2, Skyview_Temple_Small_Key) or small_keys == removed
     SVT Miniboss Room: Distance_Activator
@@ -107,6 +119,8 @@
 
 - name: SVT Miniboss Room
   dungeon: Skyview Temple
+  events:
+    Can Collect Mushroom Spores: Bottle
   exits:
     SVT Second Hub Center Room: Nothing # Open the door out of the room.
   locations:
@@ -115,6 +129,8 @@
 # This includes both rooms and assumes you've gotten locked in the 3-eyes room.
 - name: SVT Second Hub Left Rooms
   dungeon: Skyview Temple
+  events:
+    Can Collect Mushroom Spores: Bottle
   exits:
     # Sword for 3 eyes and to kill Skultullas.
     # Beetle or Bow to free the box.
@@ -127,12 +143,16 @@
 
 - name: SVT Staldra Room
   dungeon: Skyview Temple
+  events:
+    Can Collect Mushroom Spores: Bottle
   exits:
     SVT Second Hub Center Room: Skyview_Temple_Small_Key or small_keys == removed
     SVT Last Room Before Spider: Can_Defeat_Staldra
 
 - name: SVT Last Room Before Spider
   dungeon: Skyview Temple
+  events:
+    Can Collect Mushroom Spores: Bottle
   exits:
     SVT Staldra Room: Nothing # Open the door.
     # Both the Beetle and the bow can cut it down.
@@ -142,6 +162,8 @@
 
 - name: SVT Last Room Before Rope
   dungeon: Skyview Temple
+  events:
+    Can Collect Mushroom Spores: Bottle
   exits:
     SVT Last Room Before Spider: Beetle or Bow or (Bomb_Bag and logic_bomb_throws)
     SVT Second Hub Center Room: Can_Hit_High_Skyview_Switches or shortcut_skyview_bars
@@ -149,6 +171,8 @@
 
 - name: SVT Last Room After Rope
   dungeon: Skyview Temple
+  events:
+    Can Collect Mushroom Spores: Bottle
   exits:
     SVT Last Room Before Rope: Nothing # Walk over the rope.
     SVT Last Room Near Chest after Vines: Long_Range_Skyward_Strike or Distance_Activator
@@ -158,6 +182,8 @@
 
 - name: SVT Last Room Near Chest after Vines
   dungeon: Skyview Temple
+  events:
+    Can Collect Mushroom Spores: Bottle
   exits:
     SVT Last Room Before Rope: Nothing # Drop down.
     SVT Last Room After Rope: Distance_Activator

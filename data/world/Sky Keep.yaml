@@ -41,6 +41,8 @@
 
 - name: SK Skyview Room West
   dungeon: Sky Keep
+  events:
+    Can Collect Mushroom Spores: Bottle
   exits:
     SK Skyview Room North: shortcut_sky_keep_svt_room_bars or (Whip and (Beetle or Bow) and Clawshots and (Bomb_Bag or Hook_Beetle or Bow) and Gust_Bellows)
 
