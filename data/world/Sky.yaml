@@ -22,9 +22,9 @@
     Central Skyloft: Sailcloth
     Skyloft Village: Sailcloth
   locations:
-    The Sky - Form a Swirrell Ring above Volcanic Island: Can_Survive_Long_Fall
-    The Sky - Form a Swirrell Ring above Lumpy Pumpkin: Can_Survive_Long_Fall
-    The Sky - Form a Swirrell Ring above Bamboo Island: Can_Survive_Long_Fall
+    The Sky - Form a Swirrell Ring above Volcanic Island: Nothing # Obtaining the item cancels the fall damage.
+    The Sky - Form a Swirrell Ring above Lumpy Pumpkin: Nothing # Obtaining the item cancels the fall damage.
+    The Sky - Form a Swirrell Ring above Bamboo Island: Nothing # Obtaining the item cancels the fall damage.
     The Sky - Chest in Breakable Boulder near Lumpy Pumpkin: Spiral_Charge
     The Sky - Chest in Breakable Boulder near Fun Fun Island: Spiral_Charge
 
