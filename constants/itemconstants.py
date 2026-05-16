@@ -174,6 +174,7 @@ MINIMAL_ITEM_POOL: list[str] = (
         PROGRESSIVE_SLINGSHOT,
         PROGRESSIVE_BOW,
         PROGRESSIVE_BUG_NET,
+        SAILCLOTH,
         WATER_DRAGON_SCALE,
         FIRESHIELD_EARRINGS,
         STONE_OF_TRIALS,
@@ -276,7 +277,7 @@ EXTRA_ITEM_POOL: list[str] = [
     CLAWSHOTS,
     WHIP,
     GUST_BELLOWS,
-    # SAILCLOTH,
+    SAILCLOTH,
     PROGRESSIVE_MITTS,
     WATER_DRAGON_SCALE,
     FIRESHIELD_EARRINGS,
@@ -292,7 +293,7 @@ PLENTIFUL_ITEM_POOL: list[str] = (
         CLAWSHOTS,
         WHIP,
         GUST_BELLOWS,
-        # SAILCLOTH,
+        SAILCLOTH,
         WATER_DRAGON_SCALE,
         FIRESHIELD_EARRINGS,
         EMERALD_TABLET,
@@ -329,7 +330,7 @@ STARTABLE_ITEMS: list[str] = (
         GUST_BELLOWS,
     ]
     + [PROGRESSIVE_POUCH] * 5
-    # + [SAILCLOTH]
+    + [SAILCLOTH]
     + [PROGRESSIVE_MITTS] * 2
     + [
         WATER_DRAGON_SCALE,
@@ -394,7 +395,7 @@ RANDOM_STARTABLE_ITEMS = (
         WHIP,
         GUST_BELLOWS,
         PROGRESSIVE_POUCH,
-        # SAILCLOTH,
+        SAILCLOTH,
         WATER_DRAGON_SCALE,
         FIRESHIELD_EARRINGS,
         GODDESS_HARP,
@@ -448,7 +449,7 @@ ITEM_ITEMFLAGS = {
     GRATITUDE_CRYSTAL_PACK: 35,
     HYLIAN_SHIELD: 125,
     EMPTY_BOTTLE: [153, 153, 153, 153, 153],
-    # SAILCLOTH: 15,
+    SAILCLOTH: 15,
 }
 
 
@@ -498,7 +499,7 @@ ITEM_STORYFLAGS = {
     PROGRESSIVE_BUG_NET: [949, 950],  # Bug Net, Big Bug Net
     PROGRESSIVE_POUCH: [30, 932, 932, 932, 932],  # Adventure Pouch, Pouch Expansion * 4
     SOTH_PART: [895, 896, 897, 369],
-    # SAILCLOTH: 32,
+    SAILCLOTH: 32,
 }
 
 # first value is dungeon name
