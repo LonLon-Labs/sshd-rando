@@ -11,7 +11,9 @@
     Northeast Island: Nothing
     Lumpy Pumpkin Exterior: Nothing
     Island Closest to Faron Pillar: Nothing
-    Volcanic Island: Nothing
+    # Even flying right up to the sky entrance requires taking some fall damage.
+    # It is not possible to dive into the side entrance.
+    Volcanic Island: Can_Survive_Short_Fall
     Orielle's Island: Nothing
     Fun Fun Island: Nothing
     Triple Island: Nothing
