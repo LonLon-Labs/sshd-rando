@@ -145,6 +145,7 @@
     Can Get To Lake Floria Gates: Beetle or Clawshots or Bow or Sword or Bomb_Bag
     Amber Relic Farming: Nothing # Reload the area with any of the accessible loadzones to get relics to spawn under various logs.
     Can Collect Water: Bottle
+    Can Collect Mushroom Spores: Bottle
   exits:
     In the Woods Statue: Nothing # Interact with the statue.
     Viewing Platform Statue: Nothing # Interact with the statue.
@@ -245,6 +246,7 @@
   hint_region: Great Tree
   events:
     Can Collect Water: Bottle
+    Can Collect Mushroom Spores: Bottle
   exits:
     Great Tree Interior Underwater: Water_Dragons_Scale
     Great Tree Interior Middle: Gust_Bellows
@@ -254,6 +256,8 @@
 
 - name: Great Tree Interior Middle # area including the platforms and chest.
   hint_region: Great Tree
+  events:
+    Can Collect Mushroom Spores: Bottle
   exits:
     Great Tree Interior Lower: Nothing # Drop down into the water.
     Great Tree Exterior Platforms: Nothing # Run out the loadzone.
