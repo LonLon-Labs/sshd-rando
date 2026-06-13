@@ -362,7 +362,7 @@ def generate_yaml(
     # required_triforce_pieces = triforce count (rando loop maps triforce_count → required_triforce_pieces).
     # Re-apply from ap_settings["triforce_count"] so AP tab value wins over rando default.
     game_settings["required_triforce_pieces"] = ap_settings.get("triforce_count", 3)
-    game_settings["require_dungeons"] = ap_settings.get("dungeon_goal_requirement", False)
+    game_settings["dungeon_goal_requirement"] = ap_settings.get("dungeon_goal_requirement", False)
     game_settings["required_dungeon_count"] = ap_settings.get("required_dungeon_count", 2)
     game_settings["require_greg"] = ap_settings.get("require_greg", False)
     game_settings["require_tim"] = ap_settings.get("require_tim", False)
