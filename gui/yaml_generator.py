@@ -8,6 +8,7 @@ Archipelago can consume directly.
 """
 
 from pathlib import Path
+import hashlib
 
 import yaml
 
@@ -249,9 +250,27 @@ def _convert_damage_multiplier(val) -> str:
     return _DAMAGE_MULTIPLIER_MAP[closest]
 
 
-def _convert_setting_value(name: str, setting: Setting):
+def _resolve_random_setting_value(name: str, setting: Setting, seed) -> str:
+    """Resolve a setting value of 'random' to a deterministic concrete option."""
+    options = []
+    if getattr(setting, "info", None) and getattr(setting.info, "options", None):
+        options = [opt for opt in setting.info.options if opt != "random"]
+
+    if not options:
+        return "random"
+
+    token = f"{seed}:{name}".encode("utf-8")
+    digest = hashlib.sha256(token).digest()
+    index = int.from_bytes(digest[:8], "big") % len(options)
+    return options[index]
+
+
+def _convert_setting_value(name: str, setting: Setting, seed=None):
     """Convert a sshd-rando Setting to the appropriate YAML value."""
     val = setting.value
+
+    if val == "random":
+        val = _resolve_random_setting_value(name, setting, seed)
 
     if name == "damage_multiplier":
         return _convert_damage_multiplier(val)
@@ -264,7 +283,7 @@ def _convert_setting_value(name: str, setting: Setting):
             return True
         elif val == "off":
             return False
-        # Already bool-like string
+        # Preserve bool-like values and default to False only for unknown strings
         return val in ("true", "True", True)
 
     if name in _PROGRESSIVE_BOOL:
@@ -326,7 +345,11 @@ def generate_yaml(
             if setting_name in _SKIP_SETTINGS:
                 continue
             yaml_key = _RANDO_TO_YAML.get(setting_name, setting_name)
-            game_settings[yaml_key] = _convert_setting_value(setting_name, setting)
+            game_settings[yaml_key] = _convert_setting_value(
+                setting_name,
+                setting,
+                seed=config.seed,
+            )
 
         # Starting inventory
         starting_items = {}
@@ -335,6 +358,10 @@ def generate_yaml(
         game_settings["custom_starting_items"] = (
             starting_items if starting_items else {}
         )
+
+        # Individually excluded locations
+        excluded_locations = list(getattr(setting_map, "excluded_locations", []) or [])
+        game_settings["excluded_locations"] = excluded_locations
 
         # No-spoiler-log is derived from generate_spoiler_log
         game_settings["no_spoiler_log"] = not config.generate_spoiler_log
