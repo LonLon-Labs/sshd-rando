@@ -70,8 +70,11 @@ class Settings:
         # Init seed
         self.seed_line_edit: QLineEdit = self.ui.seed_line_edit
         self.seed_line_edit.setText(self.config.seed)
-        self.seed_line_edit.textChanged.connect(self.update_seed)
-        self.ui.new_seed_button.clicked.connect(self.new_seed)
+        self.seed_line_edit.setReadOnly(True)
+        self.seed_line_edit.setToolTip(
+            "Seed is assigned by Archipelago during generation."
+        )
+        self.ui.new_seed_button.hide()
 
         # Init setting_string
         self.setting_string_line_edit: QLineEdit = self.ui.setting_string_line_edit

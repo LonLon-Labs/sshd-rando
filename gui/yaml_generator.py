@@ -333,7 +333,8 @@ def generate_yaml(
     # ── Config method: leave config_yaml_path and setting_string blank ─
     game_settings["config_yaml_path"] = ""
     game_settings["setting_string"] = ""
-    game_settings["sshdr_seed"] = config.seed
+    # Leave blank so the AP world assigns the seed during generation.
+    game_settings["sshdr_seed"] = ""
 
     # ── Randomizer settings ───────────────────────────────────────────
     # These come from the sshd-rando config (user's GUI settings).
