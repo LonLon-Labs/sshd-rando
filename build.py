@@ -6,7 +6,7 @@ import shutil
 
 from constants.randoconstants import VERSION
 
-base_name = f"Skyward Sword HD Randomizer {VERSION}"
+base_name = f"Skyward Sword HD Randomizer Archipelago {VERSION}"
 
 exe_ext = ""
 

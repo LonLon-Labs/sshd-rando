@@ -2,6 +2,7 @@
 #![allow(non_snake_case)]
 #![allow(unused)]
 
+use crate::cheats;
 use crate::color;
 use crate::debug;
 use crate::fix;
@@ -79,6 +80,8 @@ pub extern "C" fn main_loop_inject() -> *mut c_void {
     color::handle_colors();
 
     fix::apply_loftwing_speed_override();
+    cheats::handle_moon_jump();
+    cheats::handle_hovercraft();
 
     return unsafe { dSystem };
 }

@@ -24,6 +24,37 @@ def build_datas_recursive(paths):
     return datas
 
 
+def build_ap_bridge_datas():
+    """Bundle AP bridge files used by patcher_tab's SSHDRWrapper import path."""
+    bridge_files = [
+        "SSHDRWrapper.py",
+        "Locations.py",
+        "Items.py",
+        "SSHD_Options.py",
+        "platform_utils.py",
+        "setting_string_decoder.py",
+        "archipelago.json",
+    ]
+    bridge_roots = [
+        "../SSHD_APWorld",
+    ]
+
+    for root in bridge_roots:
+        if not os.path.isdir(root):
+            continue
+
+        datas = []
+        for filename in bridge_files:
+            src = os.path.join(root, filename)
+            if os.path.isfile(src):
+                datas.append((src, "apworld_bridge"))
+
+        if datas:
+            return datas
+
+    return []
+
+
 a = Analysis(
     ["sshdrando.py"],
     pathex=[],
@@ -42,7 +73,7 @@ a = Analysis(
             "*.md",
             "LICENSE",
         ]
-    ),
+    ) + build_ap_bridge_datas(),
     hiddenimports=[],
     hookspath=[],
     runtime_hooks=[],
@@ -66,7 +97,7 @@ exe = EXE(
     ],
     a.binaries,
     a.datas,
-    name=f"Skyward Sword HD Randomizer {VERSION}",
+    name=f"Skyward Sword HD Randomizer Archipelago {VERSION}",
     debug=False,
     strip=False,
     upx=True,
@@ -77,13 +108,13 @@ exe = EXE(
 
 app = BUNDLE(
     exe,
-    name=f"Skyward Sword HD Randomizer {VERSION}.app",
+    name=f"Skyward Sword HD Randomizer Archipelago {VERSION}.app",
     icon="assets/icon.png",
     bundle_identifier=None,
     info_plist={
         "LSBackgroundOnly": False,
-        "CFBundleDisplayName": "Skyward Sword HD Randomizer",
-        "CFBundleName": "SSHD Randomizer", # 15 character maximum
+        "CFBundleDisplayName": "Skyward Sword HD Randomizer Archipelago",
+        "CFBundleName": "SSHD Rando AP", # 15 character maximum
         "CFBundleShortVersionString": VERSION,
     },
 )

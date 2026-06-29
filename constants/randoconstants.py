@@ -7,4 +7,4 @@
 # Stable releases ex: "1.0", "1.1", "2.0"
 # Pre-releases ex: "1.0-alpha", "1.1-beta", "2.0-rc"
 
-VERSION = "2.2+dev"
+VERSION = "1.0"

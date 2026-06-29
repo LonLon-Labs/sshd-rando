@@ -8,7 +8,6 @@ from .search import generate_playthrough
 from .spoiler_log import generate_spoiler_log, generate_anti_spoiler_log
 from .plandomizer import load_plandomizer_data
 from .entrance_shuffle import shuffle_world_entrances
-from .hints import generate_hints
 from .tooltips.tooltips import flatten_world_requirements
 from util.text import load_text_data
 
@@ -123,9 +122,6 @@ def generate_randomizer(config: Config) -> list[World]:
 
     update_progress_value(20)
     generate_playthrough(worlds)
-
-    update_progress_value(22)
-    generate_hints(worlds)
 
     update_progress_value(24)
     if config.generate_spoiler_log:
