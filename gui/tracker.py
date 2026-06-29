@@ -433,6 +433,10 @@ class Tracker:
             None,
             ["No Mitts", "Digging Mitts", "Mogma Mitts"],
         )
+        self.sailcloth_button = TrackerInventoryButton(
+            ["Nothing", SAILCLOTH],
+            ["main_quest/sailcloth_gray.png", "main_quest/sailcloth.png"],
+        )
 
         self.harp_button = TrackerInventoryButton(
             ["Nothing", GODDESS_HARP],
@@ -648,19 +652,20 @@ class Tracker:
         self.ui.lower_inventory_layout.addWidget(self.nayrus_wisdom_button, 1, 3)
         self.ui.lower_inventory_layout.addWidget(self.dins_power_button, 1, 4)
         self.ui.lower_inventory_layout.addWidget(self.song_of_the_hero_button, 1, 5)
-        self.ui.lower_inventory_layout.addWidget(self.scrapper_button, 1, 6)
+        self.ui.lower_inventory_layout.addWidget(self.gratitude_crystals_button, 1, 6)
 
-        self.ui.lower_inventory_layout.addWidget(self.mitts_button, 2, 0)
+        self.ui.lower_inventory_layout.addWidget(self.sailcloth_button, 2, 0)
         self.ui.lower_inventory_layout.addWidget(self.water_dragon_scale_button, 2, 1)
         self.ui.lower_inventory_layout.addWidget(self.fireshield_earrings_button, 2, 2)
-        self.ui.lower_inventory_layout.addWidget(self.cawlins_latter_button, 2, 3)
-        self.ui.lower_inventory_layout.addWidget(self.insect_cage_button, 2, 4)
-        self.ui.lower_inventory_layout.addWidget(self.rattle_button, 2, 5)
-        self.ui.lower_inventory_layout.addWidget(self.gratitude_crystals_button, 2, 6)
+        self.ui.lower_inventory_layout.addWidget(self.mitts_button, 2, 3)
+        self.ui.lower_inventory_layout.addWidget(self.cawlins_latter_button, 2, 4)
+        self.ui.lower_inventory_layout.addWidget(self.insect_cage_button, 2, 5)
+        self.ui.lower_inventory_layout.addWidget(self.rattle_button, 2, 6)
 
         self.ui.lower_inventory_layout.addWidget(self.life_tree_seedling_button, 3, 0)
         self.ui.lower_inventory_layout.addWidget(self.life_tree_fruit_button, 3, 1)
-        self.ui.lower_inventory_layout.addWidget(self.tadtones_button, 3, 2)
+        self.ui.lower_inventory_layout.addWidget(self.scrapper_button, 3, 2)
+        self.ui.lower_inventory_layout.addWidget(self.tadtones_button, 3, 3)
 
         # Connect clicking a tracker inventory button to updating the tracker
         for inventory_button in self.ui.tracker_tab.findChildren(

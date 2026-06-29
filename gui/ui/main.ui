@@ -36,7 +36,7 @@
        <enum>QTabWidget::TabShape::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="getting_started_tab">
        <property name="sizePolicy">
@@ -500,7 +500,7 @@
                     </property>
                     <property name="currentFont">
                      <font>
-                      <family>Arimo</family>
+                      <family>Tahoma</family>
                       <pointsize>10</pointsize>
                      </font>
                     </property>
@@ -3118,9 +3118,16 @@
               </sizepolicy>
              </property>
              <property name="title">
-              <string>Dives and Jumps</string>
+              <string>Dives, Jumps, and Falls</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_19">
+              <item>
+               <widget class="RandoTriStateCheckBox" name="setting_logic_precise_falls">
+                <property name="text">
+                 <string>Precise Falls</string>
+                </property>
+               </widget>
+              </item>
               <item>
                <widget class="RandoTriStateCheckBox" name="setting_logic_volcanic_island_dive">
                 <property name="text">

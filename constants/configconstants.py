@@ -73,6 +73,7 @@ DEFAULT_SETTINGS = {
     "disable_reminders": False,
     "starting_inventory": Counter(
         [
+            SAILCLOTH,
             HYLIAN_SHIELD,
             PROGRESSIVE_POUCH,
             SCRAPPER,
@@ -84,10 +85,6 @@ DEFAULT_SETTINGS = {
             FS_MAP,
             SK_MAP,
         ]
-        # + [
-        #     "Group of Tadtones",
-        # ]
-        # * 17
     ),
     "excluded_locations": [
         "Knight Academy - Deliver Kikwi to Owlan",
