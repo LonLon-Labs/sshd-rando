@@ -52,7 +52,6 @@ _APWORLD_BRIDGE_FILES = [
     "Items.py",
     "SSHD_Options.py",
     "platform_utils.py",
-    "setting_string_decoder.py",
     "archipelago.json",
 ]
 _APWORLD_BRIDGE_BASE_URL = os.environ.get(
