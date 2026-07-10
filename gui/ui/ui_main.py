@@ -2561,6 +2561,11 @@ class Ui_main_window(object):
 
         self.verticalLayout_32.addWidget(self.setting_allow_flying_at_night)
 
+        self.setting_randomize_loftwing = RandoTriStateCheckBox(self.other_settings_group_box)
+        self.setting_randomize_loftwing.setObjectName(u"setting_randomize_loftwing")
+
+        self.verticalLayout_32.addWidget(self.setting_randomize_loftwing)
+
         self.setting_natural_night_connections = RandoTriStateCheckBox(self.other_settings_group_box)
         self.setting_natural_night_connections.setObjectName(u"setting_natural_night_connections")
 
@@ -3398,6 +3403,7 @@ class Ui_main_window(object):
         self.other_settings_group_box.setTitle(QCoreApplication.translate("main_window", u"Other Settings", None))
         self.setting_enable_back_in_time.setText(QCoreApplication.translate("main_window", u"Enable Back in Time (BiT)", None))
         self.setting_allow_flying_at_night.setText(QCoreApplication.translate("main_window", u"Allow Flying at Night", None))
+        self.setting_randomize_loftwing.setText(QCoreApplication.translate("main_window", u"Start with Loftwing", None))
         self.setting_natural_night_connections.setText(QCoreApplication.translate("main_window", u"Require Natural Night Connections", None))
         self.setting_unlock_all_groosenator_destinations.setText(QCoreApplication.translate("main_window", u"Unlock all Groosenator Destinations", None))
         self.other_mods_group_box.setTitle(QCoreApplication.translate("main_window", u"Other Mods", None))

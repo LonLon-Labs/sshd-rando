@@ -460,6 +460,18 @@
     - "off": "You will not be able to fly at night. If the Require Natural Night Connections setting is disabled, night flying will be enabled to facilitate this."
     - "on": "You will be able to call your loftwing and fly in The Sky at night."
 
+- name: randomize_loftwing
+  default_option: "on"
+  pretty_name: Start with Loftwing
+  pretty_options:
+    - "Off"
+    - "On"
+    - "Random"
+  options:
+    - "off": "You will not start with your Loftwing unlocked. This can break expected progression and may put checks out of logic."
+    - "on": "You will start with your Loftwing unlocked."
+    - "random": "The randomizer will choose whether you start with your Loftwing unlocked when generating the seed."
+
 - name: skip_horde
   default_option: "off"
   pretty_name: Skip The Horde Fight
@@ -494,9 +506,9 @@
   default_option: 1
   pretty_name: Demise Count
   pretty_options:
-    - 1-10
+    - 1-50
   options:
-    - 1-10: "Choose how many Demise bosses will spawn in the final fight. 1 is the vanilla experience; higher values add extra Demises to the arena."
+    - 1-50: "Choose how many Demise bosses will spawn in the final fight. 1 is the vanilla experience; higher values add extra Demises to the arena."
 
 - name: required_dungeons
   default_option: 2
