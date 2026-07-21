@@ -225,6 +225,7 @@ _VALUE_MAP = {
         "shuffle_anywhere": "shuffle_anywhere",
     },
     "open_lmf": {"nodes": "nodes", "main_node": "main_node", "open": "open"},
+    "randomize_loftwing": {"on": "off", "off": "on"},
 }
 
 # sshd-rando damage_multiplier (numeric 0-80) → AP named choice
