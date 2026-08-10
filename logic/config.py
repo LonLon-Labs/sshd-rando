@@ -291,6 +291,12 @@ def load_config_from_file(
                 else:
                     setting_value = config_in[world_num_str][setting_name]
 
+                    # Backwards compatibility: old configs may store bools or numbers.
+                    if isinstance(setting_value, bool):
+                        setting_value = "on" if setting_value else "off"
+                    elif not isinstance(setting_value, str):
+                        setting_value = str(setting_value)
+
                     if setting_value not in settings_info[setting_name].options:
                         if default_on_invalid_value:
                             rewrite_config = True

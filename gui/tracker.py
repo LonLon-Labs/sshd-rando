@@ -788,7 +788,11 @@ class Tracker:
         self.et_key_piece_button.setVisible(visible)
 
         # Small Key buttons
-        visible = self.world.setting("small_keys") != "removed"
+        visible = (
+            self.world.setting("small_keys") != "removed"
+            and self.world.setting("key_rings_in_pool") == "off"
+            and self.world.setting("skeleton_key_in_pool") == "off"
+        )
         self.svt_small_key_button.setVisible(visible)
         self.lmf_small_key_button.setVisible(visible)
         self.ac_small_key_button.setVisible(visible)
@@ -1830,7 +1834,7 @@ class Tracker:
     def calculate_own_dungeon_key_locations(self) -> None:
         self.own_dungeon_key_locations.clear()
 
-        small_keys: bool = self.world.setting("small_keys") == "own_dungeon"
+        small_keys: bool = False
         boss_keys: bool = self.world.setting("boss_keys") == "own_dungeon"
 
         item_pool = get_complete_item_pool([self.world])

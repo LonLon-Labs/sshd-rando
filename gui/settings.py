@@ -56,6 +56,15 @@ if TYPE_CHECKING:
 
 
 class Settings:
+    _SETTINGS_HANDLED_ELSEWHERE = {
+        "randomize_skykeep_layout",
+        "randomize_gate_of_time",
+        "demise_count",
+        "goal_requirement",
+        "triforce_required",
+        "triforce_count",
+    }
+
     def __init__(self, main: "Main", ui: "Ui_main_window"):
         self.main = main
         self.ui = ui
@@ -64,8 +73,23 @@ class Settings:
         self.settings = self.config.settings[0].settings
         self.location_table = build_location_table()
         self.verify_excluded_locations()
+        self._ensure_dynamic_widgets()
 
         self.set_setting_descriptions(None)
+
+    def _ensure_dynamic_widgets(self) -> None:
+        """Create runtime controls for settings that are not in ui_main.py yet."""
+        for setting_name in ("key_rings_in_pool", "skeleton_key_in_pool"):
+            widget_name = f"setting_{setting_name}"
+            if hasattr(self.ui, widget_name):
+                continue
+
+            widget = RandoTriStateCheckBox(self.ui.dungeons_group_box)
+            widget.setObjectName(widget_name)
+            self.ui.verticalLayout_16.insertWidget(
+                self.ui.verticalLayout_16.count() - 1, widget
+            )
+            setattr(self.ui, widget_name, widget)
 
         # Init seed
         self.seed_line_edit: QLineEdit = self.ui.seed_line_edit
@@ -219,7 +243,8 @@ class Settings:
             try:
                 widget: QWidget = getattr(self.ui, "setting_" + setting_name)
             except:
-                print(f"Could not find widget for setting: {setting_name}.")
+                if setting_name not in self._SETTINGS_HANDLED_ELSEWHERE:
+                    print(f"Could not find widget for setting: {setting_name}.")
                 continue
 
             # Used to change the settings description when mousing over a setting
@@ -420,7 +445,8 @@ class Settings:
             try:
                 widget: QWidget = getattr(self.ui, "setting_" + setting_name)
             except:
-                print(f"Could not find widget for setting: {setting_name}.")
+                if setting_name not in self._SETTINGS_HANDLED_ELSEWHERE:
+                    print(f"Could not find widget for setting: {setting_name}.")
                 continue
 
             widget.blockSignals(True)

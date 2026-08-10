@@ -221,24 +221,42 @@
 
 - name: small_keys
   tracker_important: true
-  default_option: own_dungeon
-  pretty_name: Small Keys
+  default_option: own_region
+  pretty_name: Small Keys In The Pool
   pretty_options:
     - Vanilla
-    - Own Dungeon
-    - Any Dungeon
-    - Own Region
+    - Region
     - Overworld
     - Anywhere
-    - Removed
+    - Removed (Doors Still Locked)
   options:
     - vanilla: "Small Keys will appear in their vanilla locations."
-    - own_dungeon: "Small Keys will appear inside their respective dungeon."
-    - any_dungeon: "Small Keys can appear inside any dungeon."
     - own_region: "Small Keys will appear in their dungeon's region."
     - overworld: "Small Keys will only appear in the overworld."
     - anywhere: "Small Keys can appear anywhere."
-    - removed: "Small Keys will not appear anywhere in the world and their locks will start opened."
+    - removed: "Small Keys will not appear anywhere in the world and their locks will stay locked."
+
+- name: key_rings_in_pool
+  tracker_important: true
+  default_option: "off"
+  pretty_name: Key Rings In The Pool
+  pretty_options:
+    - "No"
+    - "Yes"
+  options:
+    - "off": "Do not add dungeon Key Rings to the item pool."
+    - "on": "Add a single key ring that can open all doors in a dungeon."
+
+- name: skeleton_key_in_pool
+  tracker_important: true
+  default_option: "off"
+  pretty_name: Skeleton Key In The Pool
+  pretty_options:
+    - "No"
+    - "Yes"
+  options:
+    - "off": "Do not add the Skeleton Key to the item pool."
+    - "on": "Add the Skeleton Key which can open all dungeon doors."
 
 - name: lanayru_caves_keys
   tracker_important: true
