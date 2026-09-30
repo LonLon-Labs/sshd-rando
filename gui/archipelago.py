@@ -470,12 +470,12 @@ class Archipelago:
     # ── Group: ROM Extract Path ───────────────────────────────────────────
 
     def _build_extract_group(self):
-        group = QGroupBox("ROM Extract Path (for YAML / Patcher)")
+        group = QGroupBox("ROM Extract Path")
         vbox = QVBoxLayout(group)
 
         note = QLabel(
             "<i>Path to your extracted SSHD ROM. Must contain romfs/ and exefs/ folders. "
-            "Used when generating the Archipelago YAML and when patching.</i>"
+            "Used when generating the Archipelago YAML.</i>"
         )
         note.setWordWrap(True)
         vbox.addWidget(note)

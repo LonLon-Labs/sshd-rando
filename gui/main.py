@@ -26,7 +26,6 @@ from filepathconstants import (
 from gui.accessibility import Accessibility
 from gui.advanced import Advanced
 from gui.archipelago import Archipelago
-from gui.patcher_tab import PatcherTab
 from gui.dialogs.dialog_header import print_progress_text
 from gui.tracker import Tracker
 from gui.dialogs.error_dialog import error, error_from_str
@@ -86,8 +85,6 @@ class Main(QMainWindow):
         self.advanced = Advanced(self, self.ui)
         print_progress_text("Initializing GUI: archipelago")
         self.archipelago = Archipelago(self, self.ui)
-        print_progress_text("Initializing GUI: patcher")
-        self.patcher_tab = PatcherTab(self, self.ui)
         print_progress_text("Initializing GUI: tracker")
         self.tracker = Tracker(self, self.ui)
 
@@ -167,7 +164,7 @@ class Main(QMainWindow):
             result = generate_yaml(self.config, ap_settings, Path(save_path))
             self.fi_info_dialog.show_dialog(
                 "YAML Generated!",
-                f"SkywardSwordHD.yaml has been saved to:<br><br>{result}<br><br>"
+                f"SkywardSwordHD_{player_name}.yaml has been saved to:<br><br>{result}<br><br>"
                 f"You can now use this file with Archipelago to generate a multiworld.",
             )
         except Exception as e:
@@ -227,15 +224,15 @@ class Main(QMainWindow):
             self.ui.how_to_generate_group_box.setTitle("3. Generate YAML")
             self.ui.how_to_generate_label.setText(
                 "<html><body><p>Click <span style=\"font-family:'Courier New';\">Generate YAML</span> "
-                "in the bottom right to create your SkywardSwordHD.yaml file.</p>"
+                "in the bottom right to create your SkywardSwordHD_Player-Name.yaml file.</p>"
                 "<p>Give this file to your multiworld host (or use it yourself as host).</p></body></html>"
             )
-            self.ui.how_to_running_group_box.setTitle("4. Patch and Play")
+            self.ui.how_to_running_group_box.setTitle("4. Play")
             self.ui.how_to_running_label.setText(
                 "<html><body>"
                 "<p>After the host generates the multiworld, you'll get an <b>.apsshd</b> file.</p>"
-                "<p>Go to the <b>Patcher</b> tab, select the .apsshd file, and click <b>Patch &amp; Install</b>.</p>"
-                "<p>Then launch the game in your emulator and connect the Archipelago client!</p>"
+                "<p>Use it with the Archipelago client or separate patcher application, then launch the game in your emulator "
+                "and connect to the server!</p>"
                 "</body></html>"
             )
         except AttributeError:
@@ -414,18 +411,13 @@ def start_gui(app: QApplication):
         main.ui.randomize_button.setText("Generate YAML")
         main.ui.randomize_button.clicked.connect(main.generate_ap_yaml)
 
-        # Sync extract path from AP tab to patcher tab when it changes
-        main.archipelago.extract_path_edit.textChanged.connect(
-            main.patcher_tab.set_extract_path
-        )
-
         main.show()
 
         if not main.config.verified_extract:
             get_extract_text = "Before you can begin, you will need to provide an extract of The Legend of Zelda: Skyward Sword HD"
             get_extract_text += "<br><br>Instructions for how to do this can be found here: <a href='https://docs.google.com/document/d/1HHQRXND0n-ZrmhEl4eXjzMANQ-xHK3pKKXPQqSbwXwY'>The Legend of Zelda: Skyward Sword HD Randomizer - Setup Guide</a>"
             get_extract_text += '<br><br>Once you are ready, click "OK" and the extract folder will open. Copy your extract of the base game into this folder'
-            get_extract_text += "<br><br>(If you just wish to look around, you can skip this step but you will be unable to generate a YAML or patch)."
+            get_extract_text += "<br><br>(If you just wish to look around, you can skip this step for now)."
             main.fi_info_dialog.show_dialog(
                 title="Getting Started", text=get_extract_text
             )
@@ -436,7 +428,7 @@ def start_gui(app: QApplication):
             if not main.config.disable_extract_verification:
                 confirm_first_time_verify_dialog = main.fi_question_dialog.show_dialog(
                     "Perform Full Verification?",
-                    f'Would you like to verify your extract (required for patching)?<br><br>Answering "No" will prevent you from patching the game but you will still be able to configure settings and generate a YAML.',
+                    f'Would you like to verify your extract?<br><br>Answering "No" will skip verification but you will still be able to configure settings and generate a YAML.',
                 )
 
                 if confirm_first_time_verify_dialog == QMessageBox.StandardButton.Yes:
