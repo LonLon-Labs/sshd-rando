@@ -420,8 +420,38 @@ class Settings:
         disabled_starting_items = self.get_disabled_starting_item_names()
         self.starting_inventory_pair.update_excluder_list(disabled_starting_items)
 
+        self.update_required_dungeon_widgets()
+
         if update_descriptions:
             self.update_descriptions(from_widget)
+
+    # Per-dungeon "require" settings. If any of these are on (or random), the
+    # exact set of required dungeons is chosen by the user, so the count and
+    # the "include Sky Keep" setting no longer apply.
+    REQUIRE_DUNGEON_SETTINGS = (
+        "require_skyview_temple",
+        "require_earth_temple",
+        "require_lanayru_mining_facility",
+        "require_ancient_cistern",
+        "require_sandship",
+        "require_fire_sanctuary",
+        "require_sky_keep",
+    )
+
+    def update_required_dungeon_widgets(self) -> None:
+        any_dungeon_chosen = any(
+            name in self.settings and self.settings[name].value != "off"
+            for name in self.REQUIRE_DUNGEON_SETTINGS
+        )
+
+        for widget_name in (
+            "setting_required_dungeons",
+            "required_dungeons_label",
+            "setting_dungeons_include_sky_keep",
+        ):
+            widget = getattr(self.ui, widget_name, None)
+            if widget is not None:
+                widget.setEnabled(not any_dungeon_chosen)
 
     def update_from_config(self):
         # Update mixed entrance pools

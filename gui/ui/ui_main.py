@@ -727,6 +727,48 @@ class Ui_main_window(object):
 
         self.gridLayout_9.addWidget(self.beat_the_game_group_box, 0, 0, 1, 1)
 
+        self.required_dungeons_group_box = QGroupBox(self.gameplay_tab)
+        self.required_dungeons_group_box.setObjectName(u"required_dungeons_group_box")
+        self.required_dungeons_list_layout = QVBoxLayout(self.required_dungeons_group_box)
+        self.required_dungeons_list_layout.setObjectName(u"required_dungeons_list_layout")
+        self.setting_require_skyview_temple = RandoTriStateCheckBox(self.required_dungeons_group_box)
+        self.setting_require_skyview_temple.setObjectName(u"setting_require_skyview_temple")
+
+        self.required_dungeons_list_layout.addWidget(self.setting_require_skyview_temple)
+
+        self.setting_require_earth_temple = RandoTriStateCheckBox(self.required_dungeons_group_box)
+        self.setting_require_earth_temple.setObjectName(u"setting_require_earth_temple")
+
+        self.required_dungeons_list_layout.addWidget(self.setting_require_earth_temple)
+
+        self.setting_require_lanayru_mining_facility = RandoTriStateCheckBox(self.required_dungeons_group_box)
+        self.setting_require_lanayru_mining_facility.setObjectName(u"setting_require_lanayru_mining_facility")
+
+        self.required_dungeons_list_layout.addWidget(self.setting_require_lanayru_mining_facility)
+
+        self.setting_require_ancient_cistern = RandoTriStateCheckBox(self.required_dungeons_group_box)
+        self.setting_require_ancient_cistern.setObjectName(u"setting_require_ancient_cistern")
+
+        self.required_dungeons_list_layout.addWidget(self.setting_require_ancient_cistern)
+
+        self.setting_require_sandship = RandoTriStateCheckBox(self.required_dungeons_group_box)
+        self.setting_require_sandship.setObjectName(u"setting_require_sandship")
+
+        self.required_dungeons_list_layout.addWidget(self.setting_require_sandship)
+
+        self.setting_require_fire_sanctuary = RandoTriStateCheckBox(self.required_dungeons_group_box)
+        self.setting_require_fire_sanctuary.setObjectName(u"setting_require_fire_sanctuary")
+
+        self.required_dungeons_list_layout.addWidget(self.setting_require_fire_sanctuary)
+
+        self.setting_require_sky_keep = RandoTriStateCheckBox(self.required_dungeons_group_box)
+        self.setting_require_sky_keep.setObjectName(u"setting_require_sky_keep")
+
+        self.required_dungeons_list_layout.addWidget(self.setting_require_sky_keep)
+
+
+        self.gridLayout_9.addWidget(self.required_dungeons_group_box, 1, 0, 1, 1)
+
         self.gridLayout_9.setColumnStretch(0, 1)
         self.gridLayout_9.setColumnStretch(1, 1)
         self.gridLayout_9.setColumnStretch(2, 1)
@@ -3174,6 +3216,14 @@ class Ui_main_window(object):
         self.setting_skip_horde.setText(QCoreApplication.translate("main_window", u"Skip The Horde Fight", None))
         self.setting_skip_g3.setText(QCoreApplication.translate("main_window", u"Skip Ghirahim 3 Fight", None))
         self.setting_skip_demise.setText(QCoreApplication.translate("main_window", u"Skip Demise Fight", None))
+        self.required_dungeons_group_box.setTitle(QCoreApplication.translate("main_window", u"Required Dungeons", None))
+        self.setting_require_skyview_temple.setText(QCoreApplication.translate("main_window", u"Skyview Temple", None))
+        self.setting_require_earth_temple.setText(QCoreApplication.translate("main_window", u"Earth Temple", None))
+        self.setting_require_lanayru_mining_facility.setText(QCoreApplication.translate("main_window", u"Lanayru Mining Facility", None))
+        self.setting_require_ancient_cistern.setText(QCoreApplication.translate("main_window", u"Ancient Cistern", None))
+        self.setting_require_sandship.setText(QCoreApplication.translate("main_window", u"Sandship", None))
+        self.setting_require_fire_sanctuary.setText(QCoreApplication.translate("main_window", u"Fire Sanctuary", None))
+        self.setting_require_sky_keep.setText(QCoreApplication.translate("main_window", u"Sky Keep", None))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.gameplay_tab), QCoreApplication.translate("main_window", u"Gameplay", None))
         self.open_world_group_box.setTitle(QCoreApplication.translate("main_window", u"Open World", None))
         self.setting_open_thunderhead.setText(QCoreApplication.translate("main_window", u"Open Thunderhead", None))

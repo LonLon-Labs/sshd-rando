@@ -580,6 +580,76 @@
     - "off": "Only the 6 main dungeons may be selected as required dungeons."
     - "on": "Sky Keep may be selected as a required dungeon needed to beat the seed. If selected, one of the \"Sacred Power\" locations will be chosen as the \"Goal Location\" containing an important item (shown on a stone tablet in the 1st room of Sky Keep)."
 
+- name: require_skyview_temple
+  default_option: "off"
+  pretty_name: Skyview Temple
+  pretty_options:
+    - "Off"
+    - "On"
+  options:
+    - "off": "Skyview Temple is not specifically chosen as a required dungeon."
+    - "on": "Skyview Temple will be a required dungeon. If any dungeon is chosen here, only the chosen dungeons are required and the Required Dungeons count and Include Sky Keep as a Dungeon settings are ignored."
+
+- name: require_earth_temple
+  default_option: "off"
+  pretty_name: Earth Temple
+  pretty_options:
+    - "Off"
+    - "On"
+  options:
+    - "off": "Earth Temple is not specifically chosen as a required dungeon."
+    - "on": "Earth Temple will be a required dungeon. If any dungeon is chosen here, only the chosen dungeons are required and the Required Dungeons count and Include Sky Keep as a Dungeon settings are ignored."
+
+- name: require_lanayru_mining_facility
+  default_option: "off"
+  pretty_name: Lanayru Mining Facility
+  pretty_options:
+    - "Off"
+    - "On"
+  options:
+    - "off": "Lanayru Mining Facility is not specifically chosen as a required dungeon."
+    - "on": "Lanayru Mining Facility will be a required dungeon. If any dungeon is chosen here, only the chosen dungeons are required and the Required Dungeons count and Include Sky Keep as a Dungeon settings are ignored."
+
+- name: require_ancient_cistern
+  default_option: "off"
+  pretty_name: Ancient Cistern
+  pretty_options:
+    - "Off"
+    - "On"
+  options:
+    - "off": "Ancient Cistern is not specifically chosen as a required dungeon."
+    - "on": "Ancient Cistern will be a required dungeon. If any dungeon is chosen here, only the chosen dungeons are required and the Required Dungeons count and Include Sky Keep as a Dungeon settings are ignored."
+
+- name: require_sandship
+  default_option: "off"
+  pretty_name: Sandship
+  pretty_options:
+    - "Off"
+    - "On"
+  options:
+    - "off": "Sandship is not specifically chosen as a required dungeon."
+    - "on": "Sandship will be a required dungeon. If any dungeon is chosen here, only the chosen dungeons are required and the Required Dungeons count and Include Sky Keep as a Dungeon settings are ignored."
+
+- name: require_fire_sanctuary
+  default_option: "off"
+  pretty_name: Fire Sanctuary
+  pretty_options:
+    - "Off"
+    - "On"
+  options:
+    - "off": "Fire Sanctuary is not specifically chosen as a required dungeon."
+    - "on": "Fire Sanctuary will be a required dungeon. If any dungeon is chosen here, only the chosen dungeons are required and the Required Dungeons count and Include Sky Keep as a Dungeon settings are ignored."
+
+- name: require_sky_keep
+  default_option: "off"
+  pretty_name: Sky Keep
+  pretty_options:
+    - "Off"
+    - "On"
+  options:
+    - "off": "Sky Keep is not specifically chosen as a required dungeon."
+    - "on": "Sky Keep will be a required dungeon, even if Include Sky Keep as a Dungeon is off. If any dungeon is chosen here, only the chosen dungeons are required and the Required Dungeons count and Include Sky Keep as a Dungeon settings are ignored."
+
 - name: empty_unrequired_dungeons
   tracker_important: true
   default_option: "on"

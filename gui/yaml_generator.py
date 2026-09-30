@@ -88,6 +88,13 @@ _BOOL_SETTINGS = {
     "natural_night_connections",
     "dungeons_include_sky_keep",
     "empty_unrequired_dungeons",
+    "require_skyview_temple",
+    "require_earth_temple",
+    "require_lanayru_mining_facility",
+    "require_ancient_cistern",
+    "require_sandship",
+    "require_fire_sanctuary",
+    "require_sky_keep",
     "small_keys_in_fancy_chests",
     "cutoff_game_over_music",
     "skip_horde",
@@ -392,7 +399,7 @@ def generate_yaml(
     # Re-apply from ap_settings["triforce_count"] so AP tab value wins over rando default.
     game_settings["required_triforce_pieces"] = ap_settings.get("triforce_count", 3)
     game_settings["dungeon_goal_requirement"] = ap_settings.get("dungeon_goal_requirement", False)
-    game_settings["required_dungeon_count"] = ap_settings.get("required_dungeon_count", 2)
+    game_settings["dungeon_goal_count"] = ap_settings.get("dungeon_goal_count", ap_settings.get("required_dungeon_count", 0))
     game_settings["require_greg"] = ap_settings.get("require_greg", False)
     game_settings["require_tim"] = ap_settings.get("require_tim", False)
     game_settings["require_all_progression_items"] = ap_settings.get("require_all_progression_items", False)

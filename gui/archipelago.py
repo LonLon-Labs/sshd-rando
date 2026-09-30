@@ -45,7 +45,7 @@ AP_DEFAULTS = {
     "triforce_required": True,
     "triforce_count": 3,
     "dungeon_goal_requirement": False,
-    "required_dungeon_count": 0,
+    "dungeon_goal_count": 0,
     "require_greg": False,
     "require_tim": False,
     "require_all_progression_items": False,
@@ -202,10 +202,10 @@ class Archipelago:
 
         # Dungeon Count
         row = QHBoxLayout()
-        lbl = QLabel("Dungeon Count:")
+        lbl = QLabel("Dungeon Goal Count:")
         lbl.setMinimumWidth(160)
         self.dungeon_count_spin = QSpinBox()
-        self.dungeon_count_spin.setRange(0, 7)
+        self.dungeon_count_spin.setRange(0, 6)
         self.dungeon_count_spin.setToolTip(
             "How many dungeons must be defeated before the goal boss counts.\n"
             "Only applies when Require Dungeons is enabled."
@@ -528,7 +528,7 @@ class Archipelago:
             self.triforce_count_spin.setValue(self.ap.get("triforce_count", 3))
             self._update_triforce_count_enabled()
             self.require_dungeons_cb.setChecked(self.ap.get("dungeon_goal_requirement", False))
-            self.dungeon_count_spin.setValue(self.ap.get("required_dungeon_count", 0))
+            self.dungeon_count_spin.setValue(min(6, self.ap.get("dungeon_goal_count", self.ap.get("required_dungeon_count", 0))))
             self._update_dungeon_count_enabled()
             self.require_greg_cb.setChecked(self.ap.get("require_greg", False))
             self.require_tim_cb.setChecked(self.ap.get("require_tim", False))
@@ -556,7 +556,7 @@ class Archipelago:
         self.ap["triforce_required"] = self.triforce_required_cb.isChecked()
         self.ap["triforce_count"] = self.triforce_count_spin.value()
         self.ap["dungeon_goal_requirement"] = self.require_dungeons_cb.isChecked()
-        self.ap["required_dungeon_count"] = self.dungeon_count_spin.value()
+        self.ap["dungeon_goal_count"] = self.dungeon_count_spin.value()
         self.ap["require_greg"] = self.require_greg_cb.isChecked()
         self.ap["require_tim"] = self.require_tim_cb.isChecked()
         self.ap["require_all_progression_items"] = self.require_all_progression_cb.isChecked()

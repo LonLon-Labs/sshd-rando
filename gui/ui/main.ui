@@ -1055,6 +1055,64 @@
           </layout>
          </widget>
         </item>
+        <item row="1" column="0">
+         <widget class="QGroupBox" name="required_dungeons_group_box">
+          <property name="title">
+           <string>Required Dungeons</string>
+          </property>
+          <layout class="QVBoxLayout" name="required_dungeons_list_layout">
+           <item>
+            <widget class="RandoTriStateCheckBox" name="setting_require_skyview_temple">
+             <property name="text">
+              <string>Skyview Temple</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="RandoTriStateCheckBox" name="setting_require_earth_temple">
+             <property name="text">
+              <string>Earth Temple</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="RandoTriStateCheckBox" name="setting_require_lanayru_mining_facility">
+             <property name="text">
+              <string>Lanayru Mining Facility</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="RandoTriStateCheckBox" name="setting_require_ancient_cistern">
+             <property name="text">
+              <string>Ancient Cistern</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="RandoTriStateCheckBox" name="setting_require_sandship">
+             <property name="text">
+              <string>Sandship</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="RandoTriStateCheckBox" name="setting_require_fire_sanctuary">
+             <property name="text">
+              <string>Fire Sanctuary</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="RandoTriStateCheckBox" name="setting_require_sky_keep">
+             <property name="text">
+              <string>Sky Keep</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="world_tab">

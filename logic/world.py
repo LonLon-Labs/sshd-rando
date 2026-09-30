@@ -314,7 +314,37 @@ class World:
             if setting.info.type == SettingType.STANDARD:
                 setting.resolve_if_random()
 
+    # Maps each dungeon to the setting that lets the player choose it as a required dungeon
+    REQUIRE_DUNGEON_SETTINGS = {
+        "Skyview Temple": "require_skyview_temple",
+        "Earth Temple": "require_earth_temple",
+        "Lanayru Mining Facility": "require_lanayru_mining_facility",
+        "Ancient Cistern": "require_ancient_cistern",
+        "Sandship": "require_sandship",
+        "Fire Sanctuary": "require_fire_sanctuary",
+        "Sky Keep": "require_sky_keep",
+    }
+
+    def get_user_chosen_dungeon_names(self) -> list[str]:
+        """Names of dungeons the player explicitly chose to be required."""
+        return [
+            dungeon_name
+            for dungeon_name, setting_name in self.REQUIRE_DUNGEON_SETTINGS.items()
+            if self.setting(setting_name) == "on"
+        ]
+
     def resolve_conflicting_settings(self) -> None:
+        # If the player chose specific required dungeons, the chosen set
+        # overrides both the required dungeon count and whether Sky Keep
+        # counts as a dungeon.
+        chosen_dungeon_names = self.get_user_chosen_dungeon_names()
+        if chosen_dungeon_names:
+            self.setting("required_dungeons").set_value(str(len(chosen_dungeon_names)))
+            self.setting("dungeons_include_sky_keep").set_value(
+                "on" if "Sky Keep" in chosen_dungeon_names else "off"
+            )
+            return
+
         if (
             self.setting("required_dungeons") == "7"
             and self.setting("dungeons_include_sky_keep") == "off"
@@ -553,8 +583,25 @@ class World:
                     + f"Please change your settings and/or plandomizer file if applicable."
                 )
 
+        # If the player picked specific required dungeons, only those can be required
+        chosen_dungeon_names = self.get_user_chosen_dungeon_names()
+
         # Set dungeons that have to be force required
         for dungeon in dungeons:
+            if chosen_dungeon_names and dungeon.name not in chosen_dungeon_names:
+                # Not one of the dungeons the player picked, so it can't be required.
+                # That's only a problem if it has to be required *and* has to be barren.
+                if (
+                    dungeon.required_reasons
+                    and self.setting("empty_unrequired_dungeons") == "on"
+                ):
+                    raise RuntimeError(
+                        f"Seed cannot generate because {dungeon} has to be required with the given settings but was not chosen as a required dungeon.<br>\n"
+                        + f"{dungeon}:<br>\n{dungeon.required_reasons}"
+                        + f"Please change your settings and/or plandomizer file if applicable."
+                    )
+                continue
+
             if dungeon.required_reasons:
                 if num_chosen_dungeons < num_required_dungeons:
                     dungeon.required = True
@@ -583,6 +630,9 @@ class World:
         # Prevent unrequired dungeons from being chosen
         unrequired_reason_list = ""
         for dungeon in dungeons.copy():
+            if chosen_dungeon_names and dungeon.name not in chosen_dungeon_names:
+                dungeons.remove(dungeon)
+                continue
             if dungeon.unrequired_reasons:
                 unrequired_reason_list += (
                     f"{dungeon}:<br>\n{dungeon.unrequired_reasons}"
