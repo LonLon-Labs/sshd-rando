@@ -69,6 +69,7 @@ AP_DEFAULTS = {
     "cheat_infinite_beetle": False,
     "cheat_infinite_loftwing": False,
     "cheat_no_electric_stun": False,
+    "cheat_no_enemy_damage": False,
     "cheat_speed_multiplier": 10,
     "demise_count": 1,
 }
@@ -435,6 +436,11 @@ class Archipelago:
                 "No Electric Stun",
                 "Electric shock paralysis animation removed.",
             ),
+            (
+                "cheat_no_enemy_damage",
+                "No Enemy Damage",
+                "Enemies are unable to hit link.",
+            )
         ]
 
         self._cheat_checkboxes: dict[str, QCheckBox] = {}
