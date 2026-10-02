@@ -1236,6 +1236,21 @@ class Ui_main_window(object):
 
         self.verticalLayout_10.addWidget(self.setting_goddess_chest_shuffle)
 
+        self.goddess_chest_unlock_label = QLabel(self.shuffles_group_box)
+        self.goddess_chest_unlock_label.setObjectName(u"goddess_chest_unlock_label")
+
+        self.verticalLayout_10.addWidget(self.goddess_chest_unlock_label)
+
+        self.setting_goddess_chest_unlock = QComboBox(self.shuffles_group_box)
+        self.setting_goddess_chest_unlock.setObjectName(u"setting_goddess_chest_unlock")
+
+        self.verticalLayout_10.addWidget(self.setting_goddess_chest_unlock)
+
+        self.setting_decouple_goddess_cubes_and_chests = RandoTriStateCheckBox(self.shuffles_group_box)
+        self.setting_decouple_goddess_cubes_and_chests.setObjectName(u"setting_decouple_goddess_cubes_and_chests")
+
+        self.verticalLayout_10.addWidget(self.setting_decouple_goddess_cubes_and_chests)
+
         self.setting_gratitude_crystal_shuffle = RandoTriStateCheckBox(self.shuffles_group_box)
         self.setting_gratitude_crystal_shuffle.setObjectName(u"setting_gratitude_crystal_shuffle")
 
@@ -3290,6 +3305,8 @@ class Ui_main_window(object):
         self.rupee_shuffle_label.setText(QCoreApplication.translate("main_window", u"Rupee Shuffle", None))
         self.setting_underground_rupee_shuffle.setText(QCoreApplication.translate("main_window", u"Underground Rupee Shuffle", None))
         self.setting_goddess_chest_shuffle.setText(QCoreApplication.translate("main_window", u"Goddess Chest Shuffle", None))
+        self.goddess_chest_unlock_label.setText(QCoreApplication.translate("main_window", u"Goddess Chest Unlock", None))
+        self.setting_decouple_goddess_cubes_and_chests.setText(QCoreApplication.translate("main_window", u"Decouple Goddess Cubes and Chests", None))
         self.setting_gratitude_crystal_shuffle.setText(QCoreApplication.translate("main_window", u"Gratitude Crystals Shuffle", None))
         self.setting_stamina_fruit_shuffle.setText(QCoreApplication.translate("main_window", u"Stamina Fruit Shuffle", None))
         self.setting_hidden_item_shuffle.setText(QCoreApplication.translate("main_window", u"Hidden Item Shuffle", None))

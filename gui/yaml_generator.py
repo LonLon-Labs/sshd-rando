@@ -52,6 +52,7 @@ _BOOL_SETTINGS = {
     "stamina_fruit_shuffle",
     "hidden_item_shuffle",
     "goddess_chest_shuffle",
+    "decouple_goddess_cubes_and_chests",
     "tadtone_shuffle",
     "gossip_stone_treasure_shuffle",
     "randomize_dungeon_entrances",

@@ -931,11 +931,15 @@ class Tracker:
                 self.items_on_mark[location] = location.current_item
                 location.remove_current_item()
 
-            # Only display goddess cubes when goddess chest shuffle is on
+            # Only display goddess cubes when goddess chest shuffle is on and
+            # goddess chests are still activated by their cubes. (Decoupled cubes
+            # are regular locations and are handled like any other check.)
             if location.has_vanilla_goddess_cube():
                 # Only list goddess cubes whose associated goddess chests aren't excluded
                 if (
                     self.world.setting("goddess_chest_shuffle") == "on"
+                    and self.world.setting("goddess_chest_unlock")
+                    == "locked_until_struck"
                     and location.current_item.get_goddess_chest().progression
                 ):
                     location.progression = True
