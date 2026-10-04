@@ -107,6 +107,10 @@ _BOOL_SETTINGS = {
     "remove_enemy_music",
     "start_with_all_bugs",
     "start_with_all_treasures",
+    # Bird Statues
+    "bird_statues_give_items",
+    "bird_statues_need_unlock",
+    "start_with_region_bird_statues",
     # Logic tricks
     "logic_early_lake_floria",
     "logic_beedles_island_cage_chest_dive",

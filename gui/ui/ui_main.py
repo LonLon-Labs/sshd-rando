@@ -2623,6 +2623,21 @@ class Ui_main_window(object):
 
         self.verticalLayout_32.addWidget(self.setting_randomize_loftwing)
 
+        self.setting_bird_statues_give_items = RandoTriStateCheckBox(self.other_settings_group_box)
+        self.setting_bird_statues_give_items.setObjectName(u"setting_bird_statues_give_items")
+
+        self.verticalLayout_32.addWidget(self.setting_bird_statues_give_items)
+
+        self.setting_bird_statues_need_unlock = RandoTriStateCheckBox(self.other_settings_group_box)
+        self.setting_bird_statues_need_unlock.setObjectName(u"setting_bird_statues_need_unlock")
+
+        self.verticalLayout_32.addWidget(self.setting_bird_statues_need_unlock)
+
+        self.setting_start_with_region_bird_statues = RandoTriStateCheckBox(self.other_settings_group_box)
+        self.setting_start_with_region_bird_statues.setObjectName(u"setting_start_with_region_bird_statues")
+
+        self.verticalLayout_32.addWidget(self.setting_start_with_region_bird_statues)
+
         self.setting_natural_night_connections = RandoTriStateCheckBox(self.other_settings_group_box)
         self.setting_natural_night_connections.setObjectName(u"setting_natural_night_connections")
 
@@ -3471,6 +3486,9 @@ class Ui_main_window(object):
         self.setting_enable_back_in_time.setText(QCoreApplication.translate("main_window", u"Enable Back in Time (BiT)", None))
         self.setting_allow_flying_at_night.setText(QCoreApplication.translate("main_window", u"Allow Flying at Night", None))
         self.setting_randomize_loftwing.setText(QCoreApplication.translate("main_window", u"Start with Loftwing", None))
+        self.setting_bird_statues_give_items.setText(QCoreApplication.translate("main_window", u"Bird Statues Give Items", None))
+        self.setting_bird_statues_need_unlock.setText(QCoreApplication.translate("main_window", u"Bird Statues Need to be Unlocked", None))
+        self.setting_start_with_region_bird_statues.setText(QCoreApplication.translate("main_window", u"Start with a Bird Statue in Each Region", None))
         self.setting_natural_night_connections.setText(QCoreApplication.translate("main_window", u"Require Natural Night Connections", None))
         self.setting_unlock_all_groosenator_destinations.setText(QCoreApplication.translate("main_window", u"Unlock all Groosenator Destinations", None))
         self.other_mods_group_box.setTitle(QCoreApplication.translate("main_window", u"Other Mods", None))
