@@ -101,6 +101,16 @@ class Settings:
             layout.insertWidget(index + 1 if index >= 0 else layout.count(), pot_widget)
             self.ui.setting_pot_shuffle = pot_widget
 
+        # Pumpkin shuffle checkbox, placed right after the pot shuffle one
+        if not hasattr(self.ui, "setting_pumpkin_shuffle"):
+            pumpkin_widget = RandoTriStateCheckBox(self.ui.shuffles_group_box)
+            pumpkin_widget.setObjectName("setting_pumpkin_shuffle")
+            pumpkin_widget.setText("Pumpkin Shuffle")
+            layout = self.ui.verticalLayout_10
+            index = layout.indexOf(self.ui.setting_pot_shuffle)
+            layout.insertWidget(index + 1 if index >= 0 else layout.count(), pumpkin_widget)
+            self.ui.setting_pumpkin_shuffle = pumpkin_widget
+
         # Init seed
         self.seed_line_edit: QLineEdit = self.ui.seed_line_edit
         self.seed_line_edit.setText(self.config.seed)
