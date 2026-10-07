@@ -51,6 +51,7 @@ _BOOL_SETTINGS = {
     "gratitude_crystal_shuffle",
     "stamina_fruit_shuffle",
     "hidden_item_shuffle",
+    "pot_shuffle",
     "goddess_chest_shuffle",
     "decouple_goddess_cubes_and_chests",
     "tadtone_shuffle",

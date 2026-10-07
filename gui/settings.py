@@ -91,6 +91,16 @@ class Settings:
             )
             setattr(self.ui, widget_name, widget)
 
+        # Pot shuffle checkbox, placed right after the hidden item shuffle one
+        if not hasattr(self.ui, "setting_pot_shuffle"):
+            pot_widget = RandoTriStateCheckBox(self.ui.shuffles_group_box)
+            pot_widget.setObjectName("setting_pot_shuffle")
+            pot_widget.setText("Pot Shuffle")
+            layout = self.ui.verticalLayout_10
+            index = layout.indexOf(self.ui.setting_hidden_item_shuffle)
+            layout.insertWidget(index + 1 if index >= 0 else layout.count(), pot_widget)
+            self.ui.setting_pot_shuffle = pot_widget
+
         # Init seed
         self.seed_line_edit: QLineEdit = self.ui.seed_line_edit
         self.seed_line_edit.setText(self.config.seed)
