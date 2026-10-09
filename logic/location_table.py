@@ -96,10 +96,19 @@ def get_disabled_shuffle_locations(
                 # decoupled from their chests. Otherwise they are just
                 # dummy logic items linked to Goddess Chests.
                 "Goddess Cube" in location.types
-                and (
-                    settings["decouple_goddess_cubes_and_chests"].value == "off"
-                    and settings["goddess_chest_shuffle"].value == "off"
-                )
+                and settings["decouple_goddess_cubes_and_chests"].value == "off"
+            )
+            or (
+                settings["pot_shuffle"].value == "off"
+                and "Pots" in location.types
+            )
+            or (
+                settings["pumpkin_shuffle"].value == "off"
+                and "Pumpkins" in location.types
+            )
+            or (
+                settings["barrel_shuffle"].value == "off"
+                and "Barrels" in location.types
             )
             or (
                 (

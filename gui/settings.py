@@ -65,6 +65,11 @@ class Settings:
         "triforce_count",
     }
 
+    _LOCATION_COUNT_SETTINGS = {
+        "decouple_goddess_cubes_and_chests",
+        "bird_statues_give_items",
+    }
+
     def __init__(self, main: "Main", ui: "Ui_main_window"):
         self.main = main
         self.ui = ui
@@ -353,7 +358,11 @@ class Settings:
             if not widget:
                 continue
 
-            if widget == from_widget and "shuffle" not in setting_name:
+            if (
+                widget == from_widget
+                and "shuffle" not in setting_name
+                and setting_name not in self._LOCATION_COUNT_SETTINGS
+            ):
                 should_update_location_counter = False
 
             new_setting = setting

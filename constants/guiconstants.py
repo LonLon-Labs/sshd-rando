@@ -19,6 +19,7 @@ ITEM_FILTER_TYPES = (
 LOCATION_FILTER_TYPES = (
     "Minigames",
     "Goddess Chests",
+    "Goddess Cube",
     "Gratitude Crystals",
     "Batreaux's Rewards",
     "Scrapper Deliveries",
