@@ -44,7 +44,15 @@ elif _patcher_extract_path:
 SSHD_EXTRACT_PATH = Path(_patcher_extract_path) if _patcher_extract_path else (Path(userdata_path) / "sshd_extract")
 EXEFS_EXTRACT_PATH = SSHD_EXTRACT_PATH / "exefs"
 ROMFS_EXTRACT_PATH = SSHD_EXTRACT_PATH / "romfs"
-OTHER_MODS_PATH = Path(userdata_path) / "other_mods"
+# The folder holding other mods to merge in. Defaults to <userdata>/other_mods,
+# but the patcher can override it (SSHD_AP_OTHER_MODS_PATH) so the mods folder
+# the GUI exported in the YAML is used.
+_patcher_other_mods_path = os.environ.get("SSHD_AP_OTHER_MODS_PATH")
+OTHER_MODS_PATH = (
+    Path(_patcher_other_mods_path)
+    if _patcher_other_mods_path
+    else Path(userdata_path) / "other_mods"
+)
 COMBINED_MODS_FOLDER = "TEMP_COMBINED_MOD_DATA"
 COMBINED_MODS_PATH = OTHER_MODS_PATH / COMBINED_MODS_FOLDER
 

@@ -93,6 +93,7 @@ class Main(QMainWindow):
 
         # Override Getting Started text for Archipelago workflow
         self._update_getting_started_text()
+        self._update_other_mods_text()
 
         print_progress_text("GUI initialized")
 
@@ -203,6 +204,30 @@ class Main(QMainWindow):
 
     def open_output_folder(self):
         QDesktopServices.openUrl(QUrl.fromLocalFile(self.config.output_dir.absolute()))
+
+    def _update_other_mods_text(self):
+        """Explain how the Other Mods list feeds into the Archipelago YAML."""
+        try:
+            self.ui.other_mods_explanation_text.setText(
+                "<html><body>"
+                "<p>You can merge other mods into the Archipelago randomizer. Put each mod in its own folder "
+                '(containing the mod\'s <span style=" font-weight:700;">romfs</span> folder) inside the '
+                '<span style=" font-weight:700;">other_mods</span> directory, refresh the mod list, and tick the '
+                "mods you want. For example, a mod which changes Link's tunic color could live in a folder named "
+                "&quot;Other Tunic Color&quot;.</p>"
+                "<p>The ticked mods, and the location of the <b>other_mods</b> folder, are written into the YAML "
+                "when you click <i>Generate YAML</i>. The mods are merged when your game files are patched, so "
+                "they need to be on the computer you patch from. If that isn't this one, copy them into an "
+                "<b>other_mods</b> folder next to your extract folder.</p>"
+                "<p>Mods which modify the <b>exefs</b> folder are not supported. Mods which change the same files "
+                "in ways that can't be combined will make patching fail with an error naming the conflict.</p>"
+                "<p>Note that this feature is EXPERIMENTAL and we do not guarantee that you won't run into bugs "
+                "when using other mods.</p>"
+                "</body></html>"
+            )
+        except AttributeError:
+            # UI elements might not exist in all versions
+            pass
 
     def _update_getting_started_text(self):
         """Override the Getting Started tab text for Archipelago workflow."""

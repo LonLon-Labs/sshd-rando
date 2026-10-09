@@ -14,6 +14,7 @@ import yaml
 
 from logic.config import Config
 from logic.settings import Setting
+from filepathconstants import OTHER_MODS_PATH
 
 from typing import TYPE_CHECKING
 
@@ -382,6 +383,21 @@ def generate_yaml(
 
         # No-spoiler-log is derived from generate_spoiler_log
         game_settings["no_spoiler_log"] = not config.generate_spoiler_log
+
+    # ── Other mods ────────────────────────────────────────────────────
+    # The mods ticked in the Advanced tab. The names are folders inside the
+    # GUI's other_mods directory, so also export where that directory is;
+    # the AP patcher falls back to <extract_path parent>/other_mods if the
+    # path doesn't exist on the machine that ends up patching.
+    selected_mods = []
+    if config.settings:
+        for mod_name in getattr(config.settings[0], "other_mods", []) or []:
+            if mod_name and mod_name not in selected_mods:
+                selected_mods.append(mod_name)
+    game_settings["other_mods"] = selected_mods
+    game_settings["other_mods_path"] = (
+        str(Path(OTHER_MODS_PATH).resolve()) if selected_mods else ""
+    )
 
     # ── Archipelago options (written AFTER rando loop to take priority) ─
     # These come from the AP tab UI settings and override any rando defaults.
