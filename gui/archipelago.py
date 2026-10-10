@@ -368,8 +368,8 @@ class Archipelago:
         vbox = QVBoxLayout(group)
 
         note = QLabel(
-            "<i>These cheats are applied via memory writes by the Archipelago client "
-            "while connected. They do NOT affect randomizer logic or seed generation.</i>"
+            "<i>These cheats are enabled in the rust backend by the Archipelago client "
+            "when connected. They do NOT affect randomizer logic or seed generation.</i>"
         )
         note.setWordWrap(True)
         vbox.addWidget(note)
