@@ -202,6 +202,20 @@ _INT_SETTINGS = {
     "demise_count",
 }
 
+# Boss and miniboss copy counts from the AP tab. Each key is an Archipelago option
+# name and a key in gui/archipelago.py AP_DEFAULTS.
+BOSS_COPY_KEYS = (
+    "extra_ghirahim_skyview",
+    "extra_ghirahim_fire_sanctuary",
+    "extra_moldarach",
+    "extra_stalfos_skyview_first_visit",
+    "extra_stalfos_skyview_second_visit",
+    "extra_stalfos_sky_keep",
+    "extra_stalmaster_sky_keep",
+    "extra_stalmaster_ancient_cistern",
+    "extra_dark_lizalfos",
+)
+
 # Settings that use "progressive_items" → "true"/"false"
 _PROGRESSIVE_BOOL = {"progressive_items"}
 
@@ -403,6 +417,8 @@ def generate_yaml(
     # These come from the AP tab UI settings and override any rando defaults.
     game_settings["goal"] = ap_settings.get("goal", 0)
     game_settings["demise_count"] = ap_settings.get("demise_count", 1)
+    for _key in BOSS_COPY_KEYS:
+        game_settings[_key] = int(ap_settings.get(_key, 0))
     game_settings["death_link"] = ap_settings.get("death_link", False)
     game_settings["breath_link"] = ap_settings.get("breath_link", False)
     game_settings["progression_balancing"] = ap_settings.get(

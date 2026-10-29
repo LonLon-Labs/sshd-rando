@@ -77,3 +77,9 @@ Pirate Stronghold Statue:
 Lanayru Gorge Statue:
   flag_space: Lanayru Gorge
   flag: 12
+Inside the Volcano Statue:
+  flag_space: Eldin Volcano
+  flag: 101
+Inside the Fire Sanctuary Statue:
+  flag_space: Fire Sanctuary
+  flag: 114

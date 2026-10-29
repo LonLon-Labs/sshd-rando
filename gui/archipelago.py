@@ -74,6 +74,33 @@ AP_DEFAULTS = {
     "demise_count": 1,
 }
 
+# (settings key, label, tooltip) for the Boss and Miniboss Copies group. Only bosses and
+# minibosses with working copies are listed. Each key is also a 0-default AP setting
+# (see the update below) and a key in gui/yaml_generator.BOSS_COPY_KEYS.
+BOSS_COPY_OPTIONS = [
+    ("extra_ghirahim_skyview", "Ghirahim (Skyview Temple)",
+     "Extra Ghirahims in the Skyview boss room. They despawn when the first one is defeated."),
+    ("extra_ghirahim_fire_sanctuary", "Ghirahim (Fire Sanctuary)",
+     "Extra Ghirahims in the Fire Sanctuary boss room. They despawn when the first one is defeated."),
+    ("extra_moldarach", "Moldarach (Lanayru Mining Facility)",
+     "Extra Moldarachs in the LMF boss room. They despawn when the first one is defeated."),
+    ("extra_stalfos_skyview_first_visit", "Stalfos (Skyview Temple, first visit)",
+     "Extra Stalfos in the Skyview Temple miniboss room on the first visit."),
+    ("extra_stalfos_skyview_second_visit", "Stalfos (Skyview Temple, second visit)",
+     "Extra Stalfos in the Skyview Temple boss room on the second visit."),
+    ("extra_stalfos_sky_keep", "Stalfos (Sky Keep)",
+     "Extra Stalfos in the Sky Keep Courage room."),
+    ("extra_stalmaster_sky_keep", "Stalmaster (Sky Keep)",
+     "Extra Stalmasters in the Sky Keep Courage room."),
+    ("extra_stalmaster_ancient_cistern", "Stalmaster (Ancient Cistern)",
+     "Extra Stalmasters in the Ancient Cistern miniboss room."),
+    ("extra_dark_lizalfos", "Dark Lizalfos (Fire Sanctuary)",
+     "Extra Dark Lizalfos in the Fire Sanctuary room."),
+]
+
+# Every boss and miniboss copy setting defaults to 0 (vanilla).
+AP_DEFAULTS.update({key: 0 for key, _label, _tip in BOSS_COPY_OPTIONS})
+
 GOAL_OPTIONS = ["Defeat Demise", "Defeat Ghirahim 3", "Defeat Horde"]
 ITEM_MODEL_OPTIONS = ["Letter", "Archipelago Logo", "Unofficial Archipelago Logo"]
 
@@ -116,6 +143,7 @@ class Archipelago:
         self._build_connection_group()
         self._build_defeat_requirements_group()
         self._build_multiworld_group()
+        self._build_boss_copies_group()
         self._build_cosmetics_group()
         self._build_cheats_group()
         self._build_extract_group()
@@ -330,6 +358,34 @@ class Archipelago:
 
     # ── Group: Cosmetics ──────────────────────────────────────────────────
 
+    def _build_boss_copies_group(self):
+        group = QGroupBox("Boss and Miniboss Copies")
+        vbox = QVBoxLayout(group)
+
+        note = QLabel(
+            "<i>Extra copies of bosses and minibosses placed in their rooms. "
+            "0 = vanilla. Copies don't change logic.</i>"
+        )
+        note.setWordWrap(True)
+        vbox.addWidget(note)
+
+        self._boss_copy_spins: dict[str, QSpinBox] = {}
+        for key, label, tooltip in BOSS_COPY_OPTIONS:
+            row = QHBoxLayout()
+            lbl = QLabel(f"{label}:")
+            lbl.setMinimumWidth(260)
+            spin = QSpinBox()
+            spin.setRange(0, 10)
+            spin.setToolTip(tooltip)
+            spin.valueChanged.connect(self._on_change)
+            row.addWidget(lbl)
+            row.addWidget(spin)
+            row.addStretch()
+            vbox.addLayout(row)
+            self._boss_copy_spins[key] = spin
+
+        self.layout.addWidget(group)
+
     def _build_cosmetics_group(self):
         group = QGroupBox("Archipelago Cosmetics")
         vbox = QVBoxLayout(group)
@@ -529,6 +585,8 @@ class Archipelago:
                 self.ap.get("player_name", AP_DEFAULTS["player_name"])
             )
             self.demise_count_spin.setValue(self.ap.get("demise_count", 1))
+            for key, spin in self._boss_copy_spins.items():
+                spin.setValue(self.ap.get(key, 0))
             self.goal_combo.setCurrentIndex(self.ap.get("goal", 0))
             self.triforce_required_cb.setChecked(self.ap.get("triforce_required", True))
             self.triforce_count_spin.setValue(self.ap.get("triforce_count", 3))
@@ -579,6 +637,10 @@ class Archipelago:
             rando_settings["triforce_count"].value = str(self.ap["triforce_count"])
         if "demise_count" in rando_settings:
             rando_settings["demise_count"].value = str(self.ap["demise_count"])
+        for key, spin in self._boss_copy_spins.items():
+            self.ap[key] = spin.value()
+            if key in rando_settings:
+                rando_settings[key].value = str(spin.value())
         self.ap["breath_link"] = self.breath_link_cb.isChecked()
         self.ap["progression_balancing"] = self.progression_spin.value()
         self.ap["use_alternative_logo"] = self.alt_logo_cb.isChecked()
