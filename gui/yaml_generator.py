@@ -76,6 +76,7 @@ _BOOL_SETTINGS = {
     "noise_traps",
     "groose_traps",
     "health_traps",
+    "teleport_traps",
     "open_thunderhead",
     "open_batreaux_shed",
     "skip_harp_playing",
@@ -200,6 +201,7 @@ _INT_SETTINGS = {
     "peatrice_conversations",
     "triforce_count",
     "demise_count",
+    "teleport_trap_duration",
 }
 
 # Boss and miniboss copy counts from the AP tab. Each key is an Archipelago option

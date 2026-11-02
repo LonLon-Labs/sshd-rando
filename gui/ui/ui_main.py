@@ -595,6 +595,24 @@ class Ui_main_window(object):
 
         self.verticalLayout_24.addWidget(self.setting_groose_traps)
 
+        self.setting_teleport_traps = RandoTriStateCheckBox(self.hint_placements_group_box)
+        self.setting_teleport_traps.setObjectName(u"setting_teleport_traps")
+        
+        self.verticalLayout_24.addWidget(self.setting_teleport_traps)
+
+        self.teleport_trap_duration_label = QLabel(self.hint_placements_group_box)
+        self.teleport_trap_duration_label.setObjectName(u"teleport_trap_duration_label")
+
+        self.verticalLayout_24.addWidget(self.teleport_trap_duration_label)
+
+        self.setting_teleport_trap_duration = QSpinBox(self.hint_placements_group_box)
+        self.setting_teleport_trap_duration.setObjectName(u"setting_teleport_trap_duration")
+        sizePolicy6.setHeightForWidth(self.setting_teleport_trap_duration.sizePolicy().hasHeightForWidth())
+        self.setting_teleport_trap_duration.setSizePolicy(sizePolicy6)
+        self.setting_teleport_trap_duration.setRange(0, 60)
+
+        self.verticalLayout_24.addWidget(self.setting_teleport_trap_duration)
+
         self.hint_placements_vspacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.verticalLayout_24.addItem(self.hint_placements_vspacer)
@@ -3232,6 +3250,8 @@ class Ui_main_window(object):
         self.setting_noise_traps.setText(QCoreApplication.translate("main_window", u"Noise Traps", None))
         self.setting_health_traps.setText(QCoreApplication.translate("main_window", u"Health Traps", None))
         self.setting_groose_traps.setText(QCoreApplication.translate("main_window", u"Groose Traps", None))
+        self.setting_teleport_traps.setText(QCoreApplication.translate("main_window", u"Teleport Traps", None))
+        self.teleport_trap_duration_label.setText(QCoreApplication.translate("main_window", u"Teleport Trap Duration (Seconds, 0 = never return)", None))
         self.dungeons_group_box.setTitle(QCoreApplication.translate("main_window", u"Dungeon Items", None))
         self.small_keys_label.setText(QCoreApplication.translate("main_window", u"Small Keys", None))
         self.boss_keys_label.setText(QCoreApplication.translate("main_window", u"Boss Keys", None))
