@@ -70,6 +70,7 @@ AP_DEFAULTS = {
     "cheat_infinite_loftwing": False,
     "cheat_no_electric_stun": False,
     "cheat_no_enemy_damage": False,
+    "cheat_infinite_silent_realm_time": False,
     "cheat_speed_multiplier": 10,
     "demise_count": 1,
 }
@@ -496,7 +497,12 @@ class Archipelago:
                 "cheat_no_enemy_damage",
                 "No Enemy Damage",
                 "Enemies are unable to hit link.",
-            )
+            ),
+            (
+                "cheat_infinite_silent_realm_time",
+                "Infinite Silent Realm Time",
+                "Silent realm trial timer frozen, so it never runs out.",
+            ),
         ]
 
         self._cheat_checkboxes: dict[str, QCheckBox] = {}
