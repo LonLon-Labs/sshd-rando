@@ -227,6 +227,33 @@ class Settings:
             self.exclude_locations_pair.update_option_list_type_filter
         )
 
+        # Init excluded hint locations: gossip stones that will never give a hint.
+        # Only stones are listed: the "Gossip Stone Treasures" locations, which are
+        # the names Archipelago accepts for them.
+        excludable_hint_stones = [
+            (location.name, location.types)
+            for location in self.location_table.values()
+            if "Gossip Stone Treasures" in location.types
+        ]
+        self.exclude_hints_locations_pair = ListPair(
+            self.config.settings[0].excluded_hint_locations,
+            [],
+            self.ui.excluded_hint_locations_list_view,
+            self.ui.included_hint_locations_list_view,
+            self.ui.exclude_hint_location_button,
+            self.ui.include_hint_location_button,
+            self.ui.hints_reset_button,
+            excludable_hint_stones,
+        )
+        self.exclude_hints_locations_pair.listPairChanged.connect(self.update_from_gui)
+
+        self.ui.excluded_hint_locations_free_search.textChanged.connect(
+            self.exclude_hints_locations_pair.update_option_list_filter
+        )
+        self.ui.included_hint_locations_free_search.textChanged.connect(
+            self.exclude_hints_locations_pair.update_non_option_list_filter
+        )
+
         # Init starting items
         item_defs: list[dict] = list(yaml_load(ITEMS_PATH))
         item_types: dict[str, list[str]] = {
@@ -406,6 +433,9 @@ class Settings:
         excluded_locations = self.exclude_locations_pair.get_added()
         self.config.settings[0].excluded_locations = excluded_locations
 
+        ## Excluded hint locations
+        self.config.settings[0].excluded_hint_locations = self.exclude_hints_locations_pair.get_added()
+
         ## Starting inventory
         starting_inventory = self.starting_inventory_pair.get_added()
         if self.config.settings[0].settings["gratitude_crystal_shuffle"].value != "on":
@@ -500,6 +530,7 @@ class Settings:
 
         # Update list pairs
         self.exclude_locations_pair.update(self.config.settings[0].excluded_locations)
+        self.exclude_hints_locations_pair.update(self.config.settings[0].excluded_hint_locations)
         self.starting_inventory_pair.update(
             list(self.config.settings[0].starting_inventory.elements())
         )

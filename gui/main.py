@@ -61,11 +61,6 @@ class Main(QMainWindow):
         # Always open on the getting started tab
         self.ui.tab_widget.setCurrentIndex(0)
 
-        # Remove the Hints tab (hints are not used in Archipelago)
-        hints_index = self.ui.tab_widget.indexOf(self.ui.hints_tab)
-        if hints_index != -1:
-            self.ui.tab_widget.removeTab(hints_index)
-
         self.fi_info_dialog = FiInfoDialog(self)
         self.fi_question_dialog = FiQuestionDialog(self)
 

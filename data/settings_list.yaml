@@ -2043,6 +2043,34 @@
     - "off": "You will only be expected to get past the Spume in the Sandship corridor by defeating it or stunning it with the Slingshot."
     - "on": "You may need to get past the Spume in the Sandship corridor without any items."
 
+- name: item_hints
+  default_option: 10
+  pretty_name: Item Hints
+  pretty_options:
+    - 0-50
+  options:
+    - 0-50: "Select the number of item hints you would like to generate, split between gossip stones and Fi."
+
+- name: item_hints_on_fi
+  default_option: "off"
+  pretty_name: On Fi # Hint type is implied by groupbox
+  pretty_options:
+    - "Off"
+    - "On"
+  options:
+    - "off": "Item hints will not be placed on Fi."
+    - "on": "Item hints will be placed on Fi and can be seen by calling Fi and asking her for hints. If item hints are also on placed on gossip stones, then the hints will be split evenly between the two options."
+
+- name: item_hints_on_gossip_stones
+  default_option: "on"
+  pretty_name: On Gossip Stones # Hint type is implied by groupbox
+  pretty_options:
+    - "Off"
+    - "On"
+  options:
+    - "off": "Item hints will not be placed on gossip stones."
+    - "on": "Item hints will be placed on gossip stones and can be seen by talking to them. If item hints are also on placed on Fi, then the hints will be split evenly between the two options."
+
 - name: logic_sandship_no_combination_hint
   default_option: "off"
   pretty_name: Sandship No Combination Hint

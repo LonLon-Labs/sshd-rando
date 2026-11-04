@@ -331,6 +331,58 @@ def _convert_setting_value(name: str, setting: Setting, seed=None):
     return val
 
 
+# ── Hint options ──────────────────────────────────────────────────────
+# Only item hints are configurable from the GUI. They're exported explicitly so
+# Archipelago receives them with the right types. A player who doesn't want item
+# hints can set the count to 0 and switch the placement toggles off.
+
+HINT_INT_SETTINGS = (
+    "item_hints",
+)
+
+# Upper bound for each count option, matching its range in settings_list.yaml.
+HINT_INT_MAX = {
+    "item_hints": 50,
+}
+
+HINT_BOOL_SETTINGS = (
+    "item_hints_on_fi",
+    "item_hints_on_gossip_stones",
+)
+
+# Fallbacks used when a setting is missing from the config (sshd-rando defaults).
+HINT_FALLBACKS = {
+    "item_hints": 10,
+    "item_hints_on_fi": False,
+    "item_hints_on_gossip_stones": True,
+}
+
+
+def _hint_value(settings: dict, name: str):
+    """Return the raw sshd-rando value for a hint setting, or its fallback."""
+    setting = settings.get(name)
+    if setting is None or getattr(setting, "value", None) in (None, ""):
+        return HINT_FALLBACKS[name]
+    return setting.value
+
+
+def _export_hint_settings(game_settings: dict, settings: dict) -> None:
+    """Write every hint option into the YAML with the type Archipelago expects."""
+    for name in HINT_INT_SETTINGS:
+        try:
+            game_settings[name] = int(_hint_value(settings, name))
+        except (ValueError, TypeError):
+            game_settings[name] = HINT_FALLBACKS[name]
+        # Range options only accept 0-7
+        game_settings[name] = max(0, min(HINT_INT_MAX[name], game_settings[name]))
+
+    for name in HINT_BOOL_SETTINGS:
+        value = _hint_value(settings, name)
+        if isinstance(value, str):
+            value = value == "on"
+        game_settings[name] = bool(value)
+
+
 def generate_yaml(
     config: Config,
     ap_settings: dict,
@@ -397,8 +449,16 @@ def generate_yaml(
         excluded_locations = list(getattr(setting_map, "excluded_locations", []) or [])
         game_settings["excluded_locations"] = excluded_locations
 
+        # Individually excluded hint locations (gossip stones only; Fi ignores them)
+        excluded_hint_locations = list(getattr(setting_map, "excluded_hint_locations", []) or [])
+        game_settings["excluded_hint_locations"] = excluded_hint_locations
+
         # No-spoiler-log is derived from generate_spoiler_log
         game_settings["no_spoiler_log"] = not config.generate_spoiler_log
+
+        _export_hint_settings(game_settings, setting_map.settings)
+    else:
+        _export_hint_settings(game_settings, {})
 
     # ── Other mods ────────────────────────────────────────────────────
     # The mods ticked in the Advanced tab. The names are folders inside the
