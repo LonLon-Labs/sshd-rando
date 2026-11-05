@@ -39,6 +39,8 @@ _RANDO_TO_YAML = {
     "triforce_count": "required_triforce_pieces",
     # randomize_skykeep_layout in sshd-rando = decouple_skykeep_layout AP option
     "randomize_skykeep_layout": "decouple_skykeep_layout",
+    # start_with_sailcloth in sshd-rando = randomize_sailcloth AP option (inverted, see _VALUE_MAP)
+    "start_with_sailcloth": "randomize_sailcloth",
 }
 
 # sshd-rando settings that have no AP equivalent and should be excluded from yaml
@@ -258,6 +260,9 @@ _VALUE_MAP = {
     },
     "open_lmf": {"nodes": "nodes", "main_node": "main_node", "open": "open"},
     "randomize_loftwing": {"on": "off", "off": "on"},
+    # sshd-rando start_with_sailcloth -> AP randomize_sailcloth. The AP option means
+    # "shuffle Sailcloth", so sshd on (start with it) must become AP off.
+    "start_with_sailcloth": {"on": False, "off": True},
 }
 
 # sshd-rando damage_multiplier (numeric 0-80) → AP named choice

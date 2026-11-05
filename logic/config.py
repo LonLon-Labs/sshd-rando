@@ -7,7 +7,7 @@ from constants.configconstants import (
     SETTING_ALIASES,
     get_default_setting,
 )
-from constants.itemconstants import STARTABLE_ITEMS
+from constants.itemconstants import STARTABLE_ITEMS, SAILCLOTH
 from filepathconstants import PREFERENCES_PATH, WORDS_PATH, PLANDO_PATH
 
 from .settings import *
@@ -337,6 +337,18 @@ def load_config_from_file(
                         raise ConfigError(
                             f"Could not read value for setting '{setting_name}'. Are you sure that {setting_name} is defined as a list? Current value: {starting_inventory}."
                         )
+
+                    # Sailcloth used to be a starting inventory item. It is now its own
+                    # setting, so move old configs over to it.
+                    if SAILCLOTH in starting_inventory:
+                        starting_inventory = [
+                            item for item in starting_inventory if item != SAILCLOTH
+                        ]
+                        cur_world_settings.settings["start_with_sailcloth"] = Setting(
+                            "start_with_sailcloth", "on", settings_info["start_with_sailcloth"]
+                        )
+                        config_in[world_num_str][setting_name] = starting_inventory
+                        rewrite_config = True
 
                     # Verify starting inventory list is valid
                     invalid_starting_items = starting_inventory.copy()

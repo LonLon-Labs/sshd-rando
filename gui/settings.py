@@ -126,6 +126,16 @@ class Settings:
             layout.insertWidget(index + 1 if index >= 0 else layout.count(), barrel_widget)
             self.ui.setting_barrel_shuffle = barrel_widget
 
+        # Start with Sailcloth checkbox, placed right above the Start with Loftwing one
+        if not hasattr(self.ui, "setting_start_with_sailcloth"):
+            sailcloth_widget = RandoTriStateCheckBox(self.ui.other_settings_group_box)
+            sailcloth_widget.setObjectName("setting_start_with_sailcloth")
+            sailcloth_widget.setText("Start with Sailcloth")
+            layout = self.ui.verticalLayout_32
+            index = layout.indexOf(self.ui.setting_randomize_loftwing)
+            layout.insertWidget(index if index >= 0 else layout.count(), sailcloth_widget)
+            self.ui.setting_start_with_sailcloth = sailcloth_widget
+
         # Init seed
         self.seed_line_edit: QLineEdit = self.ui.seed_line_edit
         self.seed_line_edit.setText(self.config.seed)
