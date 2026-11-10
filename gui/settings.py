@@ -5,6 +5,7 @@ from PySide6.QtCore import QObject, Qt
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
+    QLabel,
     QLineEdit,
     QMessageBox,
     QSpinBox,
@@ -125,6 +126,22 @@ class Settings:
             index = layout.indexOf(self.ui.setting_pumpkin_shuffle)
             layout.insertWidget(index + 1 if index >= 0 else layout.count(), barrel_widget)
             self.ui.setting_barrel_shuffle = barrel_widget
+
+        # Grass shuffle dropdown (Off / Bundles / Blades / Random), placed right
+        # after the barrel shuffle checkbox
+        if not hasattr(self.ui, "setting_grass_shuffle"):
+            grass_label = QLabel(self.ui.shuffles_group_box)
+            grass_label.setObjectName("grass_shuffle_label")
+            grass_label.setText("Grass Shuffle")
+            grass_widget = QComboBox(self.ui.shuffles_group_box)
+            grass_widget.setObjectName("setting_grass_shuffle")
+            layout = self.ui.verticalLayout_10
+            index = layout.indexOf(self.ui.setting_barrel_shuffle)
+            insert_at = index + 1 if index >= 0 else layout.count()
+            layout.insertWidget(insert_at, grass_label)
+            layout.insertWidget(insert_at + 1, grass_widget)
+            self.ui.grass_shuffle_label = grass_label
+            self.ui.setting_grass_shuffle = grass_widget
 
         # Start with Sailcloth checkbox, placed right above the Start with Loftwing one
         if not hasattr(self.ui, "setting_start_with_sailcloth"):

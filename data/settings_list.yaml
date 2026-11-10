@@ -107,6 +107,22 @@
     - "off": "Barrels will drop their vanilla items."
     - "on": "Breaking a barrel can give a randomized item. Barrels revert to their vanilla drop after the item has been collected."
 
+- name: grass_shuffle
+  tracker_important: true
+  default_option: "off"
+  pretty_name: Grass Shuffle
+  pretty_options:
+    - "Off"
+    - "Bundles"
+    - "Blades"
+  random_range:
+    first: "off"
+    last: "blades"
+  options:
+    - "off": "Grass will drop its vanilla items. Nothing is sent to the server."
+    - "bundles": "Each grass patch is one check. Cutting a patch can give one randomized item. Patches revert to their vanilla drop after the item has been collected."
+    - "blades": "Every blade of grass in every grass patch is its own check. Each blade drops its own randomized item from the normal item pool. This adds a very large number of locations and increases generation time."
+
 - name: hidden_item_shuffle
   tracker_important: true
   default_option: "off"
