@@ -127,8 +127,18 @@ class Settings:
             layout.insertWidget(index + 1 if index >= 0 else layout.count(), barrel_widget)
             self.ui.setting_barrel_shuffle = barrel_widget
 
+        # Tree shuffle checkbox, placed right after the barrel shuffle one
+        if not hasattr(self.ui, "setting_tree_shuffle"):
+            tree_widget = RandoTriStateCheckBox(self.ui.shuffles_group_box)
+            tree_widget.setObjectName("setting_tree_shuffle")
+            tree_widget.setText("Small Tree Shuffle")
+            layout = self.ui.verticalLayout_10
+            index = layout.indexOf(self.ui.setting_barrel_shuffle)
+            layout.insertWidget(index + 1 if index >= 0 else layout.count(), tree_widget)
+            self.ui.setting_tree_shuffle = tree_widget
+
         # Grass shuffle dropdown (Off / Bundles / Blades / Random), placed right
-        # after the barrel shuffle checkbox
+        # after the tree shuffle checkbox
         if not hasattr(self.ui, "setting_grass_shuffle"):
             grass_label = QLabel(self.ui.shuffles_group_box)
             grass_label.setObjectName("grass_shuffle_label")
@@ -136,7 +146,7 @@ class Settings:
             grass_widget = QComboBox(self.ui.shuffles_group_box)
             grass_widget.setObjectName("setting_grass_shuffle")
             layout = self.ui.verticalLayout_10
-            index = layout.indexOf(self.ui.setting_barrel_shuffle)
+            index = layout.indexOf(self.ui.setting_tree_shuffle)
             insert_at = index + 1 if index >= 0 else layout.count()
             layout.insertWidget(insert_at, grass_label)
             layout.insertWidget(insert_at + 1, grass_widget)
