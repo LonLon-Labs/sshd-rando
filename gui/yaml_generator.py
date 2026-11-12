@@ -58,6 +58,7 @@ _BOOL_SETTINGS = {
     "pumpkin_shuffle",
     "barrel_shuffle",
     "tree_shuffle",
+    "sign_shuffle",
     "goddess_chest_shuffle",
     "decouple_goddess_cubes_and_chests",
     "tadtone_shuffle",
